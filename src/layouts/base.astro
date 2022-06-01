@@ -8,7 +8,7 @@ let { bodyClass, title } = Astro.props;
   <Head {title} />
   <body>
     <header>
-      <h1>SUCHO Memes Gallery</h1>
+      <h1><a href={Astro.site.pathname}>SUCHO Memes Gallery</a></h1>
     </header>
     <main>
       <slot />

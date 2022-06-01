@@ -1,0 +1,47 @@
+---
+import BaseLayout from "../../layouts/base.astro";
+import { memes } from "../../dataset.mjs";
+
+export async function getStaticPaths({ paginate }) {
+  return paginate(memes, { pageSize: 20 });
+}
+
+const { page } = Astro.props;
+
+// this is a brittle hack that is technically unsupported and will probably break at some point...
+const getGDriveID = (url) => url.match(/id=([^&]+)/)?.[1] || "none";
+const getGDriveHotlinkUrl = (id) =>
+  `https://drive.google.com/uc?export=view&id=${id}`;
+---
+
+<BaseLayout>
+  <h2>Page {page.currentPage} / {page.lastPage}</h2>
+  <nav>
+    {page.url.prev ? (
+      <a href={Astro.site.pathname.replace(/\/$/, "") + page.url.prev}>Prev</a>
+    ) : null}
+    {page.url.next ? (
+      <a href={Astro.site.pathname.replace(/\/$/, "") + page.url.next}>Next</a>
+    ) : null}
+  </nav>
+
+  <div id="gallery" class="zoomwall">
+  {page.data.map((meme) => (
+    <img src={getGDriveHotlinkUrl(getGDriveID(meme.uploadFile))} />
+  ))}
+  </div>
+</BaseLayout>
+
+<script type="module">
+import * as zoomwall from 'https://cdn.jsdelivr.net/npm/zoomwall.js/+esm';
+window.onload =  () => zoomwall.create(document.getElementById("gallery"), true);
+</script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/zoomwall.js/lib/zoomwall.css" />
+
+<style>
+  nav {
+    display: flex;
+    gap: 3em;
+  }
+</style>
