@@ -17,8 +17,12 @@ const getGDriveHotlinkUrl = (id) =>
 <BaseLayout>
   <h2>Page {page.currentPage} / {page.lastPage}</h2>
   <nav>
-    {page.url.prev ? <a href={page.url.prev}>Prev</a> : null}
-    {page.url.next ? <a href={page.url.next}>Next</a> : null}
+    {page.url.prev ? (
+      <a href={Astro.site.pathname.replace(/\/$/, "") + page.url.prev}>Prev</a>
+    ) : null}
+    {page.url.next ? (
+      <a href={Astro.site.pathname.replace(/\/$/, "") + page.url.next}>Next</a>
+    ) : null}
   </nav>
 
   {page.data.map((meme) => (
