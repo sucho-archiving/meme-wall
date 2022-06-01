@@ -830,6 +830,13 @@ cross-spawn@^7.0.3:
     shebang-command "^2.0.0"
     which "^2.0.1"
 
+csv-parser@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/csv-parser/-/csv-parser-3.0.0.tgz#b88a6256d79e090a97a1b56451f9327b01d710e7"
+  integrity sha512-s6OYSXAK3IdKqYO33y09jhypG/bSDHPuyCme/IdEHfWpLf/jKcpitVFyOC6UemgGk8v7Q5u2XE0vvwmanxhGlQ==
+  dependencies:
+    minimist "^1.2.0"
+
 data-uri-to-buffer@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/data-uri-to-buffer/-/data-uri-to-buffer-4.0.0.tgz#b5db46aea50f6176428ac05b73be39a57701a64b"
@@ -2460,6 +2467,11 @@ mimic-fn@^4.0.0:
   resolved "https://registry.yarnpkg.com/mimic-fn/-/mimic-fn-4.0.0.tgz#60a90550d5cb0b239cca65d893b1a53b29871ecc"
   integrity sha512-vqiC06CuhBTUdZH+RYl8sFrL096vA45Ok5ISO6sE/Mr1jRbGH4Csnhi8f3wKVl7x8mO4Au7Ir9D3Oyv1VYMFJw==
 
+minimist@^1.2.0:
+  version "1.2.6"
+  resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.6.tgz#8637a5b759ea0d6e98702cfb3a9283323c93af44"
+  integrity sha512-Jsjnk4bw3YJqYzbdyBiNsPWHPfO++UGG749Cxs6peCu5Xg4nrena6OVxOYxrQTqww0Jmwt+Ref8rggumkTLz9Q==
+
 mri@^1.1.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/mri/-/mri-1.2.0.tgz#6721480fec2a11a4889861115a48b6cbe7cc8f0b"
@@ -2479,6 +2491,14 @@ nanoid@^3.3.4:
   version "3.3.4"
   resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.3.4.tgz#730b67e3cd09e2deacf03c027c81c9d9dbc5e8ab"
   integrity sha512-MqBkQh/OHTS2egovRtLk45wEyNXwF+cokD+1YPf9u5VfJiRdAiRwB2froX5Co9Rh20xs4siNPm8naNotSD6RBw==
+
+neat-csv@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/neat-csv/-/neat-csv-7.0.0.tgz#3edfd4fde087ebbeb2136b87c10a81a1ea70a524"
+  integrity sha512-ZmiKZNkdqb6hrBU3lDHm52vWXs6CuFPfw6ZoJZNnY7IIpfA1fxM0UPPi+iQpqQo82qcLbsZPwLkQ1cdrMDtwwA==
+  dependencies:
+    csv-parser "^3.0.0"
+    get-stream "^6.0.1"
 
 nlcst-to-string@^2.0.0:
   version "2.0.4"
