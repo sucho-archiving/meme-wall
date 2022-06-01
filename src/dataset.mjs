@@ -12,8 +12,8 @@ const toCamelCase = (str) => {
 const fetchSheet = async (sheetId) => {
   const response = await fetch(sheetUrl);
   return await neatCsv(await response.text(), {
-    mapHeaders: ({ header, index }) => toCamelCase(header),
-    mapValues: ({ header, index, value }) => value,
+    mapHeaders: ({ header, index }) => toCamelCase(header.trim()),
+    mapValues: ({ header, index, value }) => value.trim(),
   });
 };
 
