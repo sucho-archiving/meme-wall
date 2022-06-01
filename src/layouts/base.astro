@@ -1,0 +1,17 @@
+---
+import Head from "../components/Head.astro";
+
+let { bodyClass, title } = Astro.props;
+---
+
+<html lang="en">
+  <Head {title} />
+  <body>
+    <header>
+      <h1>SUCHO Memes Gallery</h1>
+    </header>
+    <main>
+      <slot />
+    </main>
+  </body>
+</html>
