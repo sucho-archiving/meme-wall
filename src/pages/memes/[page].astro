@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/base.astro";
+import { memes } from "../../dataset.mjs";
+
+export async function getStaticPaths({ paginate }) {
+  return paginate(memes, { pageSize: 10 });
+}
+
+const { page } = Astro.props;
+
+// this is a brittle hack that is technically unsupported and will probably break at some point...
+const getGDriveID = (url) => url.match(/id=([^&]+)/)?.[1] || "none";
+const getGDriveHotlinkUrl = (id) =>
+  `https://drive.google.com/uc?export=view&id=${id}`;
+---
+
+<BaseLayout>
+  <h2>Page {page.currentPage} / {page.lastPage}</h2>
+  <nav>
+    {page.url.prev ? <a href={page.url.prev}>Prev</a> : null}
+    {page.url.next ? <a href={page.url.next}>Next</a> : null}
+  </nav>
+
+  {page.data.map((meme) => (
+    <section>
+      <dl>
+        <dt>Title:</dt>
+        <dd>{meme.title}</dd>
+        <dt>Translation:</dt>
+        <dd>{meme.textTranslatedIntoEnglish}</dd>
+      </dl>
+      <a href={getGDriveHotlinkUrl(getGDriveID(meme.uploadFile))}>
+        <img src={getGDriveHotlinkUrl(getGDriveID(meme.uploadFile))} />
+      </a>
+    </section>
+    <hr />
+    ))}
+</BaseLayout>
+
+<style>
+  nav {
+    display: flex;
+    gap: 3em;
+  }
+
+  section {
+    display: flex;
+    justify-content: space-between;
+
+    img {
+      max-height: 200px;
+    }
+  }
+</style>
