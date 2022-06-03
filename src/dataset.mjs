@@ -1,7 +1,12 @@
+import fs from "fs";
+import path from "path";
+
 import neatCsv from "neat-csv";
 
 const sheetUrl =
-  "https://docs.google.com/spreadsheets/d/1KUOXe5SMMaghl_JI_eZghHG18CXok3D6yb1_SHJM0no/export?format=csv";
+  "https://docs.google.com/spreadsheets/d/12K7vdLa1PFFcuzQ5VWFxzhiJWp7wOqzhYWx-o9Atjps/export?format=csv";
+
+const memeMediaFolder = "meme_media";
 
 const toCamelCase = (str) => {
   return str
@@ -17,13 +22,22 @@ const fetchSheet = async (sheetId) => {
   });
 };
 
-const memes = await fetchSheet(sheetUrl);
+let memes = await fetchSheet(sheetUrl);
+
+memes = memes
+  .filter((meme) => meme.timestamp)
+  .filter((meme) => meme.driveFilename)
+  .filter((meme) => meme.driveFilename.match(/\.jpg|\.jpeg|\.png$/i))
+  .map((meme) => ({
+    ...meme,
+    mediaPath: path.join(memeMediaFolder, meme.driveFilename),
+  }))
+  .filter((meme) => fs.existsSync(meme.mediaPath));
 
 export { memes };
 
 // If called as a node script, print memes to stdout.
 // See `yarn print-dataset`  (requires node >= v17.5.0)
-import path from "path";
 import { fileURLToPath } from "url";
 const nodePath = path.resolve(process.argv[1]);
 const modulePath = path.resolve(fileURLToPath(import.meta.url));

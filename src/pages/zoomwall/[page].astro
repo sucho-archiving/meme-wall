@@ -27,7 +27,7 @@ const getGDriveHotlinkUrl = (id) =>
 
   <div id="gallery" class="zoomwall">
   {page.data.map((meme) => (
-    <img src={getGDriveHotlinkUrl(getGDriveID(meme.uploadFile))} />
+    <img src={Astro.site.pathname + meme.mediaPath} />
   ))}
   </div>
 </BaseLayout>
