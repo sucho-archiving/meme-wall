@@ -32,7 +32,8 @@ memes = memes
     ...meme,
     mediaPath: path.join(memeMediaFolder, meme.driveFilename),
   }))
-  .filter((meme) => fs.existsSync(meme.mediaPath));
+  .filter((meme) => fs.existsSync(meme.mediaPath))
+  .filter((meme) => /^[\u0000-\u007f]*$/.test(meme.mediaPath));
 
 export { memes };
 
