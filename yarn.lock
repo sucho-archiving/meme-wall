@@ -10,7 +10,7 @@
     "@jridgewell/gen-mapping" "^0.1.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
-"@astrojs/compiler@^0.15.1":
+"@astrojs/compiler@^0.15.2":
   version "0.15.2"
   resolved "https://registry.yarnpkg.com/@astrojs/compiler/-/compiler-0.15.2.tgz#b8b3504ea92e2c279ce931c2aa97444f29caf03d"
   integrity sha512-YsxIyx026zPWbxv3wYrudr1jh8u6oSnhP6MW+9OAgiFuICHjSX4Rw+qm8wJj1D5IkJ3HsDtE+kFMMYIozZ5bvQ==
@@ -248,7 +248,7 @@
     chalk "^2.0.0"
     js-tokens "^4.0.0"
 
-"@babel/parser@^7.16.7", "@babel/parser@^7.18.0", "@babel/parser@^7.18.3":
+"@babel/parser@^7.16.7", "@babel/parser@^7.18.0", "@babel/parser@^7.18.4":
   version "7.18.4"
   resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.18.4.tgz#6774231779dd700e0af29f6ad8d479582d7ce5ef"
   integrity sha512-FDge0dFazETFcxGw/EXzOkN8uJp0PC7Qbm+Pe9T+av2zlBpOgunFHkQPPn+eRuClU73JF+98D531UgayY89tow==
@@ -577,12 +577,12 @@ ast-types@0.14.2, ast-types@^0.14.2:
   dependencies:
     tslib "^2.0.1"
 
-astro@^1.0.0-beta.38:
-  version "1.0.0-beta.38"
-  resolved "https://registry.yarnpkg.com/astro/-/astro-1.0.0-beta.38.tgz#c082e981efc5aa09e7630f66a020844e6188a50b"
-  integrity sha512-Xbmt42mnFNCxnnrvZgQFdMkjhdAlKlMNz9a/d4KlYjPlLzJCTK+bzTEllmfu2v+2k3Y/jGvrW7gWiRe38n4ORw==
+astro@1.0.0-beta.40:
+  version "1.0.0-beta.40"
+  resolved "https://registry.yarnpkg.com/astro/-/astro-1.0.0-beta.40.tgz#852fa10e7903e5d13fc7178f2e3bcbd6b15cfc14"
+  integrity sha512-7TbwTp6S3cMffrK+aRSCzU8sMPJ+6UC0pQeKkO+LvI9AQHheUv69edZckW55SDJcHZhScDnwBwXuyE4ZGYxtzQ==
   dependencies:
-    "@astrojs/compiler" "^0.15.1"
+    "@astrojs/compiler" "^0.15.2"
     "@astrojs/language-server" "^0.13.4"
     "@astrojs/markdown-remark" "^0.10.2"
     "@astrojs/prism" "0.4.1"
@@ -590,7 +590,7 @@ astro@^1.0.0-beta.38:
     "@astrojs/webapi" "^0.12.0"
     "@babel/core" "^7.18.2"
     "@babel/generator" "^7.18.2"
-    "@babel/parser" "^7.18.3"
+    "@babel/parser" "^7.18.4"
     "@babel/traverse" "^7.18.2"
     "@proload/core" "^0.3.2"
     "@proload/plugin-tsm" "^0.2.1"
@@ -602,7 +602,7 @@ astro@^1.0.0-beta.38:
     diff "^5.1.0"
     eol "^0.9.1"
     es-module-lexer "^0.10.5"
-    esbuild "^0.14.40"
+    esbuild "^0.14.42"
     estree-walker "^3.0.1"
     execa "^6.1.0"
     fast-glob "^3.2.11"
@@ -624,7 +624,7 @@ astro@^1.0.0-beta.38:
     prompts "^2.4.2"
     recast "^0.20.5"
     resolve "^1.22.0"
-    rollup "^2.75.0"
+    rollup "^2.75.5"
     semver "^7.3.7"
     serialize-javascript "^6.0.0"
     shiki "^0.10.1"
@@ -1142,7 +1142,7 @@ esbuild-windows-arm64@0.14.42:
   resolved "https://registry.yarnpkg.com/esbuild-windows-arm64/-/esbuild-windows-arm64-0.14.42.tgz#79da8744626f24bc016dc40d016950b5a4a2bac5"
   integrity sha512-+lRAARnF+hf8J0mN27ujO+VbhPbDqJ8rCcJKye4y7YZLV6C4n3pTRThAb388k/zqF5uM0lS5O201u0OqoWSicw==
 
-esbuild@^0.14.0, esbuild@^0.14.27, esbuild@^0.14.40:
+esbuild@^0.14.0, esbuild@^0.14.27, esbuild@^0.14.42:
   version "0.14.42"
   resolved "https://registry.yarnpkg.com/esbuild/-/esbuild-0.14.42.tgz#98587df0b024d5f6341b12a1d735a2bff55e1836"
   integrity sha512-V0uPZotCEHokJdNqyozH6qsaQXqmZEOiZWrXnds/zaH/0SyrIayRXWRB98CENO73MIZ9T3HBIOsmds5twWtmgw==
@@ -2980,7 +2980,7 @@ reusify@^1.0.4:
   resolved "https://registry.yarnpkg.com/reusify/-/reusify-1.0.4.tgz#90da382b1e126efc02146e90845a88db12925d76"
   integrity sha512-U9nH88a3fc/ekCF1l0/UP1IosiuIjyTh7hBvXVMHYgVcfGvt897Xguj2UOLDeI5BG2m7/uwyaLVT6fbtCwTyzw==
 
-rollup@^2.59.0, rollup@^2.75.0:
+rollup@^2.59.0, rollup@^2.75.5:
   version "2.75.5"
   resolved "https://registry.yarnpkg.com/rollup/-/rollup-2.75.5.tgz#7985c1962483235dd07966f09fdad5c5f89f16d0"
   integrity sha512-JzNlJZDison3o2mOxVmb44Oz7t74EfSd1SQrplQk0wSaXV7uLQXtVdHbxlcT3w+8tZ1TL4r/eLfc7nAbz38BBA==
