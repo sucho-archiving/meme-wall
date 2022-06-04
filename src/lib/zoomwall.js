@@ -9,24 +9,25 @@ export default class ZoomWall {
 
   static calcRowWidth(row) {
     return row.reduce(
-      (width, img) => width + parseInt(window.getComputedStyle(img).width, 10),
+      (width, item) =>
+        width + parseInt(window.getComputedStyle(item).width, 10),
       0,
     );
   }
 
   static resizeRow(row, width) {
     if (row && row.length > 1) {
-      row.forEach(function (img) {
-        img.style.width = `${
-          (parseInt(window.getComputedStyle(img).width, 10) / width) * 100
+      row.forEach(function (item) {
+        item.style.width = `${
+          (parseInt(window.getComputedStyle(item).width, 10) / width) * 100
         }%`;
-        img.style.height = "auto";
+        item.style.height = "auto";
       });
     }
   }
 
   init() {
-    this.imgs = [...this.container.querySelectorAll("img")];
+    this.items = [...this.container.querySelectorAll("img")];
     this.resize();
     this.container.classList.remove("loading");
 
@@ -34,8 +35,8 @@ export default class ZoomWall {
     this.container.addEventListener("click", this.shrink.bind(this));
 
     // add click listeners to blocks
-    this.imgs.forEach((img) =>
-      img.addEventListener("click", this.toggleItem.bind(this)),
+    this.items.forEach((item) =>
+      item.addEventListener("click", this.toggleItem.bind(this)),
     );
 
     // add key down listener
@@ -43,7 +44,7 @@ export default class ZoomWall {
   }
 
   resize() {
-    this.imgs
+    this.items
       .reduce(function (rows, block) {
         var _a;
         const offsetTop = block.offsetTop;
@@ -60,7 +61,7 @@ export default class ZoomWall {
 
   shrink() {
     this.container.classList.remove("lightbox");
-    this.container.querySelectorAll("img").forEach(this.reset);
+    this.items.forEach(this.reset);
   }
 
   reset(block) {
@@ -69,9 +70,6 @@ export default class ZoomWall {
   }
 
   toggleItem(event) {
-    if (!(event.target instanceof HTMLImageElement)) {
-      return;
-    }
     const block = event.target;
     if (block.classList.contains("active")) {
       this.shrink();
@@ -108,8 +106,9 @@ export default class ZoomWall {
     }
 
     // determine what blocks are on this row
-    const imgs = [...this.container.querySelectorAll("img")];
-    const selectedRow = imgs.filter((img) => img.offsetTop == block.offsetTop);
+    const selectedRow = this.items.filter(
+      (item) => item.offsetTop == block.offsetTop,
+    );
 
     // calculate scale
     let scale = targetHeight / blockHeight;
@@ -131,13 +130,13 @@ export default class ZoomWall {
     const leftWidth = selectedRow
       .slice(0, selectedRow.indexOf(block))
       .reduce(
-        (offset, img) =>
-          offset + parseInt(window.getComputedStyle(img).width, 10) * scale,
+        (offset, item) =>
+          offset + parseInt(window.getComputedStyle(item).width, 10) * scale,
         0,
       );
     const leftOffsetX = parentWidth / 2 - (blockWidth * scale) / 2 - leftWidth;
 
-    const rows = imgs.reduce(function (rows, block) {
+    const rows = this.items.reduce(function (rows, block) {
       var _a;
       // group rows
       const offsetTop = block.offsetTop;
@@ -166,9 +165,9 @@ export default class ZoomWall {
             .reduce((offset, height) => offset + height, 0) -
         offsetY;
       row
-        .map((img) => ({
-          img: img,
-          width: parseInt(window.getComputedStyle(img).width, 10),
+        .map((item) => ({
+          item: item,
+          width: parseInt(window.getComputedStyle(item).width, 10),
         }))
         .forEach((item, columnIndex, items) => {
           const offsetX =
@@ -180,10 +179,10 @@ export default class ZoomWall {
             ((offsetX + leftOffsetX) / item.width) * 100;
           const percentageOffsetY =
             (rowOffsetY /
-              parseInt(window.getComputedStyle(item.img).height, 10)) *
+              parseInt(window.getComputedStyle(item.item).height, 10)) *
             100;
-          item.img.style.transformOrigin = "0% 0%";
-          item.img.style.transform =
+          item.item.style.transformOrigin = "0% 0%";
+          item.item.style.transform =
             "translate(" +
             percentageOffsetX.toFixed(8) +
             "%, " +
