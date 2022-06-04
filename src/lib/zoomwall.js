@@ -117,7 +117,11 @@ export default class ZoomWall {
     }
 
     // determine offset
-    let offsetY = parentTop - this.container.offsetTop + block.offsetTop;
+    let offsetY =
+      parentTop -
+      this.container.offsetTop -
+      this.container.scrollTop +
+      block.offsetTop;
     if (offsetY > 0) {
       if (parentHeight < window.innerHeight) {
         offsetY -= targetHeight / 2 - (blockHeight * scale) / 2;
