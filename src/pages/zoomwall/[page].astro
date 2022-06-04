@@ -1,75 +1,112 @@
 ---
-import BaseLayout from "../../layouts/base.astro";
+import path from "path";
+import Head from "../../components/Head.astro";
 import { memes } from "../../dataset.mjs";
 
 export async function getStaticPaths({ paginate }) {
   return paginate(memes, { pageSize: 20 });
 }
 
+const title = "Memes";
 const { page } = Astro.props;
 
-// this is a brittle hack that is technically unsupported and will probably break at some point...
-const getGDriveID = (url) => url.match(/id=([^&]+)/)?.[1] || "none";
-const getGDriveHotlinkUrl = (id) =>
-  `https://drive.google.com/uc?export=view&id=${id}`;
+const prevPageUrl = page.url.prev
+  ? path.join(Astro.site.pathname, page.url.prev)
+  : null;
+const nextPageUrl = page.url.next
+  ? path.join(Astro.site.pathname, page.url.next)
+  : null;
 ---
 
-<BaseLayout>
-  <h2>Page {page.currentPage} / {page.lastPage}</h2>
-  <nav>
-    {page.url.prev ? (
-      <a href={Astro.site.pathname.replace(/\/$/, "") + page.url.prev}>Prev</a>
-    ) : null}
-    {page.url.next ? (
-      <a href={Astro.site.pathname.replace(/\/$/, "") + page.url.next}>Next</a>
-    ) : null}
-  </nav>
-
-  <div id="gallery" class="zoomwall">
-  {page.data.map((meme) => (
-    <img src={Astro.site.pathname + meme.mediaPath} />
-  ))}
-  </div>
-</BaseLayout>
+<html lang="en">
+  <Head {title} />
+  <body>
+    <header>
+      <h1><a href={Astro.site.pathname}>SUCHO Memes Gallery</a></h1>
+      <h2>Page {page.currentPage} / {page.lastPage}</h2>
+      <nav>
+        {prevPageUrl ? <a href={prevPageUrl}>Prev</a> : null}
+        {nextPageUrl ? <a href={nextPageUrl}>Next</a> : null}
+      </nav>
+    </header>
+    <main id="gallery" class="zoomwall">
+      {page.data.map((meme) => (
+        <div>
+          <img src={Astro.site.pathname + meme.mediaPath} />
+          <span>{meme.title}</span>
+        </div>
+      ))}
+    </main>
+  </body>
+</html>
 
 <script type="module" hoist>
   import ZoomWall from "../../lib/zoomwall.js";
-  window.onload =  () => {
+  window.onload = () => {
     console.log(ZoomWall);
     const z = new ZoomWall(document.getElementById("gallery"));
   };
 </script>
 
 <style>
+  body {
+    background-color: #333;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    margin: 0;
+    overflow: hidden;
+    padding: 0;
+  }
+
+  header {
+    display: flex;
+  }
+
   nav {
     display: flex;
     gap: 3em;
   }
 
+  #gallery {
+    font-size: 0;
+    overflow-y: scroll;
+  }
 
-#gallery {
-  font-size: 0;
-  overflow: hidden;
-}
+  #gallery div {
+    display: inline;
+  }
 
-#gallery img {
-  width: auto;
-  height: 15vw;
-  opacity: 1;
-  vertical-align: top;
-  transform-origin: 0% 0%;
-  transition-property: transform, opacity;
-  transition-duration: 0.3s;
-  transition-timing-function: ease-out;
-}
+  #gallery img {
+    height: 15vw;
+    opacity: 1;
+    transform-origin: 0% 0%;
+    transition-duration: 0.3s;
+    transition-property: transform, opacity;
+    transition-timing-function: ease-out;
+    vertical-align: top;
+    width: auto;
+  }
 
-#gallery.lightbox img {
-  opacity: 0.3;
-  transition-timing-function: ease-in;
-}
+  #gallery.lightbox img {
+    opacity: 0.3;
+    transition-timing-function: ease-in;
+  }
 
-#gallery.lightbox img.active {
-  opacity: 1;
-}
+  #gallery.lightbox img.active {
+    opacity: 1;
+  }
 
+  #gallery.lightbox img.active + span {
+    background: rgba(0, 0, 0, 0.5);
+    bottom: 0;
+    color: white;
+    display: block;
+    font-size: large;
+    height: 40px;
+    position: absolute;
+    width: 100%;
+    z-index: 2;
+  }
 </style>
