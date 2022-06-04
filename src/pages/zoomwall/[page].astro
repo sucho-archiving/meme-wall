@@ -32,16 +32,44 @@ const getGDriveHotlinkUrl = (id) =>
   </div>
 </BaseLayout>
 
-<script type="module">
-import * as zoomwall from 'https://cdn.jsdelivr.net/npm/zoomwall.js/+esm';
-window.onload =  () => zoomwall.create(document.getElementById("gallery"), true);
+<script type="module" hoist>
+  import ZoomWall from "../../lib/zoomwall.js";
+  window.onload =  () => {
+    console.log(ZoomWall);
+    const z = new ZoomWall(document.getElementById("gallery"));
+  };
 </script>
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/zoomwall.js/lib/zoomwall.css" />
 
 <style>
   nav {
     display: flex;
     gap: 3em;
   }
+
+
+#gallery {
+  font-size: 0;
+  overflow: hidden;
+}
+
+#gallery img {
+  width: auto;
+  height: 15vw;
+  opacity: 1;
+  vertical-align: top;
+  transform-origin: 0% 0%;
+  transition-property: transform, opacity;
+  transition-duration: 0.3s;
+  transition-timing-function: ease-out;
+}
+
+#gallery.lightbox img {
+  opacity: 0.3;
+  transition-timing-function: ease-in;
+}
+
+#gallery.lightbox img.active {
+  opacity: 1;
+}
+
 </style>
