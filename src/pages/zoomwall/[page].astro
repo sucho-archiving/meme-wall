@@ -4,8 +4,15 @@ import Head from "../../components/Head.astro";
 import { memes } from "../../dataset.mjs";
 
 export async function getStaticPaths({ paginate }) {
-  return paginate(memes, { pageSize: 20 });
+  return paginate(memes, { pageSize: 800 });
 }
+
+import sizeOf from "image-size";
+
+const getAspectRatio = (imgPath) => {
+  const dimensions = sizeOf(imgPath);
+  return dimensions.width / dimensions.height;
+};
 
 const title = "Memes";
 const { page } = Astro.props;
@@ -16,6 +23,10 @@ const prevPageUrl = page.url.prev
 const nextPageUrl = page.url.next
   ? path.join(Astro.site.pathname, page.url.next)
   : null;
+
+page.data.forEach((meme) => {
+  meme.mediaAspectRatio = getAspectRatio(meme.mediaPath);
+});
 ---
 
 <html lang="en">
@@ -30,9 +41,13 @@ const nextPageUrl = page.url.next
       </nav>
     </header>
     <main id="gallery" class="zoomwall">
-      {page.data.map((meme) => (
+      {page.data.map((meme, idx) => (
         <div>
-          <img src={Astro.site.pathname + meme.mediaPath} />
+          <img
+            data-src={Astro.site.pathname + meme.mediaPath}
+            class="lazy"
+            style={`aspect-ratio: ${meme.mediaAspectRatio}`}
+          />
           <span>{meme.title}</span>
         </div>
       ))}
@@ -42,9 +57,28 @@ const nextPageUrl = page.url.next
 
 <script type="module" hoist>
   import ZoomWall from "../../lib/zoomwall.js";
+
   window.onload = () => {
-    console.log(ZoomWall);
-    const z = new ZoomWall(document.getElementById("gallery"));
+    const gallery = document.getElementById("gallery");
+    const images = document.querySelectorAll("#gallery [data-src]");
+
+    const imageObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach(
+        (entry) => {
+          if (entry.isIntersecting) {
+            const image = entry.target;
+            image.src = image.dataset.src;
+            image.removeAttribute("data-src");
+            imageObserver.unobserve(image);
+          }
+        },
+        { root: gallery, rootMargin: "0 0 500px 0" },
+      );
+    });
+
+    images.forEach((image) => imageObserver.observe(image));
+
+    const zoomwall = new ZoomWall(gallery);
   };
 </script>
 
