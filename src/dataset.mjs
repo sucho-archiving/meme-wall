@@ -8,11 +8,8 @@ const sheetUrl =
 
 const memeMediaFolder = "meme_media";
 
-const toCamelCase = (str) => {
-  return str
-    .toLowerCase()
-    .replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase());
-};
+const toCamelCase = (str) =>
+  str.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase());
 
 const fetchSheet = async (sheetId) => {
   const response = await fetch(sheetUrl);
