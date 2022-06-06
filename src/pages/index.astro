@@ -45,6 +45,7 @@ memes.forEach((meme) => {
 
 <script type="module" hoist>
   import ZoomWall from "../lib/zoomwall.js";
+  const zoomwall = new ZoomWall(gallery);
 
   window.onload = () => {
     const gallery = document.getElementById("gallery");
@@ -65,8 +66,6 @@ memes.forEach((meme) => {
     });
 
     images.forEach((image) => imageObserver.observe(image));
-
-    const zoomwall = new ZoomWall(gallery);
   };
 </script>
 
