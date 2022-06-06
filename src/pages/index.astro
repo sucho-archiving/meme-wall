@@ -2,18 +2,7 @@
 import Head from "../components/Head.astro";
 import { memes } from "../dataset.mjs";
 
-import sizeOf from "image-size";
-
-const getAspectRatio = (imgPath) => {
-  const dimensions = sizeOf(imgPath);
-  return dimensions.width / dimensions.height;
-};
-
 const title = "Memes";
-
-memes.forEach((meme) => {
-  meme.mediaAspectRatio = getAspectRatio(meme.mediaPath);
-});
 ---
 
 <html lang="en">
