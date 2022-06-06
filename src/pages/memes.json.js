@@ -5,6 +5,7 @@ const memes = rawData.map((meme) => ({
   textTranslatedIntoEnglish: meme.textTranslatedIntoEnglish,
   mediaPath: meme.mediaPath,
   mediaAspectRatio: meme.mediaAspectRatio,
+  memeTypes: meme.memeTypes,
 }));
 
 export async function get() {
