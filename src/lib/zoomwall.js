@@ -36,15 +36,24 @@ export default class ZoomWall {
     this.container.classList.remove("loading");
 
     // shrink blocks if an empty space is clicked
-    this.container.addEventListener("click", this.shrink.bind(this));
+    this.shrinkHandler = this.shrink.bind(this);
+    this.container.addEventListener("click", this.shrinkHandler);
 
     // add click listeners to blocks
+    this.toggleItemHander = this.toggleItem.bind(this);
     this.items.forEach((item) =>
-      item.addEventListener("click", this.toggleItem.bind(this)),
+      item.addEventListener("click", this.toggleItemHandler),
     );
 
     // add key down listener
     // keys(this.container);
+  }
+
+  destroy() {
+    this.container.removeEventListener("click", this.shrinkHandler);
+    this.items.forEach((item) =>
+      item.removeEventListener("click", this.toggleItemHandler),
+    );
   }
 
   resize() {
