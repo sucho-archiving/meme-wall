@@ -75,6 +75,7 @@ memes.forEach((meme) => {
     color: white;
     display: flex;
     flex-direction: column;
+    font-family: sans-serif;
     height: 100vh;
     margin: 0;
     overflow: hidden;
@@ -83,6 +84,15 @@ memes.forEach((meme) => {
 
   header {
     display: flex;
+    padding: 0.25em 1em;
+    border-top: 5px solid #777;
+    border-bottom: 5px solid #777;
+
+    h1 {
+      margin: 0;
+      font-variant-caps: petite-caps;
+      font-weight: 300;
+    }
   }
 
   #gallery {
