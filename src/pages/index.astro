@@ -20,7 +20,7 @@ memes.forEach((meme) => {
   <Head {title} />
   <body>
     <header>
-      <h1><a href={Astro.site.pathname}>SUCHO Memes Gallery</a></h1>
+      <h1>SUCHO Memes Gallery</h1>
     </header>
     <main id="gallery" class="zoomwall">
       {memes.map((meme, idx) => (
@@ -85,50 +85,43 @@ memes.forEach((meme) => {
     display: flex;
   }
 
-  nav {
-    display: flex;
-    gap: 3em;
-  }
-
   #gallery {
     font-size: 0;
     overflow-x: hidden;
     overflow-y: scroll;
-  }
 
-  #gallery div {
-    display: inline;
-  }
+    div {
+      display: inline;
+    }
+    img {
+      height: 15vmax;
+      opacity: 1;
+      transform-origin: 0% 0%;
+      transition-duration: 0.3s;
+      transition-property: transform, opacity;
+      transition-timing-function: ease-out;
+      vertical-align: top;
+      width: auto;
+    }
+    &.lightbox img {
+      opacity: 0.3;
+      transition-timing-function: ease-in;
 
-  #gallery img {
-    height: 15vmax;
-    opacity: 1;
-    transform-origin: 0% 0%;
-    transition-duration: 0.3s;
-    transition-property: transform, opacity;
-    transition-timing-function: ease-out;
-    vertical-align: top;
-    width: auto;
-  }
+      &.active {
+        opacity: 1;
 
-  #gallery.lightbox img {
-    opacity: 0.3;
-    transition-timing-function: ease-in;
-  }
-
-  #gallery.lightbox img.active {
-    opacity: 1;
-  }
-
-  #gallery.lightbox img.active + span {
-    background: rgba(0, 0, 0, 0.5);
-    bottom: 0;
-    color: white;
-    display: block;
-    font-size: large;
-    height: 40px;
-    position: absolute;
-    width: 100%;
-    z-index: 2;
+        & + span {
+          background: rgba(0, 0, 0, 0.5);
+          bottom: 0;
+          color: white;
+          display: block;
+          font-size: large;
+          height: 40px;
+          position: absolute;
+          width: 100%;
+          z-index: 2;
+        }
+      }
+    }
   }
 </style>
