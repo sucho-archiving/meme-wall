@@ -22,7 +22,7 @@ memes.forEach((meme) => {
     <header>
       <h1>SUCHO Memes Gallery</h1>
     </header>
-    <main id="gallery" class="zoomwall">
+    <main id="gallery">
       {memes.map((meme, idx) => (
         <div>
           { (idx < 20) ?
@@ -138,7 +138,7 @@ memes.forEach((meme) => {
       }
     }
 
-    &.lightbox {
+    &.zoomed {
       img {
         opacity: 0.3;
         transition-timing-function: ease-in;

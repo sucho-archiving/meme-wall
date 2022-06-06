@@ -64,7 +64,7 @@ export default class ZoomWall {
   }
 
   shrink() {
-    this.container.classList.remove("lightbox");
+    this.container.classList.remove("zoomed");
     this.items.forEach(this.reset);
   }
 
@@ -88,7 +88,7 @@ export default class ZoomWall {
 
   expand(block) {
     block.classList.add("active");
-    this.container.classList.add("lightbox");
+    this.container.classList.add("zoomed");
 
     // parent dimensions
     const parentStyle = window.getComputedStyle(this.container);
