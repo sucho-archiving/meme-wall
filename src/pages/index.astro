@@ -56,21 +56,21 @@ memes.forEach((meme) => {
 
   window.onload = () => {
     const gallery = document.getElementById("gallery");
-    const images = document.querySelectorAll("#gallery [data-src]");
+    const images = gallery.querySelectorAll("[data-src]");
 
-    const imageObserver = new IntersectionObserver((entries, observer) => {
-      entries.forEach(
-        (entry) => {
+    const imageObserver = new IntersectionObserver(
+      (entries, observer) => {
+        entries.forEach((entry) => {
           if (entry.isIntersecting) {
             const image = entry.target;
             image.src = image.dataset.src;
             image.removeAttribute("data-src");
             imageObserver.unobserve(image);
           }
-        },
-        { root: gallery, rootMargin: "0 0 100vmax 0" },
-      );
-    });
+        });
+      },
+      { root: gallery, rootMargin: "0px 0px 100% 0px" },
+    );
 
     images.forEach((image) => imageObserver.observe(image));
   };
