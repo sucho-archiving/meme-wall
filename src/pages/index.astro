@@ -41,9 +41,9 @@ const title = "Memes";
 
 <script type="module" hoist>
   import ZoomWall from "../lib/zoomwall.js";
-  const zoomwall = new ZoomWall(gallery);
+  window.zoomwall = new ZoomWall(gallery);
 
-  window.onload = () => {
+  const enableLazyLoading = () => {
     const gallery = document.getElementById("gallery");
     const images = gallery.querySelectorAll("[data-src]");
 
@@ -63,6 +63,8 @@ const title = "Memes";
 
     images.forEach((image) => imageObserver.observe(image));
   };
+
+  document.addEventListener("DOMContentLoaded", enableLazyLoading);
 </script>
 
 <style>
@@ -99,6 +101,7 @@ const title = "Memes";
     div {
       display: inline;
     }
+
     img {
       height: 15vmax;
       opacity: 1;
