@@ -16,13 +16,17 @@ export default class ZoomWall {
   }
 
   static resizeRow(row, width) {
-    if (row && row.length > 1) {
-      row.forEach(function (item) {
+    if (!row) return;
+    if (row.length > 1) {
+      row.forEach((item) => {
         item.style.width = `${
           (parseInt(window.getComputedStyle(item).width, 10) / width) * 100
         }%`;
         item.style.height = "auto";
       });
+    } else {
+      row[0].style.width = "100%";
+      row[0].style.height = "auto";
     }
   }
 
