@@ -10,6 +10,7 @@ const title = "Memes";
   <body>
     <header>
       <h1>SUCHO Memes Gallery</h1>
+      <button>Randomize</button>
     </header>
     <main id="gallery">
       {memes.map((meme, idx) => (
@@ -65,9 +66,57 @@ const title = "Memes";
   };
 
   document.addEventListener("DOMContentLoaded", enableLazyLoading);
+
+  let memes;
+  fetch("./memes.json")
+    .then((resp) => resp.json())
+    .then((json) => (memes = json));
+
+  const shuffleArray = (array) => {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  };
+
+  const randomize = () => {
+    console.log(memes);
+    const gallery = document.getElementById("gallery");
+    gallery.innerHTML = ""; // FIXME: gallery needs destroying properly
+    shuffleArray(memes).forEach((meme, idx) => {
+      const div = document.createElement("div");
+      if (idx < 20) {
+        div.innerHTML = `
+          <img
+            src="${meme.mediaPath}"
+            style="aspect-ratio: ${meme.mediaAspectRatio}"/>`;
+      } else {
+        div.innerHTML = `
+          <img
+            data-src="${meme.mediaPath}"
+            style="aspect-ratio: ${meme.mediaAspectRatio}"/>`;
+      }
+      div.innerHTML += `
+          <section>
+            <dl>
+              <dt>Title:</dt>
+              <dd>${meme.title}</dd>
+              <dt>Translation:</dt>
+              <dd>${meme.textTranslatedIntoEnglish}</dd>
+            </dl>
+          </section>
+        `;
+      gallery.appendChild(div);
+    });
+    window.zoomwall = new ZoomWall(gallery);
+    enableLazyLoading();
+  };
+
+  document.querySelector("button").addEventListener("click", randomize);
 </script>
 
-<style>
+<style is:global>
   body {
     background-color: #333;
     color: white;
