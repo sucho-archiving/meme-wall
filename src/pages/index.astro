@@ -81,9 +81,9 @@ const title = "Memes";
   };
 
   const randomize = () => {
-    console.log(memes);
     const gallery = document.getElementById("gallery");
-    gallery.innerHTML = ""; // FIXME: gallery needs destroying properly
+    window.zoomwall.destroy();
+    gallery.innerHTML = "";
     shuffleArray(memes).forEach((meme, idx) => {
       const div = document.createElement("div");
       if (idx < 20) {
