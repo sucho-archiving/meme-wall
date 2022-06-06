@@ -36,7 +36,14 @@ memes.forEach((meme) => {
               style={`aspect-ratio: ${meme.mediaAspectRatio}`}
             />
           }
-          <span>{meme.title}</span>
+          <section>
+            <dl>
+              <dt>Title:</dt>
+              <dd>{meme.title}</dd>
+              <dt>Translation:</dt>
+              <dd>{meme.textTranslatedIntoEnglish}</dd>
+            </dl>
+          </section>
         </div>
       ))}
     </main>
@@ -113,23 +120,35 @@ memes.forEach((meme) => {
       vertical-align: top;
       width: auto;
     }
-    &.lightbox img {
-      opacity: 0.3;
-      transition-timing-function: ease-in;
 
-      &.active {
-        opacity: 1;
+    section {
+      display: none;
+      background: rgba(0, 0, 0, 0.8);
+      bottom: 0;
+      color: white;
+      font-size: large;
+      padding: 0 1em;
+      position: absolute;
+      width: 100%;
+      z-index: 2;
 
-        & + span {
-          background: rgba(0, 0, 0, 0.5);
-          bottom: 0;
-          color: white;
-          display: block;
-          font-size: large;
-          height: 40px;
-          position: absolute;
-          width: 100%;
-          z-index: 2;
+      dl {
+        display: grid;
+        grid-template-columns: 80px 1fr;
+      }
+    }
+
+    &.lightbox {
+      img {
+        opacity: 0.3;
+        transition-timing-function: ease-in;
+
+        &.active {
+          opacity: 1;
+
+          & + section {
+            display: block;
+          }
         }
       }
     }
