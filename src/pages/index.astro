@@ -11,7 +11,7 @@ const title = "Memes";
   <body>
     <header>
       <h1>SUCHO Memes Gallery</h1>
-      <button>Randomize</button>
+      <div class="controls">
       <StyledSelect>
         <option value="" disabled selected>---</option>
         {Array.from(memeTypes).map(memeType => (
@@ -20,6 +20,15 @@ const title = "Memes";
           </option>
         ))}
       </StyledSelect>
+      <button>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 4l3 3l-3 3"></path>
+          <path d="M18 20l3 -3l-3 -3"></path>
+          <path d="M3 7h3a5 5 0 0 1 5 5a5 5 0 0 0 5 5h5"></path>
+          <path d="M21 7h-5a4.978 4.978 0 0 0 -2.998 .998m-4.002 8.003a4.984 4.984 0 0 1 -3 .999h-3"></path>
+        </svg>
+      </button>
+      </div>
     </header>
     <main id="gallery" class="loading">
       {memes.map((meme, idx) => (
@@ -171,12 +180,43 @@ const title = "Memes";
     border-top: 5px solid #777;
     border-bottom: 5px solid #777;
     display: flex;
+    gap: 1em;
+    justify-content: space-between;
     padding: 0.25em 1em;
 
     h1 {
       margin: 0;
       font-variant-caps: petite-caps;
       font-weight: 300;
+    }
+
+    button {
+      background: none;
+      border: none;
+      cursor: pointer;
+
+      &:hover {
+        background-color: #555;
+        border-radius: 4px;
+      }
+    }
+
+    svg {
+      display: inline-block;
+      fill: transparent;
+      height: 1.5rem);
+      stroke: white;
+      vertical-align: middle;
+      width: 1.5rem;
+    }
+
+    div.controls {
+      display: flex;
+      gap: 1em;
+
+      div {
+        max-width: 20em;
+      }
     }
   }
 
