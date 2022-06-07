@@ -10,7 +10,7 @@ const title = "Memes";
   <Head {title} />
   <body>
     <header>
-      <h1>SUCHO Memes Gallery</h1>
+      <h1><a href={Astro.site.pathname} title="SUCHO Memes Gallery">SUCHO Memes Gallery</a></h1>
       <div class="controls">
       <StyledSelect>
         <option value="" disabled selected>---</option>
@@ -171,6 +171,15 @@ const title = "Memes";
     margin: 0;
     overflow: hidden;
     padding: 0;
+  }
+
+  a {
+    color: white;
+    text-decoration: none;
+
+    &:visited {
+      color: white;
+    }
   }
 
   header {
