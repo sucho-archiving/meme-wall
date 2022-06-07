@@ -57,6 +57,15 @@ export default class ZoomWall {
     );
   }
 
+  reset() {
+    [...this.container.getElementsByClassName("active")].forEach((block) => {
+      block.style.transform = "translate(0, 0) scale(1)";
+      block.classList.remove("active");
+    });
+    this.shrink();
+    this.resize();
+  }
+
   resize() {
     this.items
       .reduce(function (rows, block) {
@@ -71,15 +80,14 @@ export default class ZoomWall {
         return rows;
       }, new Map())
       .forEach((row) => ZoomWall.resizeRow(row, ZoomWall.calcRowWidth(row)));
-    return Promise.resolve();
   }
 
   shrink() {
     this.container.classList.remove("zoomed");
-    this.items.forEach(this.reset);
+    this.items.forEach(this.resetItem);
   }
 
-  reset(block) {
+  resetItem(block) {
     block.style.transform = "translate(0, 0) scale(1)";
     block.classList.remove("active");
   }
