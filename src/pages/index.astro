@@ -3,6 +3,8 @@ import Head from "../components/Head.astro";
 import StyledSelect from "../components/StyledSelect.astro";
 import { memes, memeTypes } from "../dataset.mjs";
 
+import suchoLogo from "../img/sucho-logo.32x32.png";
+
 const title = "Memes";
 ---
 
@@ -10,7 +12,10 @@ const title = "Memes";
   <Head {title} />
   <body>
     <header>
-      <h1><a href={Astro.site.pathname} title="SUCHO Meme Wall">SUCHO Meme Wall</a></h1>
+      <h1>
+        <img src={suchoLogo} alt="SUCHO" />
+        <a href={Astro.site.pathname} title="SUCHO Meme Wall">SUCHO Meme Wall</a>
+      </h1>
       <div class="controls">
       <StyledSelect title="Filter Memes">
         <option value="" disabled selected>---</option>
@@ -166,6 +171,13 @@ const title = "Memes";
       margin: 0;
       font-variant-caps: petite-caps;
       font-weight: 300;
+    }
+
+    img {
+      height: 32px;
+      margin-right: 0.25em;
+      margin-top: 2px;
+      vertical-align: text-top;
     }
 
     button {
