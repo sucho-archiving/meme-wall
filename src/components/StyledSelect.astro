@@ -1,4 +1,8 @@
-<div><select><slot /></select></div>
+---
+const { title } = Astro.props;
+---
+
+<div {title}><select><slot /></select></div>
 
 <style>
   div {
