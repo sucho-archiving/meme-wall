@@ -12,7 +12,7 @@ const title = "Memes";
       <h1>SUCHO Memes Gallery</h1>
       <button>Randomize</button>
     </header>
-    <main id="gallery">
+    <main id="gallery" class="loading">
       {memes.map((meme, idx) => (
         <div>
           { (idx < 20) ?
@@ -42,7 +42,13 @@ const title = "Memes";
 
 <script type="module" hoist>
   import ZoomWall from "../lib/zoomwall.js";
-  window.zoomwall = new ZoomWall(gallery);
+
+  let zoomwall;
+  
+  zoomwall = new ZoomWall(gallery);
+  zoomwall.resize().then(() => {
+    gallery.classList.remove("loading");
+  });  
 
   const enableLazyLoading = () => {
     const gallery = document.getElementById("gallery");
@@ -82,7 +88,7 @@ const title = "Memes";
 
   const randomize = () => {
     const gallery = document.getElementById("gallery");
-    window.zoomwall.destroy();
+    zoomwall.destroy();
     gallery.innerHTML = "";
     shuffleArray(memes).forEach((meme, idx) => {
       const div = document.createElement("div");
@@ -109,7 +115,7 @@ const title = "Memes";
         `;
       gallery.appendChild(div);
     });
-    window.zoomwall = new ZoomWall(gallery);
+    zoomwall = new ZoomWall(gallery);
     enableLazyLoading();
   };
 
@@ -143,9 +149,16 @@ const title = "Memes";
   }
 
   #gallery {
+    flex-grow: 1;
     font-size: 0;
     overflow-x: hidden;
     overflow-y: scroll;
+    transition: opacity 1s ease-in-out;
+    
+    &.loading {
+      opacity: 0;
+      transition: none;
+    }
 
     div {
       display: inline;
