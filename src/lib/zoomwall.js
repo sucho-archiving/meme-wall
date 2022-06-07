@@ -71,6 +71,7 @@ export default class ZoomWall {
         return rows;
       }, new Map())
       .forEach((row) => ZoomWall.resizeRow(row, ZoomWall.calcRowWidth(row)));
+    return Promise.resolve();
   }
 
   shrink() {
