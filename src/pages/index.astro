@@ -10,7 +10,7 @@ const title = "Memes";
   <Head {title} />
   <body>
     <header>
-      <h1><a href={Astro.site.pathname} title="SUCHO Memes Gallery">SUCHO Memes Gallery</a></h1>
+      <h1><a href={Astro.site.pathname} title="SUCHO Meme Wall">SUCHO Meme Wall</a></h1>
       <div class="controls">
       <StyledSelect title="Filter Memes">
         <option value="" disabled selected>---</option>
@@ -30,7 +30,7 @@ const title = "Memes";
       </button>
       </div>
     </header>
-    <main id="gallery" class="loading">
+    <main id="meme-wall" class="loading">
       {memes.map((meme, idx) => (
         <div data-types={meme.memeTypes.join("|")}>
           { (idx < 20) ?
@@ -62,14 +62,14 @@ const title = "Memes";
   import ZoomWall from "../lib/zoomwall.js";
 
   let zoomwall;
-  const gallery = document.getElementById("gallery");
+  const wall = document.getElementById("meme-wall");
   
-  zoomwall = new ZoomWall(gallery);
+  zoomwall = new ZoomWall(wall);
   zoomwall.resize();
-  gallery.classList.remove("loading");
+  wall.classList.remove("loading");
 
   const enableLazyLoading = () => {
-    const images = gallery.querySelectorAll("[data-src]");
+    const images = wall.querySelectorAll("[data-src]");
 
     const imageObserver = new IntersectionObserver(
       (entries, observer) => {
@@ -82,7 +82,7 @@ const title = "Memes";
           }
         });
       },
-      { root: gallery, rootMargin: "0px 0px 100% 0px" },
+      { root: wall, rootMargin: "0px 0px 100% 0px" },
     );
 
     images.forEach((image) => imageObserver.observe(image));
@@ -91,25 +91,25 @@ const title = "Memes";
   document.addEventListener("DOMContentLoaded", enableLazyLoading);
 
   const shuffle = () => {
-    gallery.classList.add("loading");
+    wall.classList.add("loading");
     setTimeout(() => {
       zoomwall.reset();
       zoomwall.destroy();
-      gallery.querySelectorAll("img").forEach(img => {
+      wall.querySelectorAll("img").forEach(img => {
         img.style.removeProperty("width");
         img.style.removeProperty("height");
       });
       // Modified Fisher–Yates shuffle
-      for (let i = gallery.children.length; i >= 0; i--) {
-        gallery.appendChild(gallery.children[Math.random() * i | 0]);
+      for (let i = wall.children.length; i >= 0; i--) {
+        wall.appendChild(wall.children[Math.random() * i | 0]);
       }
-      zoomwall = new ZoomWall(gallery);
-      gallery.classList.remove("loading");
+      zoomwall = new ZoomWall(wall);
+      wall.classList.remove("loading");
     });
   }
 
   const filterMemes = (memeType) => {
-    const items = gallery.querySelectorAll("[data-types]");
+    const items = wall.querySelectorAll("[data-types]");
     items.forEach(item => {
       if (item.dataset.types.split("|").includes(memeType)) {
         item.querySelector("img").style.removeProperty('width');
@@ -119,12 +119,12 @@ const title = "Memes";
         item.querySelector("img").classList.add("hidden");
       }
     })
-    gallery.classList.add("loading");
+    wall.classList.add("loading");
     zoomwall.reset();
-    if (gallery.querySelectorAll("img:not(.hidden)").length === 1) {
-      zoomwall.toggleItem({target: gallery.querySelector("img:not(.hidden)"), stopPropagation: () => {}});
+    if (wall.querySelectorAll("img:not(.hidden)").length === 1) {
+      zoomwall.toggleItem({target: wall.querySelector("img:not(.hidden)"), stopPropagation: () => {}});
     }
-    gallery.classList.remove("loading");
+    wall.classList.remove("loading");
   }
 
   document.querySelector("button").addEventListener("click", shuffle);
@@ -198,7 +198,7 @@ const title = "Memes";
     }
   }
 
-  #gallery {
+  #meme-wall {
     flex-grow: 1;
     font-size: 0;
     overflow-x: hidden;

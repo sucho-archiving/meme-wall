@@ -1,3 +1,3 @@
-# SUCHO Meme Gallery
+# SUCHO Meme Wall
 
 [work in progress]
