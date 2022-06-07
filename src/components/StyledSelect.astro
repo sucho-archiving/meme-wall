@@ -1,0 +1,48 @@
+---
+const { title } = Astro.props;
+---
+
+<div {title}><select><slot /></select></div>
+
+<style>
+  div {
+    background-color: #555; /* #e6e6e6; */
+    border-radius: 4px;
+    position: relative;
+
+    select {
+      appearance: none;
+      background-color: transparent;
+      border: none;
+      color: white;
+      font-size: 1rem;
+      font-weight: normal;
+      max-width: 100%;
+      padding: 6px 24px 6px 10px;
+
+      :global(option) {
+        color: black;
+      }
+
+      &:active,
+      &:focus {
+        outline: none;
+        box-shadow: none;
+      }
+    }
+
+    &:after {
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 5px solid white;
+      content: "";
+      height: 0;
+      margin-top: -2px;
+      pointer-events: none;
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      width: 0;
+    }
+  }
+</style>

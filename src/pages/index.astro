@@ -1,30 +1,38 @@
 ---
 import Head from "../components/Head.astro";
-import { memes } from "../dataset.mjs";
-
-import sizeOf from "image-size";
-
-const getAspectRatio = (imgPath) => {
-  const dimensions = sizeOf(imgPath);
-  return dimensions.width / dimensions.height;
-};
+import StyledSelect from "../components/StyledSelect.astro";
+import { memes, memeTypes } from "../dataset.mjs";
 
 const title = "Memes";
-
-memes.forEach((meme) => {
-  meme.mediaAspectRatio = getAspectRatio(meme.mediaPath);
-});
 ---
 
 <html lang="en">
   <Head {title} />
   <body>
     <header>
-      <h1>SUCHO Memes Gallery</h1>
+      <h1><a href={Astro.site.pathname} title="SUCHO Memes Gallery">SUCHO Memes Gallery</a></h1>
+      <div class="controls">
+      <StyledSelect title="Filter Memes">
+        <option value="" disabled selected>---</option>
+        {Array.from(memeTypes).map(memeType => (
+          <option value={memeType}>
+            {memeType} [{memes.filter(meme => meme.memeTypes.includes(memeType)).length}]
+          </option>
+        ))}
+      </StyledSelect>
+      <button title="Shuffle Memes">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 4l3 3l-3 3"></path>
+          <path d="M18 20l3 -3l-3 -3"></path>
+          <path d="M3 7h3a5 5 0 0 1 5 5a5 5 0 0 0 5 5h5"></path>
+          <path d="M21 7h-5a4.978 4.978 0 0 0 -2.998 .998m-4.002 8.003a4.984 4.984 0 0 1 -3 .999h-3"></path>
+        </svg>
+      </button>
+      </div>
     </header>
-    <main id="gallery">
+    <main id="gallery" class="loading">
       {memes.map((meme, idx) => (
-        <div>
+        <div data-types={meme.memeTypes.join("|")}>
           { (idx < 20) ?
             <img
               src={Astro.site.pathname + meme.mediaPath}
@@ -52,10 +60,15 @@ memes.forEach((meme) => {
 
 <script type="module" hoist>
   import ZoomWall from "../lib/zoomwall.js";
-  const zoomwall = new ZoomWall(gallery);
 
-  window.onload = () => {
-    const gallery = document.getElementById("gallery");
+  let zoomwall;
+  const gallery = document.getElementById("gallery");
+  
+  zoomwall = new ZoomWall(gallery);
+  zoomwall.resize();
+  gallery.classList.remove("loading");
+
+  const enableLazyLoading = () => {
     const images = gallery.querySelectorAll("[data-src]");
 
     const imageObserver = new IntersectionObserver(
@@ -74,9 +87,51 @@ memes.forEach((meme) => {
 
     images.forEach((image) => imageObserver.observe(image));
   };
+
+  document.addEventListener("DOMContentLoaded", enableLazyLoading);
+
+  const shuffle = () => {
+    gallery.classList.add("loading");
+    setTimeout(() => {
+      zoomwall.reset();
+      zoomwall.destroy();
+      gallery.querySelectorAll("img").forEach(img => {
+        img.style.removeProperty("width");
+        img.style.removeProperty("height");
+      });
+      // Modified Fisher–Yates shuffle
+      for (let i = gallery.children.length; i >= 0; i--) {
+        gallery.appendChild(gallery.children[Math.random() * i | 0]);
+      }
+      zoomwall = new ZoomWall(gallery);
+      gallery.classList.remove("loading");
+    });
+  }
+
+  const filterMemes = (memeType) => {
+    const items = gallery.querySelectorAll("[data-types]");
+    items.forEach(item => {
+      if (item.dataset.types.split("|").includes(memeType)) {
+        item.querySelector("img").style.removeProperty('width');
+        item.querySelector("img").style.removeProperty('height');
+        item.querySelector("img").classList.remove("hidden");
+      } else {
+        item.querySelector("img").classList.add("hidden");
+      }
+    })
+    gallery.classList.add("loading");
+    zoomwall.reset();
+    if (gallery.querySelectorAll("img:not(.hidden)").length === 1) {
+      zoomwall.toggleItem({target: gallery.querySelector("img:not(.hidden)"), stopPropagation: () => {}});
+    }
+    gallery.classList.remove("loading");
+  }
+
+  document.querySelector("button").addEventListener("click", shuffle);
+  document.querySelector("select").addEventListener("change", (event) => filterMemes(event.target.value));
 </script>
 
-<style>
+<style is:global>
   body {
     background-color: #333;
     color: white;
@@ -89,27 +144,76 @@ memes.forEach((meme) => {
     padding: 0;
   }
 
+  a {
+    color: white;
+    text-decoration: none;
+
+    &:visited {
+      color: white;
+    }
+  }
+
   header {
-    display: flex;
-    padding: 0.25em 1em;
+    align-items: center;
     border-top: 5px solid #777;
     border-bottom: 5px solid #777;
+    display: flex;
+    gap: 1em;
+    justify-content: space-between;
+    padding: 0.25em 1em;
 
     h1 {
       margin: 0;
       font-variant-caps: petite-caps;
       font-weight: 300;
     }
+
+    button {
+      background: none;
+      border: none;
+      cursor: pointer;
+
+      &:hover {
+        background-color: #555;
+        border-radius: 4px;
+      }
+    }
+
+    svg {
+      display: inline-block;
+      fill: transparent;
+      height: 1.5rem);
+      stroke: white;
+      vertical-align: middle;
+      width: 1.5rem;
+    }
+
+    div.controls {
+      display: flex;
+      gap: 1em;
+
+      div {
+        max-width: 20em;
+      }
+    }
   }
 
   #gallery {
+    flex-grow: 1;
     font-size: 0;
     overflow-x: hidden;
     overflow-y: scroll;
+    transition: opacity 1s ease-in-out;
+
+    &.loading {
+      opacity: 0;
+      transition: none;
+    }
 
     div {
       display: inline;
     }
+
     img {
       height: 15vmax;
       opacity: 1;
@@ -119,6 +223,10 @@ memes.forEach((meme) => {
       transition-timing-function: ease-out;
       vertical-align: top;
       width: auto;
+
+      &.hidden {
+        display: none;
+      }
     }
 
     section {

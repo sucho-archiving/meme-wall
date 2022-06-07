@@ -35,16 +35,35 @@ export default class ZoomWall {
     this.resize();
     this.container.classList.remove("loading");
 
+    this.shrink = this.shrink.bind(this);
+    this.toggleItem = this.toggleItem.bind(this);
+
     // shrink blocks if an empty space is clicked
-    this.container.addEventListener("click", this.shrink.bind(this));
+    this.container.addEventListener("click", this.shrink);
 
     // add click listeners to blocks
     this.items.forEach((item) =>
-      item.addEventListener("click", this.toggleItem.bind(this)),
+      item.addEventListener("click", this.toggleItem),
     );
 
     // add key down listener
     // keys(this.container);
+  }
+
+  destroy() {
+    this.container.removeEventListener("click", this.shrink);
+    this.items.forEach((item) =>
+      item.removeEventListener("click", this.toggleItem),
+    );
+  }
+
+  reset() {
+    [...this.container.getElementsByClassName("active")].forEach((block) => {
+      block.style.transform = "translate(0, 0) scale(1)";
+      block.classList.remove("active");
+    });
+    this.shrink();
+    this.resize();
   }
 
   resize() {
@@ -65,10 +84,10 @@ export default class ZoomWall {
 
   shrink() {
     this.container.classList.remove("zoomed");
-    this.items.forEach(this.reset);
+    this.items.forEach(this.resetItem);
   }
 
-  reset(block) {
+  resetItem(block) {
     block.style.transform = "translate(0, 0) scale(1)";
     block.classList.remove("active");
   }
