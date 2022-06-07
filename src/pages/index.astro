@@ -90,52 +90,23 @@ const title = "Memes";
 
   document.addEventListener("DOMContentLoaded", enableLazyLoading);
 
-  let memes;
-  fetch("./memes.json")
-    .then((resp) => resp.json())
-    .then((json) => (memes = json));
-
-  const shuffleArray = (array) => {
-    for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-  };
-
-  const randomize = () => {
-    const gallery = document.getElementById("gallery");
-    zoomwall.destroy();
-    gallery.innerHTML = "";
-    shuffleArray(memes).forEach((meme, idx) => {
-      const div = document.createElement("div");
-      div.dataset.types = meme.memeTypes.join("|");
-      if (idx < 20) {
-        div.innerHTML = `
-          <img
-            src="${meme.mediaPath}"
-            style="aspect-ratio: ${meme.mediaAspectRatio}"/>`;
-      } else {
-        div.innerHTML = `
-          <img
-            data-src="${meme.mediaPath}"
-            style="aspect-ratio: ${meme.mediaAspectRatio}"/>`;
+  const shuffle = () => {
+    gallery.classList.add("loading");
+    setTimeout(() => {
+      zoomwall.reset();
+      zoomwall.destroy();
+      gallery.querySelectorAll("img").forEach(img => {
+        img.style.removeProperty("width");
+        img.style.removeProperty("height");
+      });
+      // Modified Fisher–Yates shuffle
+      for (let i = gallery.children.length; i >= 0; i--) {
+        gallery.appendChild(gallery.children[Math.random() * i | 0]);
       }
-      div.innerHTML += `
-          <section>
-            <dl>
-              <dt>Title:</dt>
-              <dd>${meme.title}</dd>
-              <dt>Translation:</dt>
-              <dd>${meme.textTranslatedIntoEnglish}</dd>
-            </dl>
-          </section>
-        `;
-      gallery.appendChild(div);
+      zoomwall = new ZoomWall(gallery);
+      gallery.classList.remove("loading");
     });
-    zoomwall = new ZoomWall(gallery);
-    enableLazyLoading();
-  };
+  }
 
   const filterMemes = (memeType) => {
     const items = gallery.querySelectorAll("[data-types]");
@@ -156,7 +127,7 @@ const title = "Memes";
     gallery.classList.remove("loading");
   }
 
-  document.querySelector("button").addEventListener("click", randomize);
+  document.querySelector("button").addEventListener("click", shuffle);
   document.querySelector("select").addEventListener("change", (event) => filterMemes(event.target.value));
 </script>
 
@@ -233,7 +204,7 @@ const title = "Memes";
     overflow-x: hidden;
     overflow-y: scroll;
     transition: opacity 1s ease-in-out;
-    
+
     &.loading {
       opacity: 0;
       transition: none;
