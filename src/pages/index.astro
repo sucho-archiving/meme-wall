@@ -1,6 +1,7 @@
 ---
 import Head from "../components/Head.astro";
-import { memes } from "../dataset.mjs";
+import StyledSelect from "../components/StyledSelect.astro";
+import { memes, memeTypes } from "../dataset.mjs";
 
 const title = "Memes";
 ---
@@ -11,10 +12,18 @@ const title = "Memes";
     <header>
       <h1>SUCHO Memes Gallery</h1>
       <button>Randomize</button>
+      <StyledSelect>
+        <option value="" disabled selected>---</option>
+        {Array.from(memeTypes).map(memeType => (
+          <option key={memeType} value={memeType}>
+            {memeType} {memes.filter(meme => meme.memeTypes.includes(memeType)).length}
+          </option>
+        ))}        
+      </StyledSelect>
     </header>
     <main id="gallery" class="loading">
       {memes.map((meme, idx) => (
-        <div>
+        <div data-types={meme.memeTypes.join("|")}>
           { (idx < 20) ?
             <img
               src={Astro.site.pathname + meme.mediaPath}
@@ -44,6 +53,7 @@ const title = "Memes";
   import ZoomWall from "../lib/zoomwall.js";
 
   let zoomwall;
+  const gallery = document.getElementById("gallery");
   
   zoomwall = new ZoomWall(gallery);
   zoomwall.resize().then(() => {
@@ -51,7 +61,6 @@ const title = "Memes";
   });  
 
   const enableLazyLoading = () => {
-    const gallery = document.getElementById("gallery");
     const images = gallery.querySelectorAll("[data-src]");
 
     const imageObserver = new IntersectionObserver(
@@ -92,6 +101,7 @@ const title = "Memes";
     gallery.innerHTML = "";
     shuffleArray(memes).forEach((meme, idx) => {
       const div = document.createElement("div");
+      div.dataset.types = meme.memeTypes.join("|");
       if (idx < 20) {
         div.innerHTML = `
           <img
@@ -119,7 +129,28 @@ const title = "Memes";
     enableLazyLoading();
   };
 
+  const filterMemes = (memeType) => {
+    const items = gallery.querySelectorAll("[data-types]");
+    items.forEach(item => {
+      if (item.dataset.types.split("|").includes(memeType)) {
+        item.querySelector("img").style.removeProperty('width');
+        item.querySelector("img").style.removeProperty('height');
+        item.querySelector("img").classList.remove("hidden");
+      } else {
+        item.querySelector("img").classList.add("hidden");
+      }
+    })
+    gallery.classList.add("loading");
+      zoomwall.resize().then(() => {
+        if (gallery.querySelectorAll("img:not(.hidden)").length === 1) {
+          zoomwall.toggleItem({target: gallery.querySelector("img:not(.hidden)"), stopPropagation: () => {}});
+        }
+        gallery.classList.remove("loading");
+      });
+  }
+
   document.querySelector("button").addEventListener("click", randomize);
+  document.querySelector("select").addEventListener("change", (event) => filterMemes(event.target.value));
 </script>
 
 <style is:global>
@@ -136,6 +167,7 @@ const title = "Memes";
   }
 
   header {
+    align-items: center;
     display: flex;
     padding: 0.25em 1em;
     border-top: 5px solid #777;
@@ -173,6 +205,10 @@ const title = "Memes";
       transition-timing-function: ease-out;
       vertical-align: top;
       width: auto;
+
+      &.hidden {
+        display: none;
+      }
     }
 
     section {
