@@ -154,13 +154,13 @@ const title = "Memes";
   }
 
   header {
-    align-items: center;
+    align-items: flex-start;
     border-top: 5px solid #777;
     border-bottom: 5px solid #777;
     display: flex;
-    gap: 1em;
-    justify-content: space-between;
-    padding: 0.25em 1em;
+    flex-direction: column;
+    gap: 0.5em;
+    padding: 1em;
 
     h1 {
       margin: 0;
@@ -261,4 +261,14 @@ const title = "Memes";
       }
     }
   }
+
+@media (min-width: 745px) { /* 745px = 641px / 0.86 */
+  header {
+    align-items: center;
+    flex-direction: row;
+    gap: 1em;
+    justify-content: space-between;
+    padding: 0.25em 1em;
+  }
+}
 </style>
