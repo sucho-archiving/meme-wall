@@ -15,10 +15,10 @@ const title = "Memes";
       <StyledSelect>
         <option value="" disabled selected>---</option>
         {Array.from(memeTypes).map(memeType => (
-          <option key={memeType} value={memeType}>
+          <option value={memeType}>
             {memeType} {memes.filter(meme => meme.memeTypes.includes(memeType)).length}
           </option>
-        ))}        
+        ))}
       </StyledSelect>
     </header>
     <main id="gallery" class="loading">
@@ -168,10 +168,10 @@ const title = "Memes";
 
   header {
     align-items: center;
-    display: flex;
-    padding: 0.25em 1em;
     border-top: 5px solid #777;
     border-bottom: 5px solid #777;
+    display: flex;
+    padding: 0.25em 1em;
 
     h1 {
       margin: 0;
