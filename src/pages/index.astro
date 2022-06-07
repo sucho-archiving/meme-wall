@@ -65,9 +65,8 @@ const title = "Memes";
   const gallery = document.getElementById("gallery");
   
   zoomwall = new ZoomWall(gallery);
-  zoomwall.resize().then(() => {
-    gallery.classList.remove("loading");
-  });  
+  zoomwall.resize();
+  gallery.classList.remove("loading");
 
   const enableLazyLoading = () => {
     const images = gallery.querySelectorAll("[data-src]");
@@ -150,12 +149,11 @@ const title = "Memes";
       }
     })
     gallery.classList.add("loading");
-      zoomwall.resize().then(() => {
-        if (gallery.querySelectorAll("img:not(.hidden)").length === 1) {
-          zoomwall.toggleItem({target: gallery.querySelector("img:not(.hidden)"), stopPropagation: () => {}});
-        }
-        gallery.classList.remove("loading");
-      });
+    zoomwall.reset();
+    if (gallery.querySelectorAll("img:not(.hidden)").length === 1) {
+      zoomwall.toggleItem({target: gallery.querySelector("img:not(.hidden)"), stopPropagation: () => {}});
+    }
+    gallery.classList.remove("loading");
   }
 
   document.querySelector("button").addEventListener("click", randomize);
