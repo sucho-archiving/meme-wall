@@ -9,7 +9,10 @@ let { title, description } = Astro.props;
 
 <head prefix="dcterms: http://purl.org/dc/terms/#">
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=0.86, maximum-scale=5.0, minimum-scale=0.86"
+  />
 
   <meta name="description" property="og:description" content={description} />
   <title>{title}</title>
