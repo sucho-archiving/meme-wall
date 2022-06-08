@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 
+import gm from "gm";
 import sizeOf from "image-size";
 import neatCsv from "neat-csv";
 
@@ -15,6 +16,16 @@ const toCamelCase = (str) =>
 const getAspectRatio = (imgPath) => {
   const dimensions = sizeOf(imgPath);
   return dimensions.width / dimensions.height;
+};
+
+const generate3x3Thumbnail = (imgPath) => {
+  return new Promise(async (resolve, reject) => {
+    gm(imgPath)
+      .resize(3, 3)
+      .toBuffer("GIF", (error, buffer) => {
+        resolve(`data:image/gif;base64,${buffer.toString("base64")}`);
+      });
+  });
 };
 
 const fetchSheet = async (sheetId) => {
@@ -43,6 +54,10 @@ memes = memes
   }))
   // FIXME: exclude filenames with non-ascii characters
   .filter((meme) => /^[\u0000-\u007f]*$/.test(meme.mediaPath));
+
+for (const meme of memes) {
+  meme.thumbnail = await generate3x3Thumbnail(meme.mediaPath);
+}
 
 const memeTypes = new Set(memes.map((meme) => meme.memeTypes).flat());
 
