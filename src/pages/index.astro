@@ -42,12 +42,12 @@ const description = "Collected memes from the SUCHO project concerning the Russi
           { (idx < 20) ?
             <img
               src={Astro.site.pathname + meme.mediaPath}
-              style={`aspect-ratio: ${meme.mediaAspectRatio}`}
+              style={`aspect-ratio: ${meme.mediaAspectRatio};background-image: url(${meme.thumbnail})`}
             />
             :
             <img
               data-src={Astro.site.pathname + meme.mediaPath}
-              style={`aspect-ratio: ${meme.mediaAspectRatio}`}
+              style={`aspect-ratio: ${meme.mediaAspectRatio};background-image: url(${meme.thumbnail})`}
             />
           }
           <section>
@@ -228,6 +228,7 @@ const description = "Collected memes from the SUCHO project concerning the Russi
     }
 
     img {
+      background-size: cover;
       height: 15vmax;
       opacity: 1;
       transform-origin: 0% 0%;
