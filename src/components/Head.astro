@@ -1,5 +1,6 @@
 ---
 import { execSync } from "node:child_process";
+import suchoLogo from "../img/sucho-logo.32x32.png";
 
 const commit = execSync("git rev-parse --short HEAD").toString().trim();
 const datetime = new Date().toISOString();
@@ -9,11 +10,15 @@ let { title, description } = Astro.props;
 
 <head prefix="dcterms: http://purl.org/dc/terms/#">
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=0.86, maximum-scale=5.0, minimum-scale=0.86"
+  />
 
   <meta name="description" property="og:description" content={description} />
   <title>{title}</title>
 
   <meta name="version" content={commit} />
   <meta name="dcterms.modified" content={datetime} />
+  <link rel="preload" href={suchoLogo} as="image" />
 </head>

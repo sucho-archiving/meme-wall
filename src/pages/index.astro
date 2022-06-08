@@ -3,47 +3,70 @@ import Head from "../components/Head.astro";
 import StyledSelect from "../components/StyledSelect.astro";
 import { memes, memeTypes } from "../dataset.mjs";
 
-const title = "Memes";
+import styles from "../styles/styles.css";
+import suchoLogo from "../img/sucho-logo.32x32.png";
+
+const title = "SUCHO Meme Wall";
+const description =
+  "Collected memes from the SUCHO project concerning the Russian invasion of Ukraine.";
 ---
 
 <html lang="en">
-  <Head {title} />
+  <Head {title} {description} />
   <body>
     <header>
-      <h1><a href={Astro.site.pathname} title="SUCHO Meme Wall">SUCHO Meme Wall</a></h1>
+      <h1>
+        <img src={suchoLogo} alt="SUCHO" />
+        <a href={Astro.site.pathname} title="SUCHO Meme Wall"
+          >SUCHO Meme Wall
+        </a>
+      </h1>
       <div class="controls">
-      <StyledSelect title="Filter Memes">
-        <option value="" disabled selected>---</option>
-        {Array.from(memeTypes).map(memeType => (
-          <option value={memeType}>
-            {memeType} [{memes.filter(meme => meme.memeTypes.includes(memeType)).length}]
-          </option>
-        ))}
-      </StyledSelect>
-      <button title="Shuffle Memes">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M18 4l3 3l-3 3"></path>
-          <path d="M18 20l3 -3l-3 -3"></path>
-          <path d="M3 7h3a5 5 0 0 1 5 5a5 5 0 0 0 5 5h5"></path>
-          <path d="M21 7h-5a4.978 4.978 0 0 0 -2.998 .998m-4.002 8.003a4.984 4.984 0 0 1 -3 .999h-3"></path>
-        </svg>
-      </button>
+        <StyledSelect title="Filter Memes">
+          <option value="" disabled selected>-- Filter by Meme Type --</option>
+          {Array.from(memeTypes).map((memeType) => (
+            <option value={memeType}>
+              {memeType} [
+              {memes.filter((meme) => meme.memeTypes.includes(memeType)).length}
+              ]
+            </option>
+          ))}
+        </StyledSelect>
+        <button title="Shuffle Memes">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M18 4l3 3l-3 3"></path>
+            <path d="M18 20l3 -3l-3 -3"></path>
+            <path d="M3 7h3a5 5 0 0 1 5 5a5 5 0 0 0 5 5h5"></path>
+            <path
+              d="M21 7h-5a4.978 4.978 0 0 0 -2.998 .998m-4.002 8.003a4.984 4.984 0 0 1 -3 .999h-3"
+            ></path>
+          </svg>
+        </button>
       </div>
     </header>
     <main id="meme-wall" class="loading">
       {memes.map((meme, idx) => (
         <div data-types={meme.memeTypes.join("|")}>
-          { (idx < 20) ?
+          {idx < 20 ? (
             <img
               src={Astro.site.pathname + meme.mediaPath}
-              style={`aspect-ratio: ${meme.mediaAspectRatio}`}
+              style={`aspect-ratio: ${meme.mediaAspectRatio};background-image: url(${meme.thumbnail})`}
             />
-            :
+          ) : (
             <img
               data-src={Astro.site.pathname + meme.mediaPath}
-              style={`aspect-ratio: ${meme.mediaAspectRatio}`}
+              style={`aspect-ratio: ${meme.mediaAspectRatio};background-image: url(${meme.thumbnail})`}
             />
-          }
+          )}
+
           <section>
             <dl>
               <dt>Title:</dt>
@@ -63,14 +86,14 @@ const title = "Memes";
 
   let zoomwall;
   const wall = document.getElementById("meme-wall");
-  
+  const images = wall.querySelectorAll("[data-src]");
+  const selectFilter = document.querySelector("select");
+
   zoomwall = new ZoomWall(wall);
   zoomwall.resize();
   wall.classList.remove("loading");
 
   const enableLazyLoading = () => {
-    const images = wall.querySelectorAll("[data-src]");
-
     const imageObserver = new IntersectionObserver(
       (entries, observer) => {
         entries.forEach((entry) => {
@@ -84,7 +107,6 @@ const title = "Memes";
       },
       { root: wall, rootMargin: "0px 0px 100% 0px" },
     );
-
     images.forEach((image) => imageObserver.observe(image));
   };
 
@@ -92,173 +114,48 @@ const title = "Memes";
 
   const shuffle = () => {
     wall.classList.add("loading");
+    selectFilter.value = "";
     setTimeout(() => {
       zoomwall.reset();
       zoomwall.destroy();
-      wall.querySelectorAll("img").forEach(img => {
+      wall.querySelectorAll("img").forEach((img) => {
         img.style.removeProperty("width");
         img.style.removeProperty("height");
+        img.classList.remove("hidden");
       });
       // Modified Fisher–Yates shuffle
       for (let i = wall.children.length; i >= 0; i--) {
-        wall.appendChild(wall.children[Math.random() * i | 0]);
+        wall.appendChild(wall.children[(Math.random() * i) | 0]);
       }
       zoomwall = new ZoomWall(wall);
       wall.classList.remove("loading");
     });
-  }
+  };
 
   const filterMemes = (memeType) => {
     const items = wall.querySelectorAll("[data-types]");
-    items.forEach(item => {
+    items.forEach((item) => {
       if (item.dataset.types.split("|").includes(memeType)) {
-        item.querySelector("img").style.removeProperty('width');
-        item.querySelector("img").style.removeProperty('height');
+        item.querySelector("img").style.removeProperty("width");
+        item.querySelector("img").style.removeProperty("height");
         item.querySelector("img").classList.remove("hidden");
       } else {
         item.querySelector("img").classList.add("hidden");
       }
-    })
+    });
     wall.classList.add("loading");
     zoomwall.reset();
     if (wall.querySelectorAll("img:not(.hidden)").length === 1) {
-      zoomwall.toggleItem({target: wall.querySelector("img:not(.hidden)"), stopPropagation: () => {}});
+      zoomwall.toggleItem({
+        target: wall.querySelector("img:not(.hidden)"),
+        stopPropagation: () => {},
+      });
     }
     wall.classList.remove("loading");
-  }
+  };
 
   document.querySelector("button").addEventListener("click", shuffle);
-  document.querySelector("select").addEventListener("change", (event) => filterMemes(event.target.value));
+  document
+    .querySelector("select")
+    .addEventListener("change", (event) => filterMemes(event.target.value));
 </script>
-
-<style is:global>
-  body {
-    background-color: #333;
-    color: white;
-    display: flex;
-    flex-direction: column;
-    font-family: sans-serif;
-    height: 100vh;
-    margin: 0;
-    overflow: hidden;
-    padding: 0;
-  }
-
-  a {
-    color: white;
-    text-decoration: none;
-
-    &:visited {
-      color: white;
-    }
-  }
-
-  header {
-    align-items: center;
-    border-top: 5px solid #777;
-    border-bottom: 5px solid #777;
-    display: flex;
-    gap: 1em;
-    justify-content: space-between;
-    padding: 0.25em 1em;
-
-    h1 {
-      margin: 0;
-      font-variant-caps: petite-caps;
-      font-weight: 300;
-    }
-
-    button {
-      background: none;
-      border: none;
-      cursor: pointer;
-
-      &:hover {
-        background-color: #555;
-        border-radius: 4px;
-      }
-    }
-
-    svg {
-      display: inline-block;
-      fill: transparent;
-      height: 1.5rem);
-      stroke: white;
-      vertical-align: middle;
-      width: 1.5rem;
-    }
-
-    div.controls {
-      display: flex;
-      gap: 1em;
-
-      div {
-        max-width: 20em;
-      }
-    }
-  }
-
-  #meme-wall {
-    flex-grow: 1;
-    font-size: 0;
-    overflow-x: hidden;
-    overflow-y: scroll;
-    transition: opacity 1s ease-in-out;
-
-    &.loading {
-      opacity: 0;
-      transition: none;
-    }
-
-    div {
-      display: inline;
-    }
-
-    img {
-      height: 15vmax;
-      opacity: 1;
-      transform-origin: 0% 0%;
-      transition-duration: 0.3s;
-      transition-property: transform, opacity;
-      transition-timing-function: ease-out;
-      vertical-align: top;
-      width: auto;
-
-      &.hidden {
-        display: none;
-      }
-    }
-
-    section {
-      display: none;
-      background: rgba(0, 0, 0, 0.8);
-      bottom: 0;
-      color: white;
-      font-size: large;
-      padding: 0 1em;
-      position: absolute;
-      width: 100%;
-      z-index: 2;
-
-      dl {
-        display: grid;
-        grid-template-columns: 80px 1fr;
-      }
-    }
-
-    &.zoomed {
-      img {
-        opacity: 0.3;
-        transition-timing-function: ease-in;
-
-        &.active {
-          opacity: 1;
-
-          & + section {
-            display: block;
-          }
-        }
-      }
-    }
-  }
-</style>
