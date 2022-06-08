@@ -19,7 +19,7 @@ const description = "Collected memes from the SUCHO project concerning the Russi
       </h1>
       <div class="controls">
       <StyledSelect title="Filter Memes">
-        <option value="" disabled selected>---</option>
+        <option value="" disabled selected>-- Filter by Meme Type --</option>
         {Array.from(memeTypes).map(memeType => (
           <option value={memeType}>
             {memeType} [{memes.filter(meme => meme.memeTypes.includes(memeType)).length}]
@@ -69,14 +69,14 @@ const description = "Collected memes from the SUCHO project concerning the Russi
 
   let zoomwall;
   const wall = document.getElementById("meme-wall");
+  const images = wall.querySelectorAll("[data-src]");
+  const selectFilter = document.querySelector("select");
   
   zoomwall = new ZoomWall(wall);
   zoomwall.resize();
   wall.classList.remove("loading");
 
   const enableLazyLoading = () => {
-    const images = wall.querySelectorAll("[data-src]");
-
     const imageObserver = new IntersectionObserver(
       (entries, observer) => {
         entries.forEach((entry) => {
@@ -90,7 +90,6 @@ const description = "Collected memes from the SUCHO project concerning the Russi
       },
       { root: wall, rootMargin: "0px 0px 100% 0px" },
     );
-
     images.forEach((image) => imageObserver.observe(image));
   };
 
@@ -98,12 +97,14 @@ const description = "Collected memes from the SUCHO project concerning the Russi
 
   const shuffle = () => {
     wall.classList.add("loading");
+    selectFilter.value = "";
     setTimeout(() => {
       zoomwall.reset();
       zoomwall.destroy();
       wall.querySelectorAll("img").forEach(img => {
         img.style.removeProperty("width");
         img.style.removeProperty("height");
+        img.classList.remove("hidden");
       });
       // Modified Fisher–Yates shuffle
       for (let i = wall.children.length; i >= 0; i--) {
