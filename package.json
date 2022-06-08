@@ -12,6 +12,7 @@
   },
   "devDependencies": {
     "astro": "1.0.0-beta.40",
+    "gm": "^1.23.1",
     "image-size": "^1.0.1",
     "neat-csv": "^7.0.0",
     "postcss-nested": "^5.0.6",
