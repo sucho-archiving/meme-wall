@@ -1,5 +1,6 @@
 ---
 import { execSync } from "node:child_process";
+import suchoLogo from "../img/sucho-logo.32x32.png";
 
 const commit = execSync("git rev-parse --short HEAD").toString().trim();
 const datetime = new Date().toISOString();
@@ -19,4 +20,5 @@ let { title, description } = Astro.props;
 
   <meta name="version" content={commit} />
   <meta name="dcterms.modified" content={datetime} />
+  <link rel="preload" href={suchoLogo} as="image" />
 </head>
