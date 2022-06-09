@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
   background-color: #333;
   color: white;
@@ -20,13 +24,15 @@ a {
 }
 
 header {
-  align-items: flex-start;
+  align-items: center;
   border-top: 5px solid #777;
   border-bottom: 5px solid #777;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  flex-wrap: wrap;
   gap: 0.5em;
-  padding: 1em;
+  justify-content: center;
+  padding: 0.5em;
 
   h1 {
     margin: 0;
@@ -42,11 +48,24 @@ header {
     width: 32px;
   }
 
+  span.count {
+    background: #555;
+    border-radius: 4px;
+    display: grid;
+    padding: 7px 8px 5px;
+    place-content: center;
+    white-space: nowrap;
+  }
+
   div.controls {
     display: flex;
+    flex-grow: 1;
     gap: 1em;
+    justify-content: center;
 
     div {
+      flex-grow: 1;
+      flex-shrink: 1;
       max-width: 20em;
     }
 
@@ -138,13 +157,14 @@ header {
   }
 }
 
-/* 745px = 641px / 0.86 */
-@media (min-width: 745px) {
+/* 860px = 740px / 0.86 */
+@media (min-width: 860px) {
   header {
-    align-items: center;
-    flex-direction: row;
-    gap: 1em;
     justify-content: space-between;
     padding: 0.25em 1em;
+
+    div.controls {
+      justify-content: flex-end;
+    }
   }
 }

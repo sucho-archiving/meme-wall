@@ -22,6 +22,7 @@ const description =
         </a>
       </h1>
       <div class="controls">
+        <span class="count">{memes.length} / {memes.length}</span>
         <StyledSelect title="Filter Memes">
           <option value="" disabled selected>-- Filter by Meme Type --</option>
           {Array.from(memeTypes).map((memeType) => (
@@ -112,6 +113,14 @@ const description =
 
   document.addEventListener("DOMContentLoaded", enableLazyLoading);
 
+  const updateCount = () => {
+    const count = document.querySelector("span.count");
+    count.textContent =
+      wall.querySelectorAll("img:not(.hidden").length +
+      " / " +
+      wall.querySelectorAll("img").length;
+  };
+
   const shuffle = () => {
     wall.classList.add("loading");
     selectFilter.value = "";
@@ -123,6 +132,7 @@ const description =
         img.style.removeProperty("height");
         img.classList.remove("hidden");
       });
+      updateCount();
       // Modified Fisher–Yates shuffle
       for (let i = wall.children.length; i >= 0; i--) {
         wall.appendChild(wall.children[(Math.random() * i) | 0]);
@@ -143,6 +153,7 @@ const description =
         item.querySelector("img").classList.add("hidden");
       }
     });
+    updateCount();
     wall.classList.add("loading");
     zoomwall.reset();
     if (wall.querySelectorAll("img:not(.hidden)").length === 1) {
