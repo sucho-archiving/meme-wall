@@ -6,10 +6,9 @@ import neatCsv from "neat-csv";
 
 import { fetchFile } from "./fetch-media.mjs";
 
-const sheetUrl =
-  "https://docs.google.com/spreadsheets/d/12K7vdLa1PFFcuzQ5VWFxzhiJWp7wOqzhYWx-o9Atjps/export?format=csv";
+import { formResponsesSheetId, memeMediaFolder } from "./config.js";
 
-const memeMediaFolder = "meme_media";
+const sheetUrl = `https://docs.google.com/spreadsheets/d/${formResponsesSheetId}/export?format=csv`;
 
 const toCamelCase = (str) =>
   str.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase());
@@ -29,7 +28,7 @@ const generate3x3Thumbnail = (imgPath) => {
   });
 };
 
-const fetchSheet = async (sheetId) => {
+const fetchSheet = async (sheetUrl) => {
   const response = await fetch(sheetUrl);
   return await neatCsv(await response.text(), {
     mapHeaders: ({ header, index }) => toCamelCase(header.trim()),

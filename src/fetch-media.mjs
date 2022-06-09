@@ -3,12 +3,12 @@ import path from "path";
 import { writeFile } from "fs";
 import { promisify } from "util";
 
-const apiKey = "AIzaSyAVsxisgH5DPgtN0jJF6Cf0Q9xbSSaBaZU";
+import { driveApiKey } from "./config.js";
 
 const writeFilePromise = promisify(writeFile);
 
 const getDriveApiUrl = (id) =>
-  `https://www.googleapis.com/drive/v3/files/${id}?key=${apiKey}&alt=media`;
+  `https://www.googleapis.com/drive/v3/files/${id}?key=${driveApiKey}&alt=media`;
 
 const timer = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
