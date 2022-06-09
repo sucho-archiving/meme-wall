@@ -6,7 +6,7 @@ import neatCsv from "neat-csv";
 
 import { fetchFile } from "./fetch-media.mjs";
 
-import { formResponsesSheetId, memeMediaFolder } from "./config.js";
+import { formResponsesSheetId, memeMediaFolder } from "./config.mjs";
 
 const sheetUrl = `https://docs.google.com/spreadsheets/d/${formResponsesSheetId}/export?format=csv`;
 

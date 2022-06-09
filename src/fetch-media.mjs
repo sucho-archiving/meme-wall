@@ -3,7 +3,7 @@ import path from "path";
 import { writeFile } from "fs";
 import { promisify } from "util";
 
-import { driveApiKey } from "./config.js";
+import { driveApiKey } from "./config.mjs";
 
 const writeFilePromise = promisify(writeFile);
 
