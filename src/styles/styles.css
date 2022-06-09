@@ -63,7 +63,7 @@ header {
     gap: 1em;
     justify-content: center;
 
-    div {
+    div.select {
       flex-grow: 1;
       flex-shrink: 1;
       max-width: 20em;
@@ -72,11 +72,11 @@ header {
     button {
       background: none;
       border: none;
+      border-radius: 4px;
       cursor: pointer;
 
       &:hover {
         background-color: #555;
-        border-radius: 4px;
       }
     }
 
@@ -87,6 +87,46 @@ header {
       stroke: white;
       vertical-align: middle;
       width: 1.5rem;
+    }
+
+    div.search {
+      display: flex;
+      position: relative;
+      width: 2em;
+      transition: width 0.2s ease-in-out;
+
+      button {
+        height: 100%;
+      }
+
+      input {
+        appearance: none;
+        background-color: transparent;
+        border-radius: 0 4px 4px 0;
+        border: none;
+        color: white;
+        flex: 1 1 auto;
+        font-size: 1rem;
+        font-weight: normal;
+        outline-offset: -1px;
+        outline: 1px solid #555;
+        padding: 0;
+        width: 0;
+      }
+
+      &.shown {
+        width: 20em;
+
+        button {
+          background-color: #555;
+          border-radius: 4px 0 0 4px;
+        }
+
+        input {
+          display: inline;
+          padding: 0 10px;
+        }
+      }
     }
   }
 }

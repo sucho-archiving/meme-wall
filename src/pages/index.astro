@@ -34,6 +34,12 @@ const description =
             </option>
           ))}
         </StyledSelect>
+        <div class="search">
+          <button class="search" title="Search Memes"
+            ><Icon name="search" />
+          </button>
+          <input type="text" />
+        </div>
         <button class="shuffle" title="Shuffle Memes"
           ><Icon name="shuffle" />
         </button>
@@ -156,4 +162,38 @@ const description =
   filterSelect.addEventListener("change", ({ target: { value } }) =>
     filterMemes(value),
   );
+
+  document.querySelector("button.search").addEventListener("click", () => {
+    document.querySelector("div.search").classList.toggle("shown");
+  });
+
+  document.querySelector("div.search input").addEventListener("change", (e) => {
+    console.log(e.target.value);
+    const items = wall.querySelectorAll("[data-types]");
+    items.forEach((item) => {
+      if (
+        [...item.querySelectorAll("dd")].some((dd) =>
+          dd.textContent
+            .toLocaleLowerCase()
+            .includes(e.target.value.toLocaleLowerCase()),
+        )
+      ) {
+        item.querySelector("img").style.removeProperty("width");
+        item.querySelector("img").style.removeProperty("height");
+        item.querySelector("img").classList.remove("hidden");
+      } else {
+        item.querySelector("img").classList.add("hidden");
+      }
+    });
+    updateCount();
+    wall.classList.add("loading");
+    zoomwall.reset();
+    if (wall.querySelectorAll("img:not(.hidden)").length === 1) {
+      zoomwall.toggleItem({
+        target: wall.querySelector("img:not(.hidden)"),
+        stopPropagation: () => {},
+      });
+    }
+    wall.classList.remove("loading");
+  });
 </script>
