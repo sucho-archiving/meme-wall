@@ -1,9 +1,10 @@
-import fs from "fs";
 import path from "path";
 
 import gm from "gm";
 import sizeOf from "image-size";
 import neatCsv from "neat-csv";
+
+import { fetchFile } from "./fetch-media.mjs";
 
 const sheetUrl =
   "https://docs.google.com/spreadsheets/d/12K7vdLa1PFFcuzQ5VWFxzhiJWp7wOqzhYWx-o9Atjps/export?format=csv";
@@ -39,24 +40,31 @@ const fetchSheet = async (sheetId) => {
 let memes = await fetchSheet(sheetUrl);
 
 memes = memes
-  .filter((meme) => meme.timestamp)
-  .filter((meme) => meme.driveFilename)
-  .filter((meme) => meme.driveFilename.match(/\.jpg|\.jpeg|\.png$/i))
+  .filter((meme) => meme.timestamp) // filter out empty rows
   .map((meme) => ({
     ...meme,
-    mediaPath: path.join(memeMediaFolder, meme.driveFilename),
+    driveId: meme.uploadFile.match(/id=([^&]+)/)?.[1],
   }))
-  .filter((meme) => fs.existsSync(meme.mediaPath))
+  .filter((meme) => meme.driveId) // filter out rows where we can't derive a driveId
   .map((meme) => ({
     ...meme,
-    mediaAspectRatio: getAspectRatio(meme.mediaPath),
     memeTypes: meme.memeContentType.split(", "),
-  }))
-  // FIXME: exclude filenames with non-ascii characters
-  .filter((meme) => /^[\u0000-\u007f]*$/.test(meme.mediaPath));
+  }));
+
+for (const meme of memes) {
+  const filename = await fetchFile(meme, memeMediaFolder);
+  meme.mediaPath = path.join(memeMediaFolder, filename);
+}
+
+// filter out non-image files
+// note: may prove to be inadequate
+memes = memes.filter((meme) =>
+  meme.mediaPath.match(/\.jpg|\.jpeg|\.png|\.webp$/i),
+);
 
 for (const meme of memes) {
   meme.thumbnail = await generate3x3Thumbnail(meme.mediaPath);
+  meme.aspectRatio = getAspectRatio(meme.mediaPath);
 }
 
 const memeTypes = new Set(memes.map((meme) => meme.memeTypes).flat());
