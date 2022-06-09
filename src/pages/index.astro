@@ -34,7 +34,9 @@ const description =
             </option>
           ))}
         </StyledSelect>
-        <button title="Shuffle Memes"><Icon name="shuffle" /></button>
+        <button class="shuffle" title="Shuffle Memes"
+          ><Icon name="shuffle" />
+        </button>
       </div>
     </header>
     <main id="meme-wall" class="loading">
@@ -72,7 +74,8 @@ const description =
   let zoomwall;
   const wall = document.getElementById("meme-wall");
   const images = wall.querySelectorAll("[data-src]");
-  const selectFilter = document.querySelector("select");
+  const filterSelect = document.querySelector("select");
+  const shuffleButton = document.querySelector("button.shuffle");
 
   zoomwall = new ZoomWall(wall);
   zoomwall.resize();
@@ -107,7 +110,7 @@ const description =
 
   const shuffle = () => {
     wall.classList.add("loading");
-    selectFilter.value = "";
+    filterSelect.value = "";
     setTimeout(() => {
       zoomwall.reset();
       zoomwall.destroy();
@@ -149,8 +152,8 @@ const description =
     wall.classList.remove("loading");
   };
 
-  document.querySelector("button").addEventListener("click", shuffle);
-  document
-    .querySelector("select")
-    .addEventListener("change", (event) => filterMemes(event.target.value));
+  shuffleButton.addEventListener("click", shuffle);
+  filterSelect.addEventListener("change", ({ target: { value } }) =>
+    filterMemes(value),
+  );
 </script>
