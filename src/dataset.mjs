@@ -4,7 +4,7 @@ import gm from "gm";
 import sizeOf from "image-size";
 import neatCsv from "neat-csv";
 
-import { fetchFile } from "./fetch-media.mjs";
+import { fetchFile, purgeFiles } from "./fetch-media.mjs";
 
 import { formResponsesSheetId, memeMediaFolder } from "./config.mjs";
 
@@ -47,13 +47,15 @@ memes = memes
   .filter((meme) => meme.driveId) // filter out rows where we can't derive a driveId
   .map((meme) => ({
     ...meme,
-    memeTypes: meme.memeContentType.split(", "),
+    memeTypes: meme.memeContentType.split(", ").map((type) => type.trim()),
   }));
 
 for (const meme of memes) {
   const filename = await fetchFile(meme, memeMediaFolder);
   meme.mediaPath = path.join(memeMediaFolder, filename);
 }
+
+purgeFiles(memes, memeMediaFolder);
 
 // filter out non-image files
 // note: may prove to be inadequate

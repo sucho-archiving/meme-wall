@@ -52,3 +52,14 @@ export const fetchFile = async (meme, memeMediaFolder, delay = 1000) => {
   await timer(delay);
   return filename;
 };
+
+export const purgeFiles = (memes, memeMediaFolder) => {
+  const files = fs.readdirSync(memeMediaFolder);
+  const driveIds = memes.map((meme) => meme.driveId);
+  for (let filename of files) {
+    if (!driveIds.includes(path.parse(filename).name)) {
+      console.log(`purging ${filename}...`);
+      fs.unlinkSync(path.join(memeMediaFolder, filename));
+    }
+  }
+};
