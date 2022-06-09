@@ -42,32 +42,32 @@ header {
     width: 32px;
   }
 
-  button {
-    background: none;
-    border: none;
-    cursor: pointer;
-
-    &:hover {
-      background-color: #555;
-      border-radius: 4px;
-    }
-  }
-
-  svg {
-    display: inline-block;
-    fill: transparent;
-    height: 1.5rem;
-    stroke: white;
-    vertical-align: middle;
-    width: 1.5rem;
-  }
-
   div.controls {
     display: flex;
     gap: 1em;
 
     div {
       max-width: 20em;
+    }
+
+    button {
+      background: none;
+      border: none;
+      cursor: pointer;
+
+      &:hover {
+        background-color: #555;
+        border-radius: 4px;
+      }
+    }
+
+    svg {
+      display: inline-block;
+      fill: transparent;
+      height: 1.5rem;
+      stroke: white;
+      vertical-align: middle;
+      width: 1.5rem;
     }
   }
 }
