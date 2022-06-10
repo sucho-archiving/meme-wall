@@ -1,0 +1,57 @@
+---
+const {
+  name,
+  width = "1.5rem",
+  height = "1.5rem",
+  customAttribs = {},
+  className,
+} = Astro.props;
+
+const defaultAttribs = {
+  viewBox: "0 0 24 24",
+  "stroke-width": 2,
+  "stroke-linecap": "round",
+  "stroke-linejoin": "round",
+};
+
+const icons = {
+  shuffle: {
+    svg: `
+      <path d="M18 4l3 3l-3 3"></path>
+      <path d="M18 20l3 -3l-3 -3"></path>
+      <path d="M3 7h3a5 5 0 0 1 5 5a5 5 0 0 0 5 5h5"></path>
+      <path d="M21 7h-5a4.978 4.978 0 0 0 -2.998 .998m-4.002 8.003a4.984 4.984 0 0 1 -3 .999h-3"></path>
+    `,
+  },
+  search: {
+    svg: `
+      <circle cx="10" cy="10" r="7"></circle>
+      <line x1="21" y1="21" x2="15" y2="15"></line>
+    `,
+  },
+};
+
+if (!icons[name]) {
+  throw new Error(`Icon ${name} not found`);
+}
+
+const { attribs = {}, svg } = icons[name];
+---
+
+<svg
+  {...customAttribs}
+  {...attribs}
+  {...defaultAttribs}
+  class={className ? className : ""}
+  set:html={svg}></svg>
+
+<style define:vars={{ height, width }}>
+  svg {
+    display: inline-block;
+    fill: transparent;
+    height: var(--height);
+    stroke: currentColor;
+    vertical-align: middle;
+    width: var(--width);
+  }
+</style>

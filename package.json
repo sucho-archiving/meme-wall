@@ -1,13 +1,13 @@
 {
   "name": "@sucho/meme-wall",
-  "version": "0.2",
+  "version": "0.3",
   "private": true,
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "print-dataset": "node --experimental-fetch src/dataset.mjs",
+    "build-dataset": "node --experimental-fetch src/dataset.mjs",
     "gh-deploy": "bin/astro-gh-deploy.sh"
   },
   "devDependencies": {
