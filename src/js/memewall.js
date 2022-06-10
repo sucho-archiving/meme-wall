@@ -188,7 +188,11 @@ export default class MemeWall {
         Math.sign(rowIndex - selectedIndex) *
           (scale - 1) *
           rowHeights
-            .slice(...[selectedIndex, rowIndex].sort())
+            .slice(
+              ...(rowIndex >= selectedIndex
+                ? [selectedIndex, rowIndex]
+                : [rowIndex, selectedIndex]),
+            )
             .reduce((offset, height) => offset + height, 0) -
         offsetY;
       row
