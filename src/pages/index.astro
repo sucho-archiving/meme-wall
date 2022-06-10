@@ -58,12 +58,12 @@ const description =
           {idx < 20 ? (
             <img
               src={Astro.site.pathname + meme.mediaPath}
-              style={`aspect-ratio: ${meme.mediaAspectRatio};background-image: url(${meme.thumbnail})`}
+              style={`aspect-ratio: ${meme.aspectRatio};background-image: url(${meme.thumbnail})`}
             />
           ) : (
             <img
               data-src={Astro.site.pathname + meme.mediaPath}
-              style={`aspect-ratio: ${meme.mediaAspectRatio};background-image: url(${meme.thumbnail})`}
+              style={`aspect-ratio: ${meme.aspectRatio};background-image: url(${meme.thumbnail})`}
             />
           )}
 
