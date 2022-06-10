@@ -86,19 +86,17 @@ const shuffle = () => {
 };
 
 const filterMemes = (memeType) => {
+  const delay = searchInput.value ? 200 : 0;
   resetSearchUI();
-  setTimeout(
-    () => {
-      items.forEach((item) =>
-        toggleItem(
-          item.querySelector("img"),
-          item.dataset.types.split("|").includes(memeType),
-        ),
-      );
-      updateWall();
-    },
-    searchInput.value ? 200 : 0,
-  );
+  setTimeout(() => {
+    items.forEach((item) =>
+      toggleItem(
+        item.querySelector("img"),
+        item.dataset.types.split("|").includes(memeType),
+      ),
+    );
+    updateWall();
+  }, delay);
 };
 
 const searchMemes = (searchTerm) => {

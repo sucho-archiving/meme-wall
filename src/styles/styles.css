@@ -93,8 +93,8 @@ header {
     div.search {
       display: flex;
       position: relative;
-      width: 2em;
-      transition: width 0.2s ease-in-out;
+      max-width: 20em;
+      transition: flex 200ms ease-in-out;
 
       button {
         height: 100%;
@@ -116,7 +116,7 @@ header {
       }
 
       &.shown {
-        width: 20em;
+        flex-grow: 1;
 
         button {
           background-color: #555;
@@ -198,8 +198,8 @@ header {
   }
 }
 
-/* 860px = 740px / 0.86 */
-@media (min-width: 860px) {
+/* 910px = 785px / 0.86 */
+@media (min-width: 910px) {
   header {
     justify-content: space-between;
     padding: 0.25em 1em;
