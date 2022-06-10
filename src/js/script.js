@@ -46,12 +46,14 @@ const updateCount = () => {
 const updateWall = () => {
   updateCount();
   wallContainer.classList.add("loading");
+  wallContainer.classList.remove("single");
   memewall.reset();
   if (wallContainer.querySelectorAll("img:not(.hidden)").length === 1) {
     memewall.toggleItem({
       target: wallContainer.querySelector("img:not(.hidden)"),
       stopPropagation: () => {},
     });
+    wallContainer.classList.add("single");
   }
   wallContainer.classList.remove("loading");
 };
@@ -67,6 +69,7 @@ const resetFilterUI = () => {
 
 const shuffle = () => {
   wallContainer.classList.add("loading");
+  wallContainer.classList.remove("single");
   resetSearchUI();
   resetFilterUI();
   setTimeout(() => {

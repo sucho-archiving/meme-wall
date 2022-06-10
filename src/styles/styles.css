@@ -129,6 +129,10 @@ div.controls {
     transition: none;
   }
 
+  &:not(.single) {
+    cursor: pointer;
+  }
+
   div {
     display: inline;
   }
