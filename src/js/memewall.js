@@ -1,4 +1,4 @@
-export default class ZoomWall {
+export default class MemeWall {
   constructor(container) {
     this.container =
       typeof container === "string"
@@ -79,7 +79,7 @@ export default class ZoomWall {
           : _a.push(block);
         return rows;
       }, new Map())
-      .forEach((row) => ZoomWall.resizeRow(row, ZoomWall.calcRowWidth(row)));
+      .forEach((row) => MemeWall.resizeRow(row, MemeWall.calcRowWidth(row)));
   }
 
   shrink() {

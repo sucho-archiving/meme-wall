@@ -34,6 +34,12 @@ const description =
             </option>
           ))}
         </StyledSelect>
+        <div class="search">
+          <button class="search" title="Search Memes"
+            ><Icon name="search" />
+          </button>
+          <input type="text" />
+        </div>
         <button class="shuffle" title="Shuffle Memes"
           ><Icon name="shuffle" />
         </button>
@@ -69,91 +75,5 @@ const description =
 </html>
 
 <script type="module" hoist>
-  import ZoomWall from "../lib/zoomwall.js";
-
-  let zoomwall;
-  const wall = document.getElementById("meme-wall");
-  const images = wall.querySelectorAll("[data-src]");
-  const filterSelect = document.querySelector("select");
-  const shuffleButton = document.querySelector("button.shuffle");
-
-  zoomwall = new ZoomWall(wall);
-  zoomwall.resize();
-  wall.classList.remove("loading");
-
-  const enableLazyLoading = () => {
-    const imageObserver = new IntersectionObserver(
-      (entries, observer) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const image = entry.target;
-            image.src = image.dataset.src;
-            image.removeAttribute("data-src");
-            imageObserver.unobserve(image);
-          }
-        });
-      },
-      { root: wall, rootMargin: "0px 0px 100% 0px" },
-    );
-    images.forEach((image) => imageObserver.observe(image));
-  };
-
-  document.addEventListener("DOMContentLoaded", enableLazyLoading);
-
-  const updateCount = () => {
-    const count = document.querySelector("span.count");
-    count.textContent =
-      wall.querySelectorAll("img:not(.hidden").length +
-      " / " +
-      wall.querySelectorAll("img").length;
-  };
-
-  const shuffle = () => {
-    wall.classList.add("loading");
-    filterSelect.value = "";
-    setTimeout(() => {
-      zoomwall.reset();
-      zoomwall.destroy();
-      wall.querySelectorAll("img").forEach((img) => {
-        img.style.removeProperty("width");
-        img.style.removeProperty("height");
-        img.classList.remove("hidden");
-      });
-      updateCount();
-      // Modified Fisher–Yates shuffle
-      for (let i = wall.children.length; i >= 0; i--) {
-        wall.appendChild(wall.children[(Math.random() * i) | 0]);
-      }
-      zoomwall = new ZoomWall(wall);
-      wall.classList.remove("loading");
-    });
-  };
-
-  const filterMemes = (memeType) => {
-    const items = wall.querySelectorAll("[data-types]");
-    items.forEach((item) => {
-      if (item.dataset.types.split("|").includes(memeType)) {
-        item.querySelector("img").style.removeProperty("width");
-        item.querySelector("img").style.removeProperty("height");
-        item.querySelector("img").classList.remove("hidden");
-      } else {
-        item.querySelector("img").classList.add("hidden");
-      }
-    });
-    updateCount();
-    wall.classList.add("loading");
-    zoomwall.reset();
-    if (wall.querySelectorAll("img:not(.hidden)").length === 1) {
-      zoomwall.toggleItem({
-        target: wall.querySelector("img:not(.hidden)"),
-        stopPropagation: () => {},
-      });
-    }
-    wall.classList.remove("loading");
-  };
-
-  shuffleButton.addEventListener("click", shuffle);
-  filterSelect.addEventListener("change", ({ target: { value } }) =>
-    filterMemes(value),
-  );
+  import "../js/script.js";
 </script>
