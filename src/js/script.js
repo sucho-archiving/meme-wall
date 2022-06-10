@@ -57,7 +57,7 @@ const updateWall = () => {
 };
 
 const resetSearchUI = () => {
-  document.querySelector("div.search").classList.remove("shown");
+  document.querySelector("div.controls").classList.remove("searching");
   searchInput.value = "";
 };
 
@@ -122,7 +122,7 @@ filterSelect.addEventListener("change", ({ target: { value } }) =>
 );
 
 searchButton.addEventListener("click", () => {
-  document.querySelector("div.search").classList.toggle("shown");
+  document.querySelector("div.controls").classList.toggle("searching");
   searchInput.focus();
 });
 

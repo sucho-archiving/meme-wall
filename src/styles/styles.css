@@ -24,7 +24,7 @@ a {
 }
 
 header {
-  align-items: center;
+  align-items: flex-start;
   border-top: 5px solid #777;
   border-bottom: 5px solid #777;
   display: flex;
@@ -47,6 +47,14 @@ header {
     vertical-align: text-top;
     width: 32px;
   }
+}
+
+div.controls {
+  display: flex;
+  flex-grow: 1;
+  gap: 1em;
+  justify-content: center;
+  position: relative;
 
   span.count {
     background: #555;
@@ -58,76 +66,53 @@ header {
     white-space: nowrap;
   }
 
-  div.controls {
-    display: flex;
+  div.select {
     flex-grow: 1;
-    gap: 1em;
-    justify-content: center;
+    flex-shrink: 1;
+    max-width: 20em;
+  }
 
-    div.select {
-      flex-grow: 1;
-      flex-shrink: 1;
-      max-width: 20em;
+  button {
+    background: none;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #555;
     }
+  }
+
+  svg {
+    display: inline-block;
+    fill: transparent;
+    height: 1.5rem;
+    stroke: white;
+    vertical-align: middle;
+    width: 1.5rem;
+  }
+
+  div.search {
+    display: flex;
+    max-width: 20em;
+    transition: flex 200ms ease-in-out;
 
     button {
-      background: none;
+      height: 100%;
+    }
+
+    input {
+      appearance: none;
+      background-color: transparent;
       border: none;
-      border-radius: 4px;
-      cursor: pointer;
-
-      &:hover {
-        background-color: #555;
-      }
-    }
-
-    svg {
-      display: inline-block;
-      fill: transparent;
-      height: 1.5rem;
-      stroke: white;
-      vertical-align: middle;
-      width: 1.5rem;
-    }
-
-    div.search {
-      display: flex;
-      position: relative;
-      max-width: 20em;
-      transition: flex 200ms ease-in-out;
-
-      button {
-        height: 100%;
-      }
-
-      input {
-        appearance: none;
-        background-color: transparent;
-        border-radius: 0 4px 4px 0;
-        border: none;
-        color: white;
-        flex: 1 1 auto;
-        font-size: 1rem;
-        font-weight: normal;
-        outline-offset: -1px;
-        outline: 1px solid #555;
-        padding: 0;
-        width: 0;
-      }
-
-      &.shown {
-        flex-grow: 1;
-
-        button {
-          background-color: #555;
-          border-radius: 4px 0 0 4px;
-        }
-
-        input {
-          display: inline;
-          padding: 0 10px;
-        }
-      }
+      color: white;
+      flex: 1 1 auto;
+      font-size: 1rem;
+      font-weight: normal;
+      outline-offset: -1px;
+      outline: 1px solid #555;
+      padding: 0;
+      width: 0;
     }
   }
 }
@@ -198,14 +183,73 @@ header {
   }
 }
 
-/* 910px = 785px / 0.86 */
-@media (min-width: 910px) {
+/* 950px = 815px / 0.86 */
+@media (min-width: 950px) {
   header {
+    gap: 3em;
     justify-content: space-between;
     padding: 0.25em 1em;
+  }
 
-    div.controls {
-      justify-content: flex-end;
+  div.controls {
+    justify-content: flex-end;
+  }
+}
+
+@media (max-width: 1159px) {
+  div.controls {
+    padding-top: 4px;
+    transition: padding-bottom 200ms ease;
+
+    &.searching {
+      padding-bottom: 55px;
+
+      div.search {
+        button {
+          background-color: #555;
+          border-radius: 4px 0 0 4px;
+        }
+
+        input {
+          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' fill='transparent' stroke='%23555'%3E%3Ccircle cx='10' cy='10' r='7'%3E%3C/circle%3E%3Cline x1='21' y1='21' x2='15' y2='15'%3E%3C/line%3E%3C/svg%3E");
+          background-repeat: no-repeat;
+          background-size: 1.5rem;
+          background-position: 10px center;
+          border-radius: 4px;
+          padding: 10px 10px 10px 40px;
+          position: absolute;
+          width: 100%;
+          left: 0;
+          bottom: 3px;
+          height: 40px;
+          line-height: 1em;
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: 1160px) {
+  header {
+    align-items: center;
+  }
+
+  div.controls {
+    &.searching {
+      div.search {
+        flex-grow: 1;
+
+        button {
+          background-color: #555;
+          border-radius: 4px 0 0 4px;
+        }
+
+        input {
+          border-radius: 0 4px 4px 0;
+          display: inline;
+          padding: 0 10px;
+        }
+      }
     }
   }
 }
