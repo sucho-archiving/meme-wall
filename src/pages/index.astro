@@ -1,5 +1,6 @@
 ---
 import Head from "../components/Head.astro";
+import Loader from "../components/Loader.astro";
 import StyledSelect from "../components/StyledSelect.astro";
 import Icon from "../components/Icon.astro";
 import { memes, memeTypes } from "../dataset.mjs";
@@ -47,7 +48,7 @@ const description =
     </header>
     <main id="meme-wall" class="loading">
       {memes.map((meme, idx) => (
-        <div data-types={meme.memeTypes.join("|")}>
+        <article data-types={meme.memeTypes.join("|")}>
           {idx < 20 ? (
             <img
               src={Astro.site.pathname + meme.mediaPath}
@@ -68,12 +69,12 @@ const description =
               <dd>{meme.textTranslatedIntoEnglish}</dd>
             </dl>
           </section>
-        </div>
+        </article>
       ))}
     </main>
+    <Loader />
+    <script type="module" hoist>
+      import "../js/script.js";
+    </script>
   </body>
 </html>
-
-<script type="module" hoist>
-  import "../js/script.js";
-</script>

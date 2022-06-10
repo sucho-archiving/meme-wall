@@ -83,6 +83,7 @@ export default class MemeWall {
   }
 
   shrink() {
+    if (this.container.classList.contains("single")) return;
     this.container.classList.remove("zoomed");
     this.items.forEach(this.resetItem);
   }
