@@ -56,13 +56,23 @@ const updateWall = () => {
   wallContainer.classList.remove("loading");
 };
 
+const resetSearchUI = () => {
+  document.querySelector("div.search").classList.remove("shown");
+  searchInput.value = "";
+};
+
+const resetFilterUI = () => {
+  filterSelect.value = "";
+};
+
 const shuffle = () => {
   wallContainer.classList.add("loading");
-  filterSelect.value = "";
+  resetSearchUI();
+  resetFilterUI();
   setTimeout(() => {
     memewall.reset();
     memewall.destroy();
-    wallContainer.querySelectorAll("img").forEach(toggleItem);
+    wallContainer.querySelectorAll("img").forEach((img) => toggleItem(img));
     updateCount();
     // Modified Fisher–Yates shuffle
     for (let i = wallContainer.children.length; i >= 0; i--) {
@@ -72,20 +82,27 @@ const shuffle = () => {
     }
     memewall = new MemeWall(wallContainer);
     wallContainer.classList.remove("loading");
-  });
+  }, 200);
 };
 
 const filterMemes = (memeType) => {
-  items.forEach((item) =>
-    toggleItem(
-      item.querySelector("img"),
-      item.dataset.types.split("|").includes(memeType),
-    ),
+  resetSearchUI();
+  setTimeout(
+    () => {
+      items.forEach((item) =>
+        toggleItem(
+          item.querySelector("img"),
+          item.dataset.types.split("|").includes(memeType),
+        ),
+      );
+      updateWall();
+    },
+    searchInput.value ? 200 : 0,
   );
-  updateWall();
 };
 
 const searchMemes = (searchTerm) => {
+  resetFilterUI();
   items.forEach((item) =>
     toggleItem(
       item.querySelector("img"),
@@ -108,6 +125,7 @@ filterSelect.addEventListener("change", ({ target: { value } }) =>
 
 searchButton.addEventListener("click", () => {
   document.querySelector("div.search").classList.toggle("shown");
+  searchInput.focus();
 });
 
 searchInput.addEventListener("change", ({ target: { value } }) =>
