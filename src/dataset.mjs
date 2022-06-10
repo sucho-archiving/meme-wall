@@ -48,7 +48,9 @@ memes = memes
   .map((meme) => ({
     ...meme,
     memeTypes: meme.memeContentType.split(", ").map((type) => type.trim()),
-  }));
+    timestamp: new Date(meme.timestamp),
+  }))
+  .sort((a, b) => b.timestamp - a.timestamp);
 
 for (const meme of memes) {
   const filename = await fetchFile(meme, memeMediaFolder);
