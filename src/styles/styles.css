@@ -52,6 +52,7 @@ header {
     background: #555;
     border-radius: 4px;
     display: grid;
+    min-width: calc(9ch + 16px);
     padding: 7px 8px 5px;
     place-content: center;
     white-space: nowrap;
