@@ -53,11 +53,13 @@ const description =
             <img
               src={Astro.site.pathname + meme.mediaPath}
               style={`aspect-ratio: ${meme.aspectRatio};background-image: url(${meme.thumbnail})`}
+              alt={meme.title}
             />
           ) : (
             <img
               data-src={Astro.site.pathname + meme.mediaPath}
               style={`aspect-ratio: ${meme.aspectRatio};background-image: url(${meme.thumbnail})`}
+              alt={meme.title}
             />
           )}
 
