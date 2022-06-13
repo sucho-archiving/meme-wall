@@ -53,8 +53,7 @@ memes = memes
   .sort((a, b) => b.timestamp - a.timestamp);
 
 for (const meme of memes) {
-  const filename = await fetchFile(meme, memeMediaFolder);
-  meme.mediaPath = path.join(memeMediaFolder, filename);
+  meme.filename = await fetchFile(meme, memeMediaFolder);
 }
 
 purgeFiles(memes, memeMediaFolder);
@@ -62,12 +61,13 @@ purgeFiles(memes, memeMediaFolder);
 // filter out non-image files
 // note: may prove to be inadequate
 memes = memes.filter((meme) =>
-  meme.mediaPath.match(/\.jpg|\.jpeg|\.png|\.webp$/i),
+  meme.filename.match(/\.jpg|\.jpeg|\.png|\.webp$/i),
 );
 
 for (const meme of memes) {
-  meme.thumbnail = await generate3x3Thumbnail(meme.mediaPath);
-  meme.aspectRatio = getAspectRatio(meme.mediaPath);
+  const filepath = path.join(memeMediaFolder, meme.filename);
+  meme.thumbnail = await generate3x3Thumbnail(filepath);
+  meme.aspectRatio = getAspectRatio(filepath);
 }
 
 const memeTypes = new Set(memes.map((meme) => meme.memeTypes).flat());
