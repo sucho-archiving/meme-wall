@@ -28,10 +28,8 @@ const description =
         <StyledSelect title="Filter Memes">
           <option value="" disabled selected>-- Filter by Meme Type --</option>
           {Array.from(memeTypes).map((memeType) => (
-            <option value={memeType}>
-              {memeType} [
-              {memes.filter((meme) => meme.memeTypes.includes(memeType)).length}
-              ]
+            <option value={memeType} set:text={
+              `${memeType} [${memes.filter((meme) => meme.memeTypes.includes(memeType)).length}]`}>
             </option>
           ))}
         </StyledSelect>
