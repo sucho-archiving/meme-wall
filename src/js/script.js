@@ -133,14 +133,9 @@ searchInput.addEventListener("change", ({ target: { value } }) =>
   searchMemes(value),
 );
 
-document.addEventListener("DOMContentLoaded", () =>
-  enableLazyLoading(
-    wallContainer.querySelectorAll("[data-src]"),
-    wallContainer,
-  ),
-);
+// Hook up lazy loading
+enableLazyLoading(wallContainer.querySelectorAll("[data-src]"), wallContainer);
 
-// Initialize
+// Initialize MemeWall
 memewall = new MemeWall(wallContainer);
-memewall.resize();
 wallContainer.classList.remove("loading");

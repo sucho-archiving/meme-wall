@@ -154,6 +154,7 @@ div.loader {
   img {
     background-size: cover;
     box-shadow: inset 0 0 4px 4px rgba(0, 0, 0, 0.5);
+    display: inline-block;
     height: 15vmax;
     opacity: 1;
     transform-origin: 0% 0%;
