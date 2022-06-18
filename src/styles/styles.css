@@ -201,6 +201,16 @@ div.loader {
   }
 }
 
+.visually-hidden {
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
 /* 950px = 815px / 0.86 */
 @media (min-width: 950px) {
   header {

@@ -1,8 +1,6 @@
 ---
 const {
   name,
-  width = "1.5rem",
-  height = "1.5rem",
   customAttribs = {},
   className,
 } = Astro.props;
@@ -45,13 +43,13 @@ const { attribs = {}, svg } = icons[name];
   class={className ? className : ""}
   set:html={svg}></svg>
 
-<style define:vars={{ height, width }}>
+<style>
   svg {
     display: inline-block;
     fill: transparent;
-    height: var(--height);
+    height: 1.5rem;
     stroke: currentColor;
     vertical-align: middle;
-    width: var(--width);
+    width: 1.5rem;
   }
 </style>

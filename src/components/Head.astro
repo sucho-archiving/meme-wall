@@ -1,6 +1,6 @@
 ---
 import { execSync } from "node:child_process";
-import suchoLogo from "../img/sucho-logo.32x32.png";
+import openGraphImage from "../img/opengraph_image.1200x630.jpeg";
 
 const commit = execSync("git rev-parse --short HEAD").toString().trim();
 const datetime = new Date().toISOString();
@@ -15,10 +15,25 @@ let { title, description } = Astro.props;
     content="width=device-width, initial-scale=0.86, maximum-scale=5.0, minimum-scale=0.86"
   />
 
-  <meta name="description" property="og:description" content={description} />
+  <!-- HTML Meta Tags -->
   <title>{title}</title>
+  <meta name="description" content={description} />
+
+  <!-- Facebook Meta Tags -->
+  <meta property="og:url" content={Astro.site} />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={openGraphImage} />
+
+  <!-- Twitter Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta property="twitter:domain" content={Astro.site.host} />
+  <meta property="twitter:url" content={Astro.site} />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={openGraphImage} />
 
   <meta name="version" content={commit} />
   <meta name="dcterms.modified" content={datetime} />
-  <link rel="preload" href={suchoLogo} as="image" />
 </head>
