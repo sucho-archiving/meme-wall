@@ -1,62 +1,72 @@
 <div class="loader">
-  <div class="sk-cube sk-cube1"></div>
-  <div class="sk-cube sk-cube2"></div>
-  <div class="sk-cube sk-cube3"></div>
-  <div class="sk-cube sk-cube4"></div>
-  <div class="sk-cube sk-cube5"></div>
-  <div class="sk-cube sk-cube6"></div>
-  <div class="sk-cube sk-cube7"></div>
-  <div class="sk-cube sk-cube8"></div>
-  <div class="sk-cube sk-cube9"></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
 </div>
 
 <style>
   .loader {
+    height: 120px;
+    left: 50%;
     position: absolute;
     top: 50%;
-    left: 50%;
     transform: translate3d(-50%, -50%, 0);
     width: 120px;
-    height: 120px;
 
-    .sk-cube {
-      width: 25%;
-      height: 25%;
+    div {
+      animation: grid-scale 2s infinite ease-in-out;
       background-color: #ddd;
+      border-radius: 8px;
       float: left;
-      animation: sk-cubeGridScaleDelay 2s infinite ease-in-out;
+      height: 25%;
       margin: 4%;
+      width: 25%;
     }
-    .sk-cube1 {
+
+    div:nth-child(1) {
       animation-delay: 0.2s;
     }
-    .sk-cube2 {
+
+    div:nth-child(2) {
       animation-delay: 0.3s;
     }
-    .sk-cube3 {
+
+    div:nth-child(3) {
       animation-delay: 0.4s;
     }
-    .sk-cube4 {
+
+    div:nth-child(4) {
       animation-delay: 0.1s;
     }
-    .sk-cube5 {
+
+    div:nth-child(5) {
       animation-delay: 0.2s;
     }
-    .sk-cube6 {
+
+    div:nth-child(6) {
       animation-delay: 0.3s;
     }
-    .sk-cube7 {
+
+    div:nth-child(7) {
       animation-delay: 0s;
     }
-    .sk-cube8 {
+
+    div:nth-child(8) {
       animation-delay: 0.1s;
     }
-    .sk-cube9 {
+
+    div:nth-child(9) {
       animation-delay: 0.2s;
     }
   }
 
-  @keyframes sk-cubeGridScaleDelay {
+  @keyframes grid-scale {
     0%,
     70%,
     100% {
