@@ -153,7 +153,7 @@ div.loader {
     &::after {
       bottom: 0;
       color: white;
-      content: "No memes found!";
+      content: "No memes found!\A\A(click here to reset)";
       display: grid;
       font-size: 40px;
       left: 0;
