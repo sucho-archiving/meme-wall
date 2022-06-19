@@ -48,6 +48,9 @@ const updateWall = () => {
   wallContainer.classList.add("loading");
   wallContainer.classList.remove("single");
   memewall.reset();
+  if (wallContainer.querySelectorAll("img:not(.hidden)").length === 0) {
+    wallContainer.classList.add("empty");
+  }
   if (wallContainer.querySelectorAll("img:not(.hidden)").length === 1) {
     memewall.toggleItem({
       target: wallContainer.querySelector("img:not(.hidden)"),
