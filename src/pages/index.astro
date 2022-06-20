@@ -13,19 +13,13 @@ import suchoLogo from "../img/sucho-logo.32x32.png";
 // Given a <picture/> element as am HTML string (as returned by renderPicture),
 // extract the srcset attribute values and return an object of the form
 // { <ext>: <srcset>, ... }
-const getSrcsetFromPicture = (picture) => {
-  try {
-    return Object.fromEntries(
-      [...picture.matchAll(/srcset="(?<s>[^"]*?)"/g)].map((s) => [
-        s[1].match(/(?<=\.)[^\s.]+(?=\s|$)/)[0],
-        s.groups.s,
-      ]),
-    );
-  } catch (e) {
-    console.log(picture);
-    throw e;
-  }
-};
+const getSrcsetFromPicture = (picture) =>
+  Object.fromEntries(
+    [...picture.matchAll(/srcset="(?<s>[^"]*?)"/g)].map((s) => [
+      s[1].match(/(?<=\.)[^\s.]+(?=\s|$)/)[0],
+      s.groups.s,
+    ]),
+  );
 
 const title = "SUCHO Meme Wall";
 const description =
@@ -74,6 +68,8 @@ const description =
           fallbackFormat: "jpeg",
           format: "webp",
           alt: meme.title,
+          placeholder: "none",
+          includeSourceFormat: false,
         })
         const srcsets = getSrcsetFromPicture(picture)
 
