@@ -11,12 +11,15 @@
     "gh-deploy": "bin/astro-gh-deploy.sh"
   },
   "devDependencies": {
-    "astro": "1.0.0-beta.42",
+    "astro": "1.0.0-beta.50",
     "astro-imagetools": "^0.6.10",
     "gm": "^1.23.1",
     "image-size": "^1.0.1",
     "neat-csv": "^7.0.0",
     "postcss-nested": "^5.0.6",
     "prettier-plugin-astro": "^0.1.0-next.5"
+  },
+  "resolutions": {
+    "sharp": "^0.30.6"
   }
 }
