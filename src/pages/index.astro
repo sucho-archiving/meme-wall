@@ -25,8 +25,6 @@ const title = "SUCHO Meme Wall";
 const description =
   "Collected memes from the SUCHO project concerning the Russian invasion of Ukraine.";
 ---
-
-
 <html lang="en">
   <Head {title} {description} />
   <body>
@@ -63,7 +61,7 @@ const description =
       </div>
     </header>
     <main id="meme-wall" class="loading">
-      {memes.map(async (meme) => {
+      {memes.map(async (meme, idx) => {
         const { picture } = await renderPicture({
           src: "/src/../meme_media/" + meme.filename,
           fallbackFormat: "jpeg",
@@ -80,7 +78,7 @@ const description =
             <img
               data-src={srcsets.jpg}
               style={`aspect-ratio: ${meme.aspectRatio};background-image: url(${meme.thumbnail})`}
-              loading="lazy"
+              loading={idx > 20 ? "lazy" : "eager"}
               decoding="async"
               alt={meme.title}
               sizes="15vmax"
