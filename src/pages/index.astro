@@ -1,4 +1,6 @@
 ---
+import { renderPicture } from "astro-imagetools/api";
+
 import Head from "../components/Head.astro";
 import Loader from "../components/Loader.astro";
 import StyledSelect from "../components/StyledSelect.astro";
@@ -7,6 +9,17 @@ import { memes, memeTypes } from "../dataset.mjs";
 
 import styles from "../styles/styles.css";
 import suchoLogo from "../img/sucho-logo.32x32.png";
+
+// Given a <picture/> element as am HTML string (as returned by renderPicture),
+// extract the srcset attribute values and return an object of the form
+// { <ext>: <srcset>, ... }
+const getSrcsetFromPicture = (picture) =>
+  Object.fromEntries(
+    [...picture.matchAll(/srcset="(?<s>[^"]*?)"/g)].map((s) => [
+      s[1].match(/(?<=\.)[^\s.]+(?=\s|$)/)[0],
+      s.groups.s,
+    ]),
+  );
 
 const title = "SUCHO Meme Wall";
 const description =
@@ -28,9 +41,12 @@ const description =
         <StyledSelect title="Filter Memes">
           <option value="" disabled selected>-- Filter by Meme Type --</option>
           {Array.from(memeTypes).map((memeType) => (
-            <option value={memeType} set:text={
-              `${memeType} [${memes.filter((meme) => meme.memeTypes.includes(memeType)).length}]`}>
-            </option>
+            <option
+              value={memeType}
+              set:text={`${memeType} [${
+                memes.filter((meme) => meme.memeTypes.includes(memeType)).length
+              }]`}
+            />
           ))}
         </StyledSelect>
         <div class="search">
@@ -46,32 +62,41 @@ const description =
       </div>
     </header>
     <main id="meme-wall" class="loading">
-      {memes.map((meme, idx) => (
-        <article data-types={meme.memeTypes.join("|")}>
-          {idx < 20 ? (
-            <img
-              src={Astro.site.pathname + meme.mediaPath}
-              style={`aspect-ratio: ${meme.aspectRatio};background-image: url(${meme.thumbnail})`}
-              alt={meme.title}
-            />
-          ) : (
-            <img
-              data-src={Astro.site.pathname + meme.mediaPath}
-              style={`aspect-ratio: ${meme.aspectRatio};background-image: url(${meme.thumbnail})`}
-              alt={meme.title}
-            />
-          )}
+      {memes.map(async (meme) => {
+        const { picture } = await renderPicture({
+          src: "/src/../meme_media/" + meme.filename,
+          fallbackFormat: "jpeg",
+          format: "webp",
+          alt: meme.title,
+          placeholder: "none",
+          includeSourceFormat: false,
+        })
+        const srcsets = getSrcsetFromPicture(picture)
 
-          <section>
-            <dl>
-              <dt>Title:</dt>
-              <dd>{meme.title}</dd>
-              <dt>Translation:</dt>
-              <dd>{meme.textTranslatedIntoEnglish}</dd>
-            </dl>
-          </section>
-        </article>
-      ))}
+        return (
+          <article data-types={meme.memeTypes.join("|")}>
+            <picture>
+              <source srcset={srcsets.webp} type="image/webp" sizes="15vmax" />
+              <img
+                data-src={srcsets.jpg}
+                style={`aspect-ratio: ${meme.aspectRatio};background-image: url(${meme.thumbnail})`}
+                loading="lazy"
+                decoding="async"
+                alt={meme.title}
+                sizes="15vmax"
+              />
+              <section>
+                <dl>
+                  <dt>Title:</dt>
+                  <dd>{meme.title}</dd>
+                  <dt>Translation:</dt>
+                  <dd>{meme.textTranslatedIntoEnglish}</dd>
+                </dl>
+              </section>
+            </picture>
+          </article>
+        )
+      })}
     </main>
     <Loader />
     <script type="module" hoist>

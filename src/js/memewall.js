@@ -1,9 +1,10 @@
 export default class MemeWall {
-  constructor(container) {
+  constructor(container, onItemToggleCb = () => {}) {
     this.container =
       typeof container === "string"
         ? document.querySelector(container)
         : container;
+    this.onItemToggleCb = onItemToggleCb;
     this.init();
   }
 
@@ -103,6 +104,7 @@ export default class MemeWall {
       );
       this.expand(block);
     }
+    this.onItemToggleCb(block);
     event.stopPropagation();
   }
 

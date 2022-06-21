@@ -117,6 +117,16 @@ const searchMemes = (searchTerm) => {
   updateWall();
 };
 
+const wallItemToggleCb = (img) => {
+  if (img.classList.contains("active")) {
+    img.sizes = "100vw";
+    img.previousElementSibling.sizes = "100vw";
+  } else {
+    img.sizes = "15vmax";
+    img.previousElementSibling.sizes = "15vmax";
+  }
+};
+
 // Hook up event listeners
 shuffleButton.addEventListener("click", shuffle);
 
@@ -137,5 +147,5 @@ searchInput.addEventListener("change", ({ target: { value } }) =>
 enableLazyLoading(wallContainer.querySelectorAll("[data-src]"), wallContainer);
 
 // Initialize MemeWall
-memewall = new MemeWall(wallContainer);
+memewall = new MemeWall(wallContainer, wallItemToggleCb);
 wallContainer.classList.remove("loading");
