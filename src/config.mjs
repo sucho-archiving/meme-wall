@@ -2,6 +2,9 @@
 export const formResponsesSheetId =
   "1KUOXe5SMMaghl_JI_eZghHG18CXok3D6yb1_SHJM0no";
 
+// Tab ID (gid=) for the "ready" tab that has curated memes for publishing
+export const readyTabId = "965014117";
+
 // location of the local folder for copies of the uploaded media
 export const memeMediaFolder = "meme_media";
 

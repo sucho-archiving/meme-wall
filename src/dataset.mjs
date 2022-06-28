@@ -6,9 +6,13 @@ import neatCsv from "neat-csv";
 
 import { fetchFile, purgeFiles } from "./fetch-media.mjs";
 
-import { formResponsesSheetId, memeMediaFolder } from "./config.mjs";
+import {
+  formResponsesSheetId,
+  readyTabId,
+  memeMediaFolder,
+} from "./config.mjs";
 
-const sheetUrl = `https://docs.google.com/spreadsheets/d/${formResponsesSheetId}/export?format=csv`;
+const sheetUrl = `https://docs.google.com/spreadsheets/d/${formResponsesSheetId}/export?format=csv&gid=${readyTabId}`;
 
 const toCamelCase = (str) =>
   str.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase());
