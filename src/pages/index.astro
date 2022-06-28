@@ -74,27 +74,23 @@ const description =
         const srcsets = getSrcsetFromPicture(picture)
 
         return (
-          <article data-types={meme.memeTypes.join("|")}>
-            <picture>
-              <source srcset={srcsets.webp} type="image/webp" sizes="15vmax" />
-              <img
-                data-src={srcsets.jpg}
-                style={`aspect-ratio: ${meme.aspectRatio};background-image: url(${meme.thumbnail})`}
-                loading="lazy"
-                decoding="async"
-                alt={meme.title}
-                sizes="15vmax"
-              />
-              <section>
-                <dl>
-                  <dt>Title:</dt>
-                  <dd>{meme.title}</dd>
-                  <dt>Translation:</dt>
-                  <dd>{meme.textTranslatedIntoEnglish}</dd>
-                </dl>
-              </section>
-            </picture>
-          </article>
+          <picture data-types={meme.memeTypes.join("|")}>
+            <source srcset={srcsets.webp} type="image/webp" sizes="15vmax" />
+            <img
+              data-src={srcsets.jpg}
+              style={`aspect-ratio: ${meme.aspectRatio};background-image: url(${meme.thumbnail})`}
+              loading="lazy"
+              decoding="async"
+              alt={meme.title}
+              sizes="15vmax"
+            />
+            <dl>
+              <dt>Title:</dt>
+              <dd>{meme.title}</dd>
+              <dt>Translation:</dt>
+              <dd>{meme.textTranslatedIntoEnglish}</dd>
+            </dl>
+          </picture>
         )
       })}
     </main>
