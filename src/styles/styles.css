@@ -255,7 +255,7 @@ div.loader {
 
   &.zoomed {
     img {
-      opacity: 0.3;
+      opacity: 0.1;
       transition-timing-function: ease-in;
 
       &.active {
