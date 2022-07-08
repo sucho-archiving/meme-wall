@@ -63,7 +63,7 @@ export default class MemeWall {
       block.style.transform = "translate(0, 0) scale(1)";
       block.classList.remove("active");
     });
-    this.shrink();
+    this.shrink(false);
     this.resize();
   }
 
@@ -83,10 +83,12 @@ export default class MemeWall {
       .forEach((row) => MemeWall.resizeRow(row, MemeWall.calcRowWidth(row)));
   }
 
-  shrink() {
-    if (this.container.classList.contains("single")) return;
-    this.container.classList.remove("zoomed");
-    this.items.forEach(this.resetItem);
+  shrink(event) {
+    if (!event || (event && event.target === this.container)) {
+      if (this.container.classList.contains("single")) return;
+      this.container.classList.remove("zoomed");
+      this.items.forEach(this.resetItem);
+    }
   }
 
   resetItem(block) {
@@ -97,7 +99,7 @@ export default class MemeWall {
   toggleItem(event) {
     const block = event.target;
     if (block.classList.contains("active")) {
-      this.shrink();
+      this.shrink(false);
     } else {
       [...this.container.getElementsByClassName("active")].forEach((block) =>
         block.classList.remove("active"),
