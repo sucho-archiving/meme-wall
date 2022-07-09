@@ -24,13 +24,13 @@ a {
 }
 
 header {
-  align-items: flex-start;
+  align-items: stretch;
   border-top: 5px solid #777;
   border-bottom: 5px solid #777;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  gap: 0.5em;
+  gap: 0 1em;
   justify-content: center;
   padding: 0.5em;
 
@@ -47,6 +47,17 @@ header {
     vertical-align: text-top;
     width: 32px;
   }
+
+  button {
+    background: none;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #555;
+    }
+  }
 }
 
 div.controls {
@@ -54,6 +65,7 @@ div.controls {
   flex-grow: 1;
   gap: 1em;
   justify-content: center;
+  padding: 4px 0;
   position: relative;
 
   span.count {
@@ -70,17 +82,6 @@ div.controls {
     flex-grow: 1;
     flex-shrink: 1;
     max-width: 20em;
-  }
-
-  button {
-    background: none;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-
-    &:hover {
-      background-color: #555;
-    }
   }
 
   svg {
@@ -109,11 +110,31 @@ div.controls {
       flex: 1 1 auto;
       font-family: inherit;
       font-size: 1rem;
+      margin-bottom: -2px;
       outline-offset: -1px;
       outline: 1px solid #555;
       padding: 0;
       width: 0;
     }
+  }
+}
+
+button.show-filters.on {
+  background-color: #555;
+}
+
+div.more-filters {
+  display: flex;
+  gap: 1em;
+  height: 0;
+  justify-content: center;
+  overflow: hidden;
+  transition: height 200ms ease, margin-top 200ms ease;
+  width: 100%;
+
+  &.show {
+    height: 35px;
+    margin-top: 0.5em;
   }
 }
 
@@ -280,9 +301,9 @@ div.loader {
 }
 
 /* 950px = 815px / 0.86 */
-@media (min-width: 950px) {
+@media (min-width: 960px) {
   header {
-    gap: 3em;
+    gap: 0 1em;
     justify-content: space-between;
     padding: 0.25em 1em;
   }
@@ -290,20 +311,27 @@ div.loader {
   div.controls {
     justify-content: flex-end;
   }
+
+  div.more-filters {
+    justify-content: flex-end;
+
+    &.show {
+      margin-top: 0;
+    }
+  }
 }
 
-@media (max-width: 1159px) {
+@media (max-width: 1149px) {
   div.controls {
     padding-top: 4px;
     transition: padding-bottom 200ms ease;
 
     &.searching {
-      padding-bottom: 55px;
+      padding-bottom: 54px;
 
       div.search {
         button {
           background-color: #555;
-          border-radius: 4px 0 0 4px;
         }
 
         input {
@@ -319,13 +347,14 @@ div.loader {
           bottom: 3px;
           height: 40px;
           line-height: 1em;
+          margin-bottom: 4px;
         }
       }
     }
   }
 }
 
-@media (min-width: 1160px) {
+@media (min-width: 1150px) {
   header {
     align-items: center;
   }
@@ -343,6 +372,7 @@ div.loader {
         input {
           border-radius: 0 4px 4px 0;
           display: inline;
+          margin-bottom: 0;
           padding: 0 10px;
         }
       }

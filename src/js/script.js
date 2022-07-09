@@ -5,6 +5,7 @@ const wallContainer = document.getElementById("meme-wall");
 const items = wallContainer.querySelectorAll("[data-types]");
 const filterSelect = document.querySelector("select");
 const shuffleButton = document.querySelector("button.shuffle");
+const showFiltersButton = document.querySelector("button.show-filters");
 const searchButton = document.querySelector("button.search");
 const searchInput = document.querySelector("div.search input");
 
@@ -141,6 +142,11 @@ shuffleButton.addEventListener("click", shuffle);
 filterSelect.addEventListener("change", ({ target: { value } }) =>
   filterMemes(value),
 );
+
+showFiltersButton.addEventListener("click", () => {
+  document.querySelector("div.more-filters").classList.toggle("show");
+  showFiltersButton.classList.toggle("on");
+});
 
 searchButton.addEventListener("click", () => {
   document.querySelector("div.controls").classList.toggle("searching");
