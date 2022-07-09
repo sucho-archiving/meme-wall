@@ -1,6 +1,6 @@
 {
   "name": "@sucho/meme-wall",
-  "version": "0.5",
+  "version": "0.6",
   "private": true,
   "scripts": {
     "dev": "astro dev --experimental-integrations",
@@ -21,5 +21,8 @@
   },
   "resolutions": {
     "sharp": "^0.30.6"
+  },
+  "dependencies": {
+    "@fontsource/jost": "^4.5.10"
   }
 }

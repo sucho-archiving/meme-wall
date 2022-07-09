@@ -7,7 +7,7 @@ body {
   color: white;
   display: flex;
   flex-direction: column;
-  font-family: sans-serif;
+  font-family: "Jost", sans-serif;
   height: 100vh;
   margin: 0;
   overflow: hidden;
@@ -35,9 +35,9 @@ header {
   padding: 0.5em;
 
   h1 {
-    margin: 0;
     font-variant-caps: petite-caps;
     font-weight: 300;
+    margin: 0;
   }
 
   img {
@@ -107,8 +107,8 @@ div.controls {
       border: none;
       color: white;
       flex: 1 1 auto;
+      font-family: inherit;
       font-size: 1rem;
-      font-weight: normal;
       outline-offset: -1px;
       outline: 1px solid #555;
       padding: 0;
@@ -147,19 +147,33 @@ div.loader {
     cursor: pointer;
   }
 
-  article {
-    display: inline;
+  &.empty {
+    position: relative;
+
+    &::after {
+      bottom: 0;
+      color: white;
+      content: "No memes found!\A\A(click here to reset)";
+      display: grid;
+      font-size: 40px;
+      left: 0;
+      place-items: center;
+      position: absolute;
+      right: 0;
+      text-align: center;
+      top: 0;
+      white-space: pre;
+    }
   }
 
   img {
     background-size: cover;
-    box-shadow: inset 0 0 4px 4px rgba(0, 0, 0, 0.5);
     display: inline-block;
     height: 15vmax;
     opacity: 1;
     transform-origin: 0% 0%;
     transition-duration: 0.3s;
-    transition-property: transform, opacity;
+    transition-property: transform, opacity, box-shadow;
     transition-timing-function: ease-out;
     vertical-align: top;
     width: auto;
@@ -169,33 +183,86 @@ div.loader {
     }
   }
 
-  section {
-    display: none;
+  dl {
     background: rgba(0, 0, 0, 0.8);
+    border: 1em solid transparent;
     bottom: 0;
     color: white;
+    column-gap: 1em;
+    display: none;
     font-size: large;
-    padding: 0 1em;
+    grid-template-columns: 7em 1fr;
+    margin: 0;
     position: absolute;
     width: 100%;
     z-index: 2;
 
-    dl {
+    &:not(.show-more) {
+      dt:nth-child(n + 5),
+      dd:nth-child(n + 5) {
+        font-size: 0;
+        opacity: 0;
+        margin-top: 0;
+        transition: font-size 300ms 300ms ease-in,
+          margin-top 300ms 300ms ease-in, opacity 300ms 0ms ease-in;
+      }
+
+      &:after {
+        transition: transform 300ms 300ms ease-in-out;
+      }
+    }
+
+    dt,
+    dd {
       display: grid;
-      grid-template-columns: 80px 1fr;
+      margin: 4px 0 0 0;
+      opacity: 1;
+      overflow: hidden;
+      place-content: center left;
+      transition: font-size 300ms 0ms ease-in, margin-top 300ms 0ms ease-in,
+        opacity 300ms 300ms ease-in;
+    }
+
+    dt {
+      background-color: #555;
+      border-radius: 4px;
+      font-size: 0.8em;
+      line-height: 1.8;
+      padding: 0 4px;
+      place-content: center right;
+      text-align: right;
+      text-transform: uppercase;
+    }
+
+    &::after {
+      border-color: transparent transparent white;
+      border-style: solid;
+      border-width: 0 10px 17.3px 10px;
+      content: "";
+      height: 0;
+      position: absolute;
+      right: 0;
+      top: 0;
+      transition: transform 300ms ease-in-out;
+      width: 0;
+    }
+
+    &.show-more::after {
+      transform: rotate(-0.5turn);
     }
   }
 
   &.zoomed {
     img {
-      opacity: 0.3;
+      opacity: 0.1;
       transition-timing-function: ease-in;
 
       &.active {
         opacity: 1;
+        box-shadow: 0px 0px 8px 10px rgba(0, 0, 0, 0.8);
 
-        & + section {
-          display: block;
+        & + dl {
+          display: grid;
         }
       }
     }

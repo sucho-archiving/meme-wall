@@ -7,6 +7,7 @@ import StyledSelect from "../components/StyledSelect.astro";
 import Icon from "../components/Icon.astro";
 import { memes, memeTypes } from "../dataset.mjs";
 
+import "@fontsource/jost/300.css";
 import styles from "../styles/styles.css";
 import suchoLogo from "../img/sucho-logo.32x32.png";
 
@@ -25,7 +26,6 @@ const title = "SUCHO Meme Wall";
 const description =
   "Collected memes from the SUCHO project concerning the Russian invasion of Ukraine.";
 ---
-
 <html lang="en">
   <Head {title} {description} />
   <body>
@@ -62,7 +62,7 @@ const description =
       </div>
     </header>
     <main id="meme-wall" class="loading">
-      {memes.map(async (meme) => {
+      {memes.map(async (meme, idx) => {
         const { picture } = await renderPicture({
           src: "/src/../meme_media/" + meme.filename,
           fallbackFormat: "jpeg",
@@ -74,27 +74,33 @@ const description =
         const srcsets = getSrcsetFromPicture(picture)
 
         return (
-          <article data-types={meme.memeTypes.join("|")}>
-            <picture>
-              <source srcset={srcsets.webp} type="image/webp" sizes="15vmax" />
-              <img
-                data-src={srcsets.jpg}
-                style={`aspect-ratio: ${meme.aspectRatio};background-image: url(${meme.thumbnail})`}
-                loading="lazy"
-                decoding="async"
-                alt={meme.title}
-                sizes="15vmax"
-              />
-              <section>
-                <dl>
-                  <dt>Title:</dt>
-                  <dd>{meme.title}</dd>
-                  <dt>Translation:</dt>
-                  <dd>{meme.textTranslatedIntoEnglish}</dd>
-                </dl>
-              </section>
-            </picture>
-          </article>
+          <picture data-types={meme.memeTypes.join("|")}>
+            <source srcset={srcsets.webp} type="image/webp" sizes="15vmax" />
+            <img
+              data-src={srcsets.jpg}
+              style={`aspect-ratio: ${meme.aspectRatio};background-image: url(${meme.thumbnail})`}
+              loading={idx > 20 ? "lazy" : "eager"}
+              decoding="async"
+              alt={meme.title}
+              sizes="15vmax"
+            />
+            <dl>
+              <dt>Title</dt>
+              <dd>{meme.title || "---"}</dd>
+              <dt>Translation</dt>
+              <dd>{meme.textTranslatedIntoEnglish || "---"}</dd>
+              <dt>Content Type</dt>
+              <dd>{meme.memeContentType || "---"}</dd>
+              <dt>Country</dt>
+              <dd>{meme.country || "---"}</dd>
+              <dt>Language</dt>
+              <dd>{meme.language || "---"}</dd>
+              <dt>Template Type</dt>
+              <dd>{meme.memeTemplateType || "---"}</dd>
+              <dt>People</dt>
+              <dd>{meme.peopleIndividuals || "---"}</dd>
+            </dl>
+          </picture>
         )
       })}
     </main>

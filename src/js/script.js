@@ -46,8 +46,10 @@ const updateCount = () => {
 const updateWall = () => {
   updateCount();
   wallContainer.classList.add("loading");
-  wallContainer.classList.remove("single");
   memewall.reset();
+  if (wallContainer.querySelectorAll("img:not(.hidden)").length === 0) {
+    wallContainer.classList.add("empty");
+  }
   if (wallContainer.querySelectorAll("img:not(.hidden)").length === 1) {
     memewall.toggleItem({
       target: wallContainer.querySelector("img:not(.hidden)"),
@@ -58,20 +60,26 @@ const updateWall = () => {
   wallContainer.classList.remove("loading");
 };
 
-const resetSearchUI = () => {
-  document.querySelector("div.controls").classList.remove("searching");
-  searchInput.value = "";
-};
+const resetUi = (except = []) => {
+  except = [].concat(except);
 
-const resetFilterUI = () => {
-  filterSelect.value = "";
+  wallContainer.classList.remove("empty");
+  wallContainer.classList.remove("single");
+
+  if (!except.includes("search")) {
+    document.querySelector("div.controls").classList.remove("searching");
+    searchInput.value = "";
+  }
+
+  if (!except.includes("filter")) {
+    filterSelect.value = "";
+  }
 };
 
 const shuffle = () => {
   wallContainer.classList.add("loading");
   wallContainer.classList.remove("single");
-  resetSearchUI();
-  resetFilterUI();
+  resetUi();
   setTimeout(() => {
     memewall.reset();
     memewall.destroy();
@@ -90,7 +98,7 @@ const shuffle = () => {
 
 const filterMemes = (memeType) => {
   const delay = searchInput.value ? 200 : 0;
-  resetSearchUI();
+  resetUi("filter");
   setTimeout(() => {
     items.forEach((item) =>
       toggleItem(
@@ -103,7 +111,7 @@ const filterMemes = (memeType) => {
 };
 
 const searchMemes = (searchTerm) => {
-  resetFilterUI();
+  resetUi("search");
   items.forEach((item) =>
     toggleItem(
       item.querySelector("img"),
@@ -142,6 +150,17 @@ searchButton.addEventListener("click", () => {
 searchInput.addEventListener("change", ({ target: { value } }) =>
   searchMemes(value),
 );
+
+wallContainer.addEventListener("click", ({ target }) => {
+  if (target === wallContainer && target.classList.contains("empty")) {
+    wallContainer.classList.remove("empty");
+    shuffle();
+  }
+});
+
+document.querySelectorAll("dl").forEach((dl) => {
+  dl.addEventListener("click", (e) => dl.classList.toggle("show-more"));
+});
 
 // Hook up lazy loading
 enableLazyLoading(wallContainer.querySelectorAll("[data-src]"), wallContainer);
