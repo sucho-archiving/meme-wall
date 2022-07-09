@@ -7,7 +7,7 @@ body {
   color: white;
   display: flex;
   flex-direction: column;
-  font-family: sans-serif;
+  font-family: "Jost", sans-serif;
   height: 100vh;
   margin: 0;
   overflow: hidden;
@@ -35,9 +35,9 @@ header {
   padding: 0.5em;
 
   h1 {
-    margin: 0;
     font-variant-caps: petite-caps;
     font-weight: 300;
+    margin: 0;
   }
 
   img {
@@ -107,8 +107,8 @@ div.controls {
       border: none;
       color: white;
       flex: 1 1 auto;
+      font-family: inherit;
       font-size: 1rem;
-      font-weight: normal;
       outline-offset: -1px;
       outline: 1px solid #555;
       padding: 0;
@@ -191,7 +191,7 @@ div.loader {
     column-gap: 1em;
     display: none;
     font-size: large;
-    grid-template-columns: 8em 1fr;
+    grid-template-columns: 7em 1fr;
     margin: 0;
     position: absolute;
     width: 100%;
