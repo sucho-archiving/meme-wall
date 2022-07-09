@@ -54,6 +54,7 @@ memes = memes
   .map((meme) => ({
     ...meme,
     memeTypes: meme.memeContentType.split(", ").map((type) => type.trim()),
+    people: meme.peopleIndividuals.split(", ").map((person) => person.trim()),
     timestamp: new Date(meme.timestamp),
   }))
   .sort((a, b) => b.timestamp - a.timestamp);
@@ -77,8 +78,9 @@ for (const meme of memes) {
 }
 
 const memeTypes = new Set(memes.map((meme) => meme.memeTypes).flat());
+const people = new Set(memes.map((meme) => meme.people).flat());
 
-export { memes, memeTypes };
+export { memes, memeTypes, people };
 
 // If called as a node script, print memes to stdout.
 // See `yarn build-dataset`  (requires node >= v17.5.0)
@@ -89,6 +91,10 @@ if (nodePath === modulePath) {
   switch (process.argv[2]) {
     case "memeTypes":
       console.log(memeTypes);
+      break;
+
+    case "people":
+      console.log(people);
       break;
 
     default:
