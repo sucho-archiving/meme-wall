@@ -15,7 +15,9 @@ import {
 const sheetUrl = `https://docs.google.com/spreadsheets/d/${formResponsesSheetId}/export?format=csv&gid=${readyTabId}`;
 
 const toCamelCase = (str) =>
-  str.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase());
+  str
+    .toLowerCase()
+    .replace(/[^a-zA-Z0-9]+(.|$)/g, (m, chr) => chr.toUpperCase());
 
 const getAspectRatio = (imgPath) => {
   const dimensions = sizeOf(imgPath);

@@ -143,6 +143,10 @@ searchInput.addEventListener("change", ({ target: { value } }) =>
   searchMemes(value),
 );
 
+document.querySelectorAll("dl").forEach((dl) => {
+  dl.addEventListener("click", (e) => dl.classList.toggle("show-more"));
+});
+
 // Hook up lazy loading
 enableLazyLoading(wallContainer.querySelectorAll("[data-src]"), wallContainer);
 

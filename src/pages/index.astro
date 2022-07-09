@@ -26,6 +26,7 @@ const description =
   "Collected memes from the SUCHO project concerning the Russian invasion of Ukraine.";
 ---
 
+
 <html lang="en">
   <Head {title} {description} />
   <body>
@@ -85,10 +86,20 @@ const description =
               sizes="15vmax"
             />
             <dl>
-              <dt>Title:</dt>
-              <dd>{meme.title}</dd>
-              <dt>Translation:</dt>
-              <dd>{meme.textTranslatedIntoEnglish}</dd>
+              <dt>Title</dt>
+              <dd>{meme.title || "---"}</dd>
+              <dt>Translation</dt>
+              <dd>{meme.textTranslatedIntoEnglish || "---"}</dd>
+              <dt>Content Type</dt>
+              <dd>{meme.memeContentType || "---"}</dd>
+              <dt>Country</dt>
+              <dd>{meme.country || "---"}</dd>
+              <dt>Language</dt>
+              <dd>{meme.language || "---"}</dd>
+              <dt>Template Type</dt>
+              <dd>{meme.memeTemplateType || "---"}</dd>
+              <dt>People</dt>
+              <dd>{meme.peopleIndividuals || "---"}</dd>
             </dl>
           </picture>
         )
