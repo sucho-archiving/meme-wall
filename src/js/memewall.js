@@ -150,9 +150,12 @@ export default class MemeWall {
       this.container.offsetTop -
       this.container.scrollTop +
       block.offsetTop;
+    const metadataHeight =
+      block.nextElementSibling.getBoundingClientRect().height;
+    const availableHeight = targetHeight - metadataHeight;
     if (offsetY > 0) {
-      if (parentHeight < window.innerHeight) {
-        offsetY -= targetHeight / 2 - (blockHeight * scale) / 2;
+      if (blockHeight * scale < availableHeight) {
+        offsetY -= availableHeight / 2 - (blockHeight * scale) / 2;
       }
       if (parentTop > 0) {
         offsetY -= parentTop;
