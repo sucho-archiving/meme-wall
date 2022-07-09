@@ -147,6 +147,25 @@ div.loader {
     cursor: pointer;
   }
 
+  &.empty {
+    position: relative;
+
+    &::after {
+      bottom: 0;
+      color: white;
+      content: "No memes found!\A\A(click here to reset)";
+      display: grid;
+      font-size: 40px;
+      left: 0;
+      place-items: center;
+      position: absolute;
+      right: 0;
+      text-align: center;
+      top: 0;
+      white-space: pre;
+    }
+  }
+
   img {
     background-size: cover;
     box-shadow: inset 0 0 4px 4px rgba(0, 0, 0, 0.5);
