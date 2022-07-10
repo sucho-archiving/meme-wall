@@ -1,8 +1,8 @@
 ---
-const { title, className = "select" } = Astro.props;
+const { title, className = "select", selectClass } = Astro.props;
 ---
 
-<div {title} class={className}><select><slot /></select></div>
+<div {title} class={className}><select class={selectClass}><slot /></select></div>
 
 <style>
   div {

@@ -2,11 +2,16 @@ import MemeWall from "./memewall.js";
 
 let memewall;
 const wallContainer = document.getElementById("meme-wall");
-const items = wallContainer.querySelectorAll("[data-types]");
-const filterSelect = document.querySelector("select");
+const items = wallContainer.querySelectorAll("picture");
 const shuffleButton = document.querySelector("button.shuffle");
+const showFiltersButton = document.querySelector("button.show-filters");
 const searchButton = document.querySelector("button.search");
 const searchInput = document.querySelector("div.search input");
+
+const filters = ["memeType", "person", "language", "country", "templateType"];
+const filterSelects = Object.fromEntries(
+  filters.map((filter) => [filter, document.querySelector(`select.${filter}`)]),
+);
 
 const enableLazyLoading = (images, root) => {
   const imageObserver = new IntersectionObserver(
@@ -71,9 +76,9 @@ const resetUi = (except = []) => {
     searchInput.value = "";
   }
 
-  if (!except.includes("filter")) {
-    filterSelect.value = "";
-  }
+  Object.entries(filterSelects).forEach(([filter, filterSelect]) => {
+    if (!except.includes(filter)) filterSelect.value = "";
+  });
 };
 
 const shuffle = () => {
@@ -96,16 +101,16 @@ const shuffle = () => {
   }, 200);
 };
 
-const filterMemes = (memeType) => {
+const filterMemes = (facet, value) => {
   const delay = searchInput.value ? 200 : 0;
-  resetUi("filter");
+  resetUi(facet);
   setTimeout(() => {
-    items.forEach((item) =>
+    items.forEach((item) => {
       toggleItem(
         item.querySelector("img"),
-        item.dataset.types.split("|").includes(memeType),
-      ),
-    );
+        item.dataset[facet].split("|").includes(value),
+      );
+    });
     updateWall();
   }, delay);
 };
@@ -138,9 +143,16 @@ const wallItemToggleCb = (img) => {
 // Hook up event listeners
 shuffleButton.addEventListener("click", shuffle);
 
-filterSelect.addEventListener("change", ({ target: { value } }) =>
-  filterMemes(value),
+Object.entries(filterSelects).forEach(([filter, filterSelect]) =>
+  filterSelect.addEventListener("change", ({ target: { value } }) =>
+    filterMemes(filter, value),
+  ),
 );
+
+showFiltersButton.addEventListener("click", () => {
+  document.querySelector("div.more-filters").classList.toggle("show");
+  showFiltersButton.classList.toggle("on");
+});
 
 searchButton.addEventListener("click", () => {
   document.querySelector("div.controls").classList.toggle("searching");
