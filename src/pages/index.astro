@@ -40,12 +40,16 @@ const description =
         <span class="count">{memes.length} / {memes.length}</span>
         <StyledSelect title="Filter Memes" selectClass="memeType">
           <option value="" disabled selected>-- Filter by Content --</option>
-          {Array.from(memeTypes).map((memeType) => (
+          {Array.from(memeTypes)
+            .map((memeType) => ({
+              value: memeType, 
+              count: memes.filter((meme) => meme.memeTypes.includes(memeType)).length
+            }))
+            .sort((a, b) => b.count - a.count)
+            .map((option) => (
             <option
-              value={memeType}
-              set:text={`${memeType} [${
-                memes.filter((meme) => meme.memeTypes.includes(memeType)).length
-              }]`}
+              value={option.value}
+              set:text={`${option.value} [${option.count}]`}
             />
           ))}
         </StyledSelect>
