@@ -80,11 +80,36 @@ for (const meme of memes) {
   meme.aspectRatio = getAspectRatio(filepath);
 }
 
-const memeTypes = new Set(memes.map((meme) => meme.memeTypes).flat());
-const people = new Set(memes.map((meme) => meme.people).flat());
-const languages = new Set(memes.map((meme) => meme.languages).flat());
-const countries = new Set(memes.map((meme) => meme.countries).flat());
-const templateTypes = new Set(memes.map((meme) => meme.templateTypes).flat());
+const memeTypes = new Set(
+  memes
+    .map((meme) => meme.memeTypes)
+    .flat()
+    .filter((x) => x),
+);
+const people = new Set(
+  memes
+    .map((meme) => meme.people)
+    .flat()
+    .filter((x) => x),
+);
+const languages = new Set(
+  memes
+    .map((meme) => meme.languages)
+    .flat()
+    .filter((x) => x),
+);
+const countries = new Set(
+  memes
+    .map((meme) => meme.countries)
+    .flat()
+    .filter((x) => x),
+);
+const templateTypes = new Set(
+  memes
+    .map((meme) => meme.templateTypes)
+    .flat()
+    .filter((x) => x),
+);
 
 export { memes, memeTypes, people, languages, countries, templateTypes };
 
