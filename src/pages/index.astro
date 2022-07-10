@@ -65,7 +65,7 @@ const description =
       </div>
       <div class="more-filters">
         <StyledSelect title="Filter by Person">
-          <option value="" disabled selected>-- Filter by Person --</option>
+          <option value="" disabled selected>-- Person --</option>
           {Array.from(people).map((person) => (
             <option
               value={person}
@@ -76,7 +76,7 @@ const description =
           ))}
         </StyledSelect>
         <StyledSelect title="Filter by Language">
-          <option value="" disabled selected>-- Filter by Language --</option>
+          <option value="" disabled selected>-- Language --</option>
           {Array.from(languages).map((language) => (
             <option
               value={language}
@@ -87,7 +87,7 @@ const description =
           ))}
         </StyledSelect>
         <StyledSelect title="Filter by Country">
-          <option value="" disabled selected>-- Filter by Country --</option>
+          <option value="" disabled selected>-- Country --</option>
           {Array.from(countries).map((country) => (
             <option
               value={country}
@@ -98,7 +98,7 @@ const description =
           ))}
         </StyledSelect>
         <StyledSelect title="Filter by Template Type">
-          <option value="" disabled selected>-- Filter by Template Type --</option>
+          <option value="" disabled selected>-- Template Type --</option>
           {Array.from(templateTypes).map((templateType) => (
             <option
               value={templateType}

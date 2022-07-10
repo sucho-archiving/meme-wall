@@ -81,6 +81,7 @@ div.controls {
   div.select {
     flex-grow: 1;
     flex-shrink: 1;
+    height: 39px;
     max-width: 20em;
   }
 
@@ -135,6 +136,10 @@ div.more-filters {
   &.show {
     height: 35px;
     margin-top: 0.5em;
+  }
+
+  div {
+    max-width: calc(25% - 0.75em);
   }
 }
 
@@ -314,10 +319,6 @@ div.loader {
 
   div.more-filters {
     justify-content: flex-end;
-
-    &.show {
-      margin-top: 0;
-    }
   }
 }
 
@@ -327,7 +328,7 @@ div.loader {
     transition: padding-bottom 200ms ease;
 
     &.searching {
-      padding-bottom: 54px;
+      padding-bottom: calc(40px + 1em);
 
       div.search {
         button {
@@ -344,10 +345,9 @@ div.loader {
           position: absolute;
           width: 100%;
           left: 0;
-          bottom: 3px;
+          bottom: 0.5em;
           height: 40px;
           line-height: 1em;
-          margin-bottom: 4px;
         }
       }
     }
