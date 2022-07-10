@@ -3,10 +3,9 @@ import { renderPicture } from "astro-imagetools/api";
 
 import Head from "../components/Head.astro";
 import Loader from "../components/Loader.astro";
-import StyledSelect from "../components/StyledSelect.astro";
 import Filter from "../components/Filter.astro";
 import Icon from "../components/Icon.astro";
-import { memes, memeTypes, people, languages, countries, templateTypes } from "../dataset.mjs";
+import { memes } from "../dataset.mjs";
 
 import "@fontsource/jost/300.css";
 import styles from "../styles/styles.css";
@@ -59,50 +58,26 @@ const description =
         </button>
       </div>
       <div class="more-filters">
-        <StyledSelect title="Filter by Person" selectClass="person">
-          <option value="" disabled selected>-- Person --</option>
-          {Array.from(people).map((person) => (
-            <option
-              value={person}
-              set:text={`${person} [${
-                memes.filter((meme) => meme.people.includes(person)).length
-              }]`}
-            />
-          ))}
-        </StyledSelect>
-        <StyledSelect title="Filter by Language" selectClass="language">
-          <option value="" disabled selected>-- Language --</option>
-          {Array.from(languages).map((language) => (
-            <option
-              value={language}
-              set:text={`${language} [${
-                memes.filter((meme) => meme.languages.includes(language)).length
-              }]`}
-            />
-          ))}
-        </StyledSelect>
-        <StyledSelect title="Filter by Country" selectClass="country">
-          <option value="" disabled selected>-- Country --</option>
-          {Array.from(countries).map((country) => (
-            <option
-              value={country}
-              set:text={`${country} [${
-                memes.filter((meme) => meme.countries.includes(country)).length
-              }]`}
-            />
-          ))}
-        </StyledSelect>
-        <StyledSelect title="Filter by Template Type" selectClass="templateType">
-          <option value="" disabled selected>-- Template Type --</option>
-          {Array.from(templateTypes).map((templateType) => (
-            <option
-              value={templateType}
-              set:text={`${templateType} [${
-                memes.filter((meme) => meme.templateTypes.includes(templateType)).length
-              }]`}
-            />
-          ))}
-        </StyledSelect>
+        <Filter
+          title="Filter by Person"
+          selectClass="person"
+          placeHolder="-- Person --"
+          facet="people"></Filter>
+        <Filter
+          title="Filter by Language"
+          selectClass="language"
+          placeHolder="-- Language --"
+          facet="languages"></Filter>
+        <Filter
+          title="Filter by Country"
+          selectClass="country"
+          placeHolder="-- Country --"
+          facet="countries"></Filter>
+        <Filter
+          title="Filter by Template Type"
+          selectClass="templateType"
+          placeHolder="-- Template Type --"
+          facet="templateTypes"></Filter>
       </div>
     </header>
     <main id="meme-wall" class="loading">
