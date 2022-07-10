@@ -54,6 +54,10 @@ memes = memes
   .map((meme) => ({
     ...meme,
     memeTypes: meme.memeContentType.split(", ").map((type) => type.trim()),
+    people: meme.peopleIndividuals.split(", ").map((person) => person.trim()),
+    templateTypes: meme.memeTemplateType.split(", ").map((type) => type.trim()),
+    languages: meme.language.split(", ").map((language) => language.trim()),
+    countries: meme.country.split(", ").map((country) => country.trim()),
     timestamp: new Date(meme.timestamp),
   }))
   .sort((a, b) => b.timestamp - a.timestamp);
@@ -76,14 +80,67 @@ for (const meme of memes) {
   meme.aspectRatio = getAspectRatio(filepath);
 }
 
-const memeTypes = new Set(memes.map((meme) => meme.memeTypes).flat());
+const memeTypes = new Set(
+  memes
+    .map((meme) => meme.memeTypes)
+    .flat()
+    .filter((x) => x),
+);
+const people = new Set(
+  memes
+    .map((meme) => meme.people)
+    .flat()
+    .filter((x) => x),
+);
+const languages = new Set(
+  memes
+    .map((meme) => meme.languages)
+    .flat()
+    .filter((x) => x),
+);
+const countries = new Set(
+  memes
+    .map((meme) => meme.countries)
+    .flat()
+    .filter((x) => x),
+);
+const templateTypes = new Set(
+  memes
+    .map((meme) => meme.templateTypes)
+    .flat()
+    .filter((x) => x),
+);
 
-export { memes, memeTypes };
+export { memes, memeTypes, people, languages, countries, templateTypes };
 
 // If called as a node script, print memes to stdout.
-// See `yarn print-dataset`  (requires node >= v17.5.0)
+// See `yarn build-dataset`  (requires node >= v17.5.0)
 import { fileURLToPath } from "url";
 const nodePath = path.resolve(process.argv[1]);
 const modulePath = path.resolve(fileURLToPath(import.meta.url));
-if (nodePath === modulePath) console.log(JSON.stringify(memes, null, 2));
-if (nodePath === modulePath) console.log(memeTypes);
+if (nodePath === modulePath) {
+  switch (process.argv[2]) {
+    case "memeTypes":
+      console.log(memeTypes);
+      break;
+
+    case "people":
+      console.log(people);
+      break;
+
+    case "countries":
+      console.log(countries);
+      break;
+
+    case "templateTypes":
+      console.log(templateTypes);
+      break;
+
+    case "languages":
+      console.log(languages);
+      break;
+
+    default:
+      console.log(JSON.stringify(memes, null, 2));
+  }
+}
