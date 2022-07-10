@@ -39,7 +39,7 @@ const description =
       <div class="controls">
         <span class="count">{memes.length} / {memes.length}</span>
         <StyledSelect title="Filter Memes" selectClass="memeType">
-          <option value="" disabled selected>-- Filter by Meme Type --</option>
+          <option value="" disabled selected>-- Filter by Content --</option>
           {Array.from(memeTypes).map((memeType) => (
             <option
               value={memeType}
