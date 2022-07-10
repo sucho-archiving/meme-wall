@@ -4,6 +4,7 @@ import { renderPicture } from "astro-imagetools/api";
 import Head from "../components/Head.astro";
 import Loader from "../components/Loader.astro";
 import StyledSelect from "../components/StyledSelect.astro";
+import Filter from "../components/Filter.astro";
 import Icon from "../components/Icon.astro";
 import { memes, memeTypes, people, languages, countries, templateTypes } from "../dataset.mjs";
 
@@ -38,21 +39,11 @@ const description =
       </h1>
       <div class="controls">
         <span class="count">{memes.length} / {memes.length}</span>
-        <StyledSelect title="Filter Memes" selectClass="memeType">
-          <option value="" disabled selected>-- Filter by Content --</option>
-          {Array.from(memeTypes)
-            .map((memeType) => ({
-              value: memeType, 
-              count: memes.filter((meme) => meme.memeTypes.includes(memeType)).length
-            }))
-            .sort((a, b) => b.count - a.count)
-            .map((option) => (
-            <option
-              value={option.value}
-              set:text={`${option.value} [${option.count}]`}
-            />
-          ))}
-        </StyledSelect>
+        <Filter
+          title="Filter Memes"
+          selectClass="memeType"
+          placeHolder="-- Filter by Content --"
+          facet="memeTypes"></Filter>
         <div class="search">
           <button class="search" title="Search Memes"
             ><Icon name="search" />
