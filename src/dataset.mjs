@@ -55,6 +55,9 @@ memes = memes
     ...meme,
     memeTypes: meme.memeContentType.split(", ").map((type) => type.trim()),
     people: meme.peopleIndividuals.split(", ").map((person) => person.trim()),
+    templateTypes: meme.memeTemplateType.split(", ").map((type) => type.trim()),
+    languages: meme.language.split(", ").map((language) => language.trim()),
+    countries: meme.country.split(", ").map((country) => country.trim()),
     timestamp: new Date(meme.timestamp),
   }))
   .sort((a, b) => b.timestamp - a.timestamp);
@@ -79,8 +82,11 @@ for (const meme of memes) {
 
 const memeTypes = new Set(memes.map((meme) => meme.memeTypes).flat());
 const people = new Set(memes.map((meme) => meme.people).flat());
+const languages = new Set(memes.map((meme) => meme.languages).flat());
+const countries = new Set(memes.map((meme) => meme.countries).flat());
+const templateTypes = new Set(memes.map((meme) => meme.templateTypes).flat());
 
-export { memes, memeTypes, people };
+export { memes, memeTypes, people, languages, countries, templateTypes };
 
 // If called as a node script, print memes to stdout.
 // See `yarn build-dataset`  (requires node >= v17.5.0)
@@ -95,6 +101,18 @@ if (nodePath === modulePath) {
 
     case "people":
       console.log(people);
+      break;
+
+    case "countries":
+      console.log(countries);
+      break;
+
+    case "templateTypes":
+      console.log(templateTypes);
+      break;
+
+    case "languages":
+      console.log(languages);
       break;
 
     default:
