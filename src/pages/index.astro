@@ -38,7 +38,7 @@ const description =
       </h1>
       <div class="controls">
         <span class="count">{memes.length} / {memes.length}</span>
-        <StyledSelect title="Filter Memes">
+        <StyledSelect title="Filter Memes" selectClass="memeType">
           <option value="" disabled selected>-- Filter by Meme Type --</option>
           {Array.from(memeTypes).map((memeType) => (
             <option
@@ -64,7 +64,7 @@ const description =
         </button>
       </div>
       <div class="more-filters">
-        <StyledSelect title="Filter by Person">
+        <StyledSelect title="Filter by Person" selectClass="person">
           <option value="" disabled selected>-- Person --</option>
           {Array.from(people).map((person) => (
             <option
@@ -75,7 +75,7 @@ const description =
             />
           ))}
         </StyledSelect>
-        <StyledSelect title="Filter by Language">
+        <StyledSelect title="Filter by Language" selectClass="language">
           <option value="" disabled selected>-- Language --</option>
           {Array.from(languages).map((language) => (
             <option
@@ -86,7 +86,7 @@ const description =
             />
           ))}
         </StyledSelect>
-        <StyledSelect title="Filter by Country">
+        <StyledSelect title="Filter by Country" selectClass="country">
           <option value="" disabled selected>-- Country --</option>
           {Array.from(countries).map((country) => (
             <option
@@ -97,7 +97,7 @@ const description =
             />
           ))}
         </StyledSelect>
-        <StyledSelect title="Filter by Template Type">
+        <StyledSelect title="Filter by Template Type" selectClass="templateType">
           <option value="" disabled selected>-- Template Type --</option>
           {Array.from(templateTypes).map((templateType) => (
             <option
@@ -123,7 +123,12 @@ const description =
         const srcsets = getSrcsetFromPicture(picture)
 
         return (
-          <picture data-types={meme.memeTypes.join("|")}>
+          <picture
+            data-meme-type={meme.memeTypes.join("|")}
+            data-person={meme.people.join("|")}
+            data-language={meme.languages.join("|")}
+            data-country={meme.countries.join("|")}
+            data-template-type={meme.templateTypes.join("|")}>
             <source srcset={srcsets.webp} type="image/webp" sizes="15vmax" />
             <img
               data-src={srcsets.jpg}
