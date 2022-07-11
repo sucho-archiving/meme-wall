@@ -4,6 +4,7 @@ import Head from "../components/Head.astro";
 import "@fontsource/jost/200.css";
 import "@fontsource/jost/300.css";
 import sharedStyles from "../styles/shared.css";
+import aboutPageStyles from "../styles/about-page.css";
 import suchoLogo32x32 from "../img/sucho-logo.32x32.png";
 import suchoLogo64x64 from "../img/sucho-logo.64x64.png";
 
@@ -63,47 +64,3 @@ const description =
 </body>
 
 </html>
-
-<style is:global>
-  main a {
-    color: cadetblue;
-    font-weight: 300;
-    text-decoration: none;
-
-    &:visited {
-      color: cadetblue;
-    }
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-
-  body>header {
-    padding: 0.25em calc((100vw - min(1000px, 80vw)) / 2) !important;
-  }
-
-  h1,
-  h2 {
-    margin: 0;
-    font-variant-caps: petite-caps;
-    font-weight: 300;
-  }
-
-  h2 {
-    letter-spacing: 5px;
-    border-bottom: 1px solid #555;
-  }
-
-  main {
-    font-size: 1.5em;
-    font-weight: 200;
-    line-height: 1.5;
-    margin: 4vh auto;
-    max-width: min(1000px, 80vw);
-  }
-
-  section {
-    margin-bottom: 4vh;
-  }
-</style>
