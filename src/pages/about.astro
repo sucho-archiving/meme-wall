@@ -3,7 +3,8 @@ import Head from "../components/Head.astro";
 
 import "@fontsource/jost/200.css";
 import "@fontsource/jost/300.css";
-import suchoLogo from "../img/sucho-logo.32x32.png";
+import suchoLogo32x32 from "../img/sucho-logo.32x32.png";
+import suchoLogo64x64 from "../img/sucho-logo.64x64.png";
 
 const title = "About :: SUCHO Meme Wall";
 const description =
@@ -17,7 +18,7 @@ const description =
 <body>
   <header>
     <h1>
-      <img src={suchoLogo} alt="SUCHO" />
+      <img srcset={`${suchoLogo64x64} 2x`} src={suchoLogo32x32} alt="SUCHO" />
       <a href={Astro.site.pathname} title="SUCHO Meme Wall">SUCHO Meme Wall
       </a>
     </h1>
