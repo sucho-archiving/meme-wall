@@ -25,9 +25,6 @@ export default class MemeWall {
         }%`;
         item.style.height = "auto";
       });
-    } else {
-      row[0].style.width = "100%";
-      row[0].style.height = "auto";
     }
   }
 
