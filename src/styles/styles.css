@@ -127,6 +127,18 @@ button.show-filters.on {
   background-color: #555;
 }
 
+a.button {
+  border-radius: 4px;
+  height: 39px;
+  line-height: 38px;
+  text-align: center;
+  width: 36px;
+
+  &:hover {
+    background-color: #555;
+  }
+}
+
 div.more-filters {
   display: flex;
   gap: 1em;
