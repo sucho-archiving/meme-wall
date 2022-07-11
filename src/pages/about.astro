@@ -3,6 +3,7 @@ import Head from "../components/Head.astro";
 
 import "@fontsource/jost/200.css";
 import "@fontsource/jost/300.css";
+import sharedStyles from "../styles/shared.css";
 import suchoLogo32x32 from "../img/sucho-logo.32x32.png";
 import suchoLogo64x64 from "../img/sucho-logo.64x64.png";
 
@@ -64,22 +65,7 @@ const description =
 </html>
 
 <style is:global>
-  * {
-    box-sizing: border-box;
-  }
-
-  body {
-    background-color: #333;
-    color: white;
-    display: flex;
-    flex-direction: column;
-    font-family: "Jost", sans-serif;
-    height: 100vh;
-    margin: 0;
-    padding: 0;
-  }
-
-  a {
+  main a {
     color: cadetblue;
     font-weight: 300;
     text-decoration: none;
@@ -93,6 +79,10 @@ const description =
     }
   }
 
+  body>header {
+    padding: 0.25em calc((100vw - min(1000px, 80vw)) / 2) !important;
+  }
+
   h1,
   h2 {
     margin: 0;
@@ -103,45 +93,6 @@ const description =
   h2 {
     letter-spacing: 5px;
     border-bottom: 1px solid #555;
-  }
-
-
-  body>header {
-    align-items: flex-start;
-    border-top: 5px solid #777;
-    border-bottom: 5px solid #777;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 0.5em;
-    justify-content: center;
-    padding: 0.5em;
-
-    h1 {
-      align-items: center;
-      display: flex;
-      gap: 0.5em;
-      width: min(1000px, 80vw);
-    }
-
-    img {
-      height: 32px;
-      margin-top: -2px;
-      vertical-align: text-top;
-      width: 32px;
-    }
-
-    a {
-      color: white;
-
-      &:visited {
-        color: white;
-      }
-
-      &:hover {
-        text-decoration: none;
-      }
-    }
   }
 
   main {
