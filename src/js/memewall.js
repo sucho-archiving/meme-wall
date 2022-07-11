@@ -8,21 +8,15 @@ export default class MemeWall {
     this.init();
   }
 
-  static calcRowWidth(row) {
-    return row.reduce(
-      (width, item) =>
-        width + parseInt(window.getComputedStyle(item).width, 10),
-      0,
-    );
-  }
-
-  static resizeRow(row, width) {
+  static resizeRow(row) {
     if (!row) return;
     if (row.length > 1) {
-      row.forEach((item) => {
-        item.style.width = `${
-          (parseInt(window.getComputedStyle(item).width, 10) / width) * 100
-        }%`;
+      const itemWidths = row.map((item) =>
+        parseInt(window.getComputedStyle(item).width, 10),
+      );
+      const rowWidth = itemWidths.reduce((width, item) => width + item, 0);
+      row.forEach((item, i) => {
+        item.style.width = `${(itemWidths[i] / rowWidth) * 100}%`;
         item.style.height = "auto";
       });
     }
@@ -77,7 +71,7 @@ export default class MemeWall {
           : _a.push(block);
         return rows;
       }, new Map())
-      .forEach((row) => MemeWall.resizeRow(row, MemeWall.calcRowWidth(row)));
+      .forEach((row) => MemeWall.resizeRow(row));
   }
 
   shrink(event) {
