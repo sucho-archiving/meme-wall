@@ -6,11 +6,11 @@ body > header {
 
 a.button {
   overflow: hidden;
-  transition: width 0.3s ease;
+  transition: flex 0.3s ease;
 
   &:hover {
     font-weight: 300;
-    width: 14em;
+    flex: 0 0 14em;
   }
 }
 

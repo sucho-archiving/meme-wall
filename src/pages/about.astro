@@ -1,4 +1,6 @@
 ---
+import { submissionFormUrl } from "../config.mjs";
+
 import Head from "../components/Head.astro";
 import Icon from "../components/Icon.astro";
 
@@ -8,6 +10,7 @@ import sharedStyles from "../styles/shared.css";
 import aboutPageStyles from "../styles/about-page.css";
 import suchoLogo32x32 from "../img/sucho-logo.32x32.png";
 import suchoLogo64x64 from "../img/sucho-logo.64x64.png";
+import { submissionFormUrl } from "../config.mjs";
 
 const title = "About :: SUCHO Meme Wall";
 const description =
@@ -52,7 +55,7 @@ const description =
       </header>
       <p>
         This site is built directly from curated submissions to <a title="SUCHO Meme Submission Form"
-          href="https://docs.google.com/forms/d/e/1FAIpQLSdhi-nky_fICuBD-HKaGsQi_ezukKtU3oVeMulMg0Ra8TCnvw/viewform">the
+          href={submissionFormUrl}>the
           Google Form</a>. At build-time, the contents of the sheet is fetched and parsed, and the source images are
         downloaded from the Google Drive folder. The images are then processed to create the versions in multiple
         sizes/formats required to create the site.
