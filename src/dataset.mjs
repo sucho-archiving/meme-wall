@@ -108,7 +108,7 @@ const templateTypes = new Set(
   memes
     .map((meme) => meme.templateTypes)
     .flat()
-    .filter((x) => x),
+    .filter((x) => x && x !== "Other"),
 );
 
 export { memes, memeTypes, people, languages, countries, templateTypes };

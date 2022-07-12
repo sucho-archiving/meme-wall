@@ -1,0 +1,20 @@
+---
+import StyledSelect from "../components/StyledSelect.astro";
+import * as datasetObj from "../dataset.mjs";
+
+const { title, selectClass, placeHolder, facet } = Astro.props;
+const { memes } = datasetObj;
+const facetValues = datasetObj[facet];
+---
+<StyledSelect {title} {selectClass}>
+  <option value="" disabled selected>{ placeHolder }</option>
+  {Array.from(facetValues)
+  .map((facetValue) => ({
+    value: facetValue,
+    count: memes.filter((meme) => meme[facet].includes(facetValue)).length
+  }))
+  .sort((a, b) => b.count - a.count || a.value.localeCompare(b.value))
+  .map((option) => (
+    <option value={option.value} set:text={`${option.value} [${option.count}]`} />
+  ))}
+</StyledSelect>
