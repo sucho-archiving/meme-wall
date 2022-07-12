@@ -8,8 +8,10 @@ import Icon from "../components/Icon.astro";
 import { memes } from "../dataset.mjs";
 
 import "@fontsource/jost/300.css";
-import styles from "../styles/styles.css";
-import suchoLogo from "../img/sucho-logo.32x32.png";
+import sharedStyles from "../styles/shared.css";
+import wallStyles from "../styles/wall.css";
+import suchoLogo32x32 from "../img/sucho-logo.32x32.png";
+import suchoLogo64x64 from "../img/sucho-logo.64x64.png";
 
 // Given a <picture/> element as am HTML string (as returned by renderPicture),
 // extract the srcset attribute values and return an object of the form
@@ -31,7 +33,7 @@ const description =
   <body>
     <header>
       <h1>
-        <img src={suchoLogo} alt="SUCHO" />
+        <img srcset={`${suchoLogo64x64} 2x`} src={suchoLogo32x32} alt="SUCHO" />
         <a href={Astro.site.pathname} title="SUCHO Meme Wall"
           >SUCHO Meme Wall
         </a>
@@ -56,6 +58,9 @@ const description =
         <button class="shuffle" title="Shuffle Memes"
           ><Icon name="shuffle" />
         </button>
+        <a class="button" title="About" href="/about/">
+          <Icon name="info-circle" />
+        </a>
       </div>
       <div class="more-filters">
         <Filter
