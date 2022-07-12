@@ -2,22 +2,9 @@ import path from "path";
 
 import gm from "gm";
 import sizeOf from "image-size";
-import neatCsv from "neat-csv";
 
-import { fetchFile, purgeFiles } from "./fetch-media.mjs";
-
-import {
-  formResponsesSheetId,
-  readyTabId,
-  memeMediaFolder,
-} from "./config.mjs";
-
-const sheetUrl = `https://docs.google.com/spreadsheets/d/${formResponsesSheetId}/export?format=csv&gid=${readyTabId}`;
-
-const toCamelCase = (str) =>
-  str
-    .toLowerCase()
-    .replace(/[^a-zA-Z0-9]+(.|$)/g, (m, chr) => chr.toUpperCase());
+import { memeMediaFolder } from "./config.mjs";
+import { fetchMemes, fetchFile, purgeFiles } from "./fetch-data.mjs";
 
 const getAspectRatio = (imgPath) => {
   const dimensions = sizeOf(imgPath);
@@ -34,23 +21,11 @@ const generate3x3Thumbnail = (imgPath) => {
   });
 };
 
-const fetchSheet = async (sheetUrl) => {
-  const response = await fetch(sheetUrl);
-  return await neatCsv(await response.text(), {
-    mapHeaders: ({ header, index }) => toCamelCase(header.trim()),
-    mapValues: ({ header, index, value }) => value.trim(),
-  });
-};
+// fetch minimally-parsed data from the spreadsheet
+let memes = await fetchMemes();
 
-let memes = await fetchSheet(sheetUrl);
-
+// parse some of the metadata values and sort by date
 memes = memes
-  .filter((meme) => meme.timestamp) // filter out empty rows
-  .map((meme) => ({
-    ...meme,
-    driveId: meme.uploadFile.match(/id=([^&]+)/)?.[1],
-  }))
-  .filter((meme) => meme.driveId) // filter out rows where we can't derive a driveId
   .map((meme) => ({
     ...meme,
     memeTypes: meme.memeContentType.split(", ").map((type) => type.trim()),
@@ -62,6 +37,7 @@ memes = memes
   }))
   .sort((a, b) => b.timestamp - a.timestamp);
 
+// ensure all media files are available locally
 for (const meme of memes) {
   meme.filename = await fetchFile(meme, memeMediaFolder);
 }
@@ -69,17 +45,21 @@ for (const meme of memes) {
 purgeFiles(memes, memeMediaFolder);
 
 // filter out non-image files
-// note: may prove to be inadequate
+// note: may prove to be inadequate (if other image types are submitted)
+// note: must be done after files are fetched, as we don't know file types / extensions
+//  until after they are downloaded
 memes = memes.filter((meme) =>
   meme.filename.match(/\.jpg|\.jpeg|\.png|\.webp$/i),
 );
 
+// parse the images and generate thumbnails and aspect ratios
 for (const meme of memes) {
   const filepath = path.join(memeMediaFolder, meme.filename);
   meme.thumbnail = await generate3x3Thumbnail(filepath);
   meme.aspectRatio = getAspectRatio(filepath);
 }
 
+// Prepare facets and facet counts
 const memeTypes = new Set(
   memes
     .map((meme) => meme.memeTypes)
@@ -114,7 +94,7 @@ const templateTypes = new Set(
 export { memes, memeTypes, people, languages, countries, templateTypes };
 
 // If called as a node script, print memes to stdout.
-// See `yarn build-dataset`  (requires node >= v17.5.0)
+// See `yarn print-dataset`  (requires node >= v17.5.0)
 import { fileURLToPath } from "url";
 const nodePath = path.resolve(process.argv[1]);
 const modulePath = path.resolve(fileURLToPath(import.meta.url));
