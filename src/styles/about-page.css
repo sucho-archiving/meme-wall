@@ -1,5 +1,6 @@
 body > header {
-  justify-content: flex-start;
+  align-items: center;
+  justify-content: space-between;
   padding: 0.25em calc((100vw - min(1000px, 80vw)) / 2) !important;
 }
 

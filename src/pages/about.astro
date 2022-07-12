@@ -1,5 +1,6 @@
 ---
 import Head from "../components/Head.astro";
+import Icon from "../components/Icon.astro";
 
 import "@fontsource/jost/200.css";
 import "@fontsource/jost/300.css";
@@ -24,6 +25,9 @@ const description =
       <a href={Astro.site.pathname} title="SUCHO Meme Wall">SUCHO Meme Wall
       </a>
     </h1>
+    <a class="button" title="Return to the Meme Wall" href="/">
+      <Icon name="arrow-narrow-left" />
+    </a>
   </header>
   <main>
     <section>
