@@ -4,6 +4,16 @@ body > header {
   padding: 0.25em calc((100vw - min(1000px, 80vw)) / 2) !important;
 }
 
+a.button {
+  overflow: hidden;
+  transition: width 0.3s ease;
+
+  &:hover {
+    font-weight: 300;
+    width: 14em;
+  }
+}
+
 h1,
 h2 {
   margin: 0;
