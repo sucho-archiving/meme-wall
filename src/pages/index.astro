@@ -1,6 +1,8 @@
 ---
 import { renderPicture } from "astro-imagetools/api";
 
+import { submissionFormUrl } from "../config.mjs";
+
 import Head from "../components/Head.astro";
 import Loader from "../components/Loader.astro";
 import Filter from "../components/Filter.astro";
@@ -58,6 +60,9 @@ const description =
         <button class="shuffle" title="Shuffle Memes"
           ><Icon name="shuffle" />
         </button>
+        <a class="button" title="Contribute" href={submissionFormUrl}>
+          <Icon name="upload" />
+        </a>
         <a class="button" title="About" href="/about/">
           <Icon name="info-circle" />
         </a>
