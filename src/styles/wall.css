@@ -2,6 +2,14 @@ body {
   overflow: hidden;
 }
 
+body > header {
+  padding: 0.5em 0.5em 0;
+}
+
+header > h1 {
+  line-height: 39px;
+}
+
 button {
   background: none;
   border: none;
@@ -18,7 +26,6 @@ div.controls {
   flex-grow: 1;
   gap: 0.5em;
   justify-content: center;
-  padding: 4px 0;
   position: relative;
 
   span.count {
@@ -83,12 +90,13 @@ div.more-filters {
   height: 0;
   justify-content: center;
   overflow: hidden;
-  transition: height 200ms ease, margin-top 200ms ease;
+  transition: height 200ms ease, margin-bottom 100ms 100ms ease;
   width: 100%;
 
   &.show {
-    height: 35px;
-    margin-top: 0.5em;
+    height: 39px;
+    margin-bottom: 0.5em;
+    transition: height 200ms ease, margin-bottom 200ms ease;
   }
 
   div {
@@ -259,10 +267,10 @@ div.loader {
 }
 
 @media (min-width: 1100px) {
-  header {
-    gap: 0 1em;
+  body > header {
+    gap: 0.5em 1em;
     justify-content: space-between;
-    padding: 0.25em 1em;
+    padding: 0.5em 1em 0;
   }
 
   div.controls {
@@ -276,11 +284,10 @@ div.loader {
 
 @media (max-width: 1149px) {
   div.controls {
-    padding-top: 4px;
     transition: padding-bottom 200ms ease;
 
     &.searching {
-      padding-bottom: calc(40px + 1em);
+      padding-bottom: calc(40px + 0.5em);
 
       div.search {
         button {
@@ -297,7 +304,7 @@ div.loader {
           position: absolute;
           width: 100%;
           left: 0;
-          bottom: 0.5em;
+          bottom: 2px;
           height: 40px;
           line-height: 1em;
         }
@@ -307,9 +314,8 @@ div.loader {
 }
 
 @media (min-width: 1150px) {
-  header {
+  body > header {
     align-items: center;
-    padding: 0.25em 1em;
   }
 
   div.controls,
