@@ -1,0 +1,53 @@
+body > header {
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.25em calc((100vw - min(1000px, 80vw)) / 2) !important;
+}
+
+a.button {
+  overflow: hidden;
+  transition: flex 0.3s ease;
+
+  &:hover {
+    font-weight: 300;
+    flex: 0 0 14em;
+  }
+}
+
+h1,
+h2 {
+  margin: 0;
+  font-variant-caps: petite-caps;
+  font-weight: 300;
+}
+
+h2 {
+  letter-spacing: 5px;
+  border-bottom: 1px solid #555;
+}
+
+main {
+  font-size: 1.5em;
+  font-weight: 200;
+  line-height: 1.5;
+  margin: 4vh auto;
+  max-width: min(1000px, 80vw);
+
+  a {
+    color: cadetblue;
+    font-weight: 300;
+    text-decoration: none;
+
+    &:visited {
+      color: cadetblue;
+    }
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+section {
+  margin-bottom: 4vh;
+}

@@ -1,0 +1,73 @@
+---
+import { submissionFormUrl } from "../config.mjs";
+
+import Head from "../components/Head.astro";
+import Icon from "../components/Icon.astro";
+
+import "@fontsource/jost/200.css";
+import "@fontsource/jost/300.css";
+import sharedStyles from "../styles/shared.css";
+import aboutPageStyles from "../styles/about-page.css";
+import suchoLogo32x32 from "../img/sucho-logo.32x32.png";
+import suchoLogo64x64 from "../img/sucho-logo.64x64.png";
+import { submissionFormUrl } from "../config.mjs";
+
+const title = "About :: SUCHO Meme Wall";
+const description =
+  "Collected memes from the SUCHO project concerning the Russian invasion of Ukraine.";
+---
+
+<html lang="en">
+
+<Head {title} {description} />
+
+<body>
+  <header>
+    <h1>
+      <img srcset={`${suchoLogo64x64} 2x`} src={suchoLogo32x32} alt="SUCHO" />
+      <a href={Astro.site.pathname} title="SUCHO Meme Wall">SUCHO Meme Wall
+      </a>
+    </h1>
+    <a class="button" title="Return to the Meme Wall" href="/">
+      <Icon name="arrow-narrow-left" /> Return to the Meme Wall
+    </a>
+  </header>
+  <main>
+    <section>
+      <header>
+        <h2>About the Meme Wall</h2>
+      </header>
+      <p>
+        Ukrainian war memes are an important born-digital element of contemporary culture. They are disseminated mainly
+        through social media and transmit very powerful war-related messages in a playful manner. Because memes are
+        strongly rooted in current events and ideas, their life span is very short and if not preserved, they will be
+        lost. To preserve this cultural phenomenon SUCHO has begun building an archival collection of visual internet
+        memes related to the Russo-Ukrainian war. The collecting is carried out by harvesting social media accounts
+        dedicated to memes and by manual submission of individual memes via a public Google form. Each meme is described
+        using a complex metadata structure. The collection can be previewed as an interactive “SUCHO Meme Wall”, where
+        memes can be filtered or searched by content, language and template as well as by the names of individuals and
+        countries mentioned.
+      </p>
+    </section>
+    <section>
+      <header>
+        <h2>About the Site</h2>
+      </header>
+      <p>
+        This site is built directly from curated submissions to <a title="SUCHO Meme Submission Form"
+          href={submissionFormUrl}>the
+          Google Form</a>. At build-time, the contents of the sheet is fetched and parsed, and the source images are
+        downloaded from the Google Drive folder. The images are then processed to create the versions in multiple
+        sizes/formats required to create the site.
+      </p>
+      <p>
+        The front-end site itself is created in HTML, CSS, and vanilla Javascript using the <a title="Astro"
+          href="https://astro.build/">Astro</a> static framework. The site is hosted on GitHub Pages and <a
+          href="https://github.com/sucho-archiving/meme-wall/" title="SUCHO Meme Wall Repository">the source is
+          available on GitHub</a>.
+      </p>
+    </section>
+  </main>
+</body>
+
+</html>

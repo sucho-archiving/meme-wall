@@ -1,15 +1,19 @@
 ---
 import { renderPicture } from "astro-imagetools/api";
 
+import { submissionFormUrl } from "../config.mjs";
+
 import Head from "../components/Head.astro";
 import Loader from "../components/Loader.astro";
-import StyledSelect from "../components/StyledSelect.astro";
+import Filter from "../components/Filter.astro";
 import Icon from "../components/Icon.astro";
-import { memes, memeTypes, people, languages, countries, templateTypes } from "../dataset.mjs";
+import { memes } from "../dataset.mjs";
 
 import "@fontsource/jost/300.css";
-import styles from "../styles/styles.css";
-import suchoLogo from "../img/sucho-logo.32x32.png";
+import sharedStyles from "../styles/shared.css";
+import wallStyles from "../styles/wall.css";
+import suchoLogo32x32 from "../img/sucho-logo.32x32.png";
+import suchoLogo64x64 from "../img/sucho-logo.64x64.png";
 
 // Given a <picture/> element as am HTML string (as returned by renderPicture),
 // extract the srcset attribute values and return an object of the form
@@ -31,24 +35,18 @@ const description =
   <body>
     <header>
       <h1>
-        <img src={suchoLogo} alt="SUCHO" />
+        <img srcset={`${suchoLogo64x64} 2x`} src={suchoLogo32x32} alt="SUCHO" />
         <a href={Astro.site.pathname} title="SUCHO Meme Wall"
           >SUCHO Meme Wall
         </a>
       </h1>
       <div class="controls">
         <span class="count">{memes.length} / {memes.length}</span>
-        <StyledSelect title="Filter Memes" selectClass="memeType">
-          <option value="" disabled selected>-- Filter by Meme Type --</option>
-          {Array.from(memeTypes).map((memeType) => (
-            <option
-              value={memeType}
-              set:text={`${memeType} [${
-                memes.filter((meme) => meme.memeTypes.includes(memeType)).length
-              }]`}
-            />
-          ))}
-        </StyledSelect>
+        <Filter
+          title="Filter Memes"
+          selectClass="memeType"
+          placeHolder="-- Filter by Content --"
+          facet="memeTypes"></Filter>
         <div class="search">
           <button class="search" title="Search Memes"
             ><Icon name="search" />
@@ -62,52 +60,34 @@ const description =
         <button class="shuffle" title="Shuffle Memes"
           ><Icon name="shuffle" />
         </button>
+        <a class="button" title="Contribute" href={submissionFormUrl}>
+          <Icon name="upload" />
+        </a>
+        <a class="button" title="About" href="/about/">
+          <Icon name="info-circle" />
+        </a>
       </div>
       <div class="more-filters">
-        <StyledSelect title="Filter by Person" selectClass="person">
-          <option value="" disabled selected>-- Person --</option>
-          {Array.from(people).map((person) => (
-            <option
-              value={person}
-              set:text={`${person} [${
-                memes.filter((meme) => meme.people.includes(person)).length
-              }]`}
-            />
-          ))}
-        </StyledSelect>
-        <StyledSelect title="Filter by Language" selectClass="language">
-          <option value="" disabled selected>-- Language --</option>
-          {Array.from(languages).map((language) => (
-            <option
-              value={language}
-              set:text={`${language} [${
-                memes.filter((meme) => meme.languages.includes(language)).length
-              }]`}
-            />
-          ))}
-        </StyledSelect>
-        <StyledSelect title="Filter by Country" selectClass="country">
-          <option value="" disabled selected>-- Country --</option>
-          {Array.from(countries).map((country) => (
-            <option
-              value={country}
-              set:text={`${country} [${
-                memes.filter((meme) => meme.countries.includes(country)).length
-              }]`}
-            />
-          ))}
-        </StyledSelect>
-        <StyledSelect title="Filter by Template Type" selectClass="templateType">
-          <option value="" disabled selected>-- Template Type --</option>
-          {Array.from(templateTypes).map((templateType) => (
-            <option
-              value={templateType}
-              set:text={`${templateType} [${
-                memes.filter((meme) => meme.templateTypes.includes(templateType)).length
-              }]`}
-            />
-          ))}
-        </StyledSelect>
+        <Filter
+          title="Filter by Person"
+          selectClass="person"
+          placeHolder="-- Person --"
+          facet="people"></Filter>
+        <Filter
+          title="Filter by Language"
+          selectClass="language"
+          placeHolder="-- Language --"
+          facet="languages"></Filter>
+        <Filter
+          title="Filter by Country"
+          selectClass="country"
+          placeHolder="-- Country --"
+          facet="countries"></Filter>
+        <Filter
+          title="Filter by Template Type"
+          selectClass="templateType"
+          placeHolder="-- Template Type --"
+          facet="templateTypes"></Filter>
       </div>
     </header>
     <main id="meme-wall" class="loading">
