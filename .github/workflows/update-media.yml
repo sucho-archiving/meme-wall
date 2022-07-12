@@ -1,0 +1,28 @@
+name: Update Media
+
+on:
+  workflow_dispatch:
+
+jobs:
+  update-media:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js 18
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18
+        cache: 'yarn'
+    - name: Install Dependencies
+      run: yarn install --frozen-lockfile
+    - name: Update Media Assets
+      run: yarn update-media
+    - name: Commit Changes
+      run: |
+        git config user.email "simonjwiles@gmail.com"
+        git config user.name "Simon Wiles"
+        git add .
+        if ! git diff --exit-code --quiet HEAD --; then
+          git commit -m "Automated Media Update $(date +"%Y-%m-%d")"
+          git push
+        fi
