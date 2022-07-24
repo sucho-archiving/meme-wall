@@ -31,7 +31,7 @@ main {
   font-weight: 200;
   line-height: 1.5;
   margin: 4vh auto;
-  max-width: min(1000px, 80vw);
+  width: min(1000px, 80vw);
 
   a {
     color: cadetblue;
@@ -46,10 +46,25 @@ main {
       text-decoration: underline;
     }
   }
+
+  p {
+    margin: 1em 0 0;
+  }
 }
 
-section {
-  margin-bottom: 4vh;
+section + section {
+  margin-top: 4vh;
+}
+
+footer {
+  font-size: 0.8em;
+  margin: 0 auto;
+  text-align: right;
+  width: min(1000px, 80vw);
+
+  a:hover {
+    color: cadetblue;
+  }
 }
 
 @media (max-width: 700px) {

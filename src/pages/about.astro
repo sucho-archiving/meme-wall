@@ -1,4 +1,5 @@
 ---
+import { version } from "../../package.json";
 import { submissionFormUrl } from "../config.mjs";
 
 import Head from "../components/Head.astro";
@@ -64,6 +65,10 @@ const description =
       </p>
     </section>
   </main>
+  <footer>
+    <a href={`https://github.com/sucho-archiving/meme-wall/releases/tag/v${version}`} target="gh-release"
+      title={`Release v${version} on GitHub`}>v{version}</a>
+  </footer>
 </body>
 
 </html>
