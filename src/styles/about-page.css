@@ -51,3 +51,9 @@ main {
 section {
   margin-bottom: 4vh;
 }
+
+@media (max-width: 700px) {
+  header > a.button {
+    display: none;
+  }
+}
