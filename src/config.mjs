@@ -1,15 +1,15 @@
 // Google Drive ID for the spreadsheet
 export const formResponsesSheetId =
-  "1KUOXe5SMMaghl_JI_eZghHG18CXok3D6yb1_SHJM0no";
+  "1b2AbsthNbfQmB7PYTtOZHLONS7OQodxPZVfLZnzxJFk";
 
 // Tab ID (gid=) for the "ready" tab that has curated memes for publishing
-export const readyTabId = "965014117";
+export const readyTabId = "1777903438";
 
 // location of the local folder for copies of the uploaded media
-export const memeMediaFolder = "meme_media";
+export const memeMediaFolder = "closet_media";
 
 // Google Drive API key (read-only, can access publically-accessible files only)
-export const driveApiKey = "AIzaSyAVsxisgH5DPgtN0jJF6Cf0Q9xbSSaBaZU";
+export const driveApiKey = "1205849294";
 
 // Submission Form URL
 export const submissionFormUrl =

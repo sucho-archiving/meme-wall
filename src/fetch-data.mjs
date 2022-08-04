@@ -61,10 +61,10 @@ const fetchSheet = async (sheetUrl) => {
 const fetchMemes = async () => {
   const memes = await fetchSheet(sheetUrl);
   return memes
-    .filter((meme) => meme.timestamp) // filter out empty rows
+    .filter((meme) => meme.idNumber) // filter out empty rows
     .map((meme) => ({
       ...meme,
-      driveId: meme.uploadFile.match(/id=([^&]+)/)?.[1],
+      driveId: meme.scannedSheets.match(/id=([^&]+)/)?.[1],
     }))
     .filter((meme) => meme.driveId); // filter out rows where we can't derive a driveId
 };

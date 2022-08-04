@@ -21,7 +21,8 @@
     "prettier-plugin-astro": "^0.2.0"
   },
   "dependencies": {
-    "@fontsource/jost": "^4.5.10"
+    "@fontsource/jost": "^4.5.10",
+    "file-type": "^17.1.3"
   },
   "resolutions": {
     "astro-imagetools/file-type": "^17.1.3",
