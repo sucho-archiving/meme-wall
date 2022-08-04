@@ -28,14 +28,15 @@ let memes = await fetchMemes();
 memes = memes
   .map((meme) => ({
     ...meme,
-    memeTypes: meme.memeContentType.split(", ").map((type) => type.trim()),
-    people: meme.peopleIndividuals.split(", ").map((person) => person.trim()),
-    templateTypes: meme.memeTemplateType.split(", ").map((type) => type.trim()),
-    languages: meme.language.split(", ").map((language) => language.trim()),
-    countries: meme.country.split(", ").map((country) => country.trim()),
-    timestamp: new Date(meme.timestamp),
+    
+	gender: meme.gender.split(", ").map((gender) => gender.trim()),
+    id: meme.id.split(", ").map((id) => id.trim()),
+    dateRange: meme.dateRange.split(", ").map((dateRange) => dateRange.trim()),
+    yearListed: meme.yearListed.split(", ").map((yearListed) => yearListed.trim()),
+    type: meme.type.split(", ").map((type) => type.trim()),
+    pieces: meme.pieces.split(", ").map((pieces) => pieces.trim()),
   }))
-  .sort((a, b) => b.timestamp - a.timestamp);
+  .sort((a, b) => b.dateRange - a.dateRange);
 
 // ensure all media files are available locally
 for (const meme of memes) {
@@ -60,38 +61,38 @@ for (const meme of memes) {
 }
 
 // Prepare facets and facet counts
-const memeTypes = new Set(
+const gender = new Set(
   memes
-    .map((meme) => meme.memeTypes)
+    .map((meme) => meme.gender)
     .flat()
     .filter((x) => x),
 );
-const people = new Set(
+const id = new Set(
   memes
-    .map((meme) => meme.people)
+    .map((meme) => meme.id)
     .flat()
     .filter((x) => x),
 );
-const languages = new Set(
+const dateRange = new Set(
   memes
-    .map((meme) => meme.languages)
+    .map((meme) => meme.dateRange)
     .flat()
     .filter((x) => x),
 );
-const countries = new Set(
+const yearListed = new Set(
   memes
-    .map((meme) => meme.countries)
+    .map((meme) => meme.yearListed)
     .flat()
     .filter((x) => x),
 );
-const templateTypes = new Set(
+const type = new Set(
   memes
-    .map((meme) => meme.templateTypes)
+    .map((meme) => meme.type)
     .flat()
     .filter((x) => x && x !== "Other"),
 );
 
-export { memes, memeTypes, people, languages, countries, templateTypes };
+export { memes, gender, id, dateRange, yearListed, type };
 
 // If called as a node script, print memes to stdout.
 // See `yarn print-dataset`  (requires node >= v17.5.0)
@@ -101,23 +102,23 @@ const modulePath = path.resolve(fileURLToPath(import.meta.url));
 if (nodePath === modulePath) {
   switch (process.argv[2]) {
     case "memeTypes":
-      console.log(memeTypes);
+      console.log(gender);
       break;
 
     case "people":
-      console.log(people);
+      console.log(id);
       break;
 
     case "countries":
-      console.log(countries);
+      console.log(dateRange);
       break;
 
     case "templateTypes":
-      console.log(templateTypes);
+      console.log(yearListed);
       break;
 
     case "languages":
-      console.log(languages);
+      console.log(type);
       break;
 
     default:
