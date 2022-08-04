@@ -38,9 +38,15 @@ Running `yarn update-media` will fetch and synchronize the media files and then 
 ### Static Build
 
 1. Run `yarn build` to create a production build (the deployment url can be set in [`astro.config.mjs`](astro.config.mjs) but only matters for OpenGraph/Twitter metadata etc.).
-2. Serve `dist/` using an http server.
+2. Run `yarn preview` to serve the contents of `dist/` using an http server at `http://localhost:3000/`.
 
 
 ### Deploy to GH Pages
 
 1. Users with write permissions to this repository can run `yarn gh-deploy` from the project root to install dependencies, build the static assets, and update and push to the `gh-pages` branch.
+
+
+### Additional Development Commands
+
+* `yarn update-media` (requires `node >= v17.5.0`) will fetch the spreadsheet, update the local working tree with any new (or missing) media files fetched from Google Drive, and delete any media files from `meme_media/` that do not correspond to records in the spreadsheet.
+* `yarn print-dataset` (requires `node >= v17.5.0`) will fetch the spreadsheet, process the data and media files, and then output the parsed dataset to `stdout` in JSON format.
