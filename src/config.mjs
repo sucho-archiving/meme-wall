@@ -3,13 +3,13 @@ export const formResponsesSheetId =
   "1b2AbsthNbfQmB7PYTtOZHLONS7OQodxPZVfLZnzxJFk";
 
 // Tab ID (gid=) for the "ready" tab that has curated memes for publishing
-export const readyTabId = "233343157";
+export const readyTabId = "2031710433";
 
 // location of the local folder for copies of the uploaded media
 export const memeMediaFolder = "closet_media";
 
 // Google Drive API key (read-only, can access publically-accessible files only)
-export const driveApiKey = "1205849294";
+export const driveApiKey = "AIzaSyAVsxisgH5DPgtN0jJF6Cf0Q9xbSSaBaZU";
 
 // Submission Form URL
 export const submissionFormUrl =

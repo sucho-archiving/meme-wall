@@ -56,7 +56,7 @@ memes = memes.filter((meme) =>
 // parse the images and generate thumbnails and aspect ratios
 for (const meme of memes) {
   const filepath = path.join(memeMediaFolder, meme.filename);
-  meme.thumbnail = await generate3x3Thumbnail(filepath);
+  meme.thumbnail = ""
   meme.aspectRatio = getAspectRatio(filepath);
 }
 
