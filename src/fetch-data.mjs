@@ -63,7 +63,7 @@ const fetchMemes = async () => {
   return memes
     .map((meme) => ({
       ...meme,
-      driveId: meme.file.match(/id=([^&]+)/)?.[1],
+      driveId: meme.file.match(/[a-zA-Z0-9]{33}/)?.[0],
     }))
     .filter((meme) => meme.driveId); // filter out rows where we can't derive a driveId
 };

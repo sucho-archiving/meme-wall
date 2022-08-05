@@ -9,7 +9,7 @@ export const readyTabId = "2031710433";
 export const memeMediaFolder = "closet_media";
 
 // Google Drive API key (read-only, can access publically-accessible files only)
-export const driveApiKey = "AIzaSyAVsxisgH5DPgtN0jJF6Cf0Q9xbSSaBaZU";
+export const driveApiKey = "AIzaSyAjy7_s8W3HWsYlrBtVYdkVySd3h1KpHFE";
 
 // Submission Form URL
 export const submissionFormUrl =
