@@ -4,6 +4,7 @@ import { writeFile } from "fs";
 import { promisify } from "util";
 
 import neatCsv from "neat-csv";
+import sharp from "sharp";
 
 import {
   formResponsesSheetId,
@@ -38,7 +39,13 @@ const downloadFile = async (url, outputPath, fileStem) =>
       const buffer = await response.arrayBuffer();
       const filename = `${fileStem}.${mimeType.split("/")[1]}`;
       const destination = path.join(outputPath, filename);
-      writeFilePromise(destination, Buffer.from(buffer));
+      // calling sharp.rotate with no arguments will rotate the image according
+      //  to the jpeg EXIF `Orientation` tag (if it exists), and then remove the
+      //  tag.  Should be a noop otherwise.
+      const rotatedBuffer = await sharp(Buffer.from(buffer))
+        .rotate()
+        .toBuffer();
+      writeFilePromise(destination, rotatedBuffer);
       return filename;
     });
 
