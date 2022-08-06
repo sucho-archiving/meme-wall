@@ -40,11 +40,11 @@ const description =
       </h1>
       <div class="controls">
         <span class="count">{memes.length} / {memes.length}</span>
-        <Filter
+        <!--Filter
           title="Filter"
           selectClass="memeType"
           placeHolder="-- Filter by Content --"
-          facet="memeTypes"></Filter>
+          facet="memeTypes"></Filter-->
         <div class="search">
           <button class="search" title="Search"
             ><Icon name="search" />
@@ -93,7 +93,7 @@ const description =
           src: "/src/../closet_media/" + meme.filename,
           fallbackFormat: "jpeg",
           format: "webp",
-          alt: meme.title,
+          alt: meme.notes,
           placeholder: "none",
           includeSourceFormat: false,
         })
@@ -133,7 +133,7 @@ const description =
       })}
     </main>
     <Loader />
-    <script type="module">
+    <script type="module" hoist>
       import "../js/script.js";
     </script>
   </body>
