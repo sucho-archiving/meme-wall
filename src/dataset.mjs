@@ -36,7 +36,7 @@ memes = memes
     type: meme.type.split(", ").map((type) => type.trim()),
     pieces: meme.pieces.split(", ").map((pieces) => pieces.trim()),
   }))
-  .sort((a, b) => b.dateRange - a.dateRange);
+  .sort((a, b) => b.id - a.id);
 
 // ensure all media files are available locally
 for (const meme of memes) {
@@ -56,7 +56,7 @@ memes = memes.filter((meme) =>
 // parse the images and generate thumbnails and aspect ratios
 for (const meme of memes) {
   const filepath = path.join(memeMediaFolder, meme.filename);
-  meme.thumbnail = ""
+  meme.thumbnail = 'img/dress-hanger.png';
   meme.aspectRatio = getAspectRatio(filepath);
 }
 
@@ -101,23 +101,23 @@ const nodePath = path.resolve(process.argv[1]);
 const modulePath = path.resolve(fileURLToPath(import.meta.url));
 if (nodePath === modulePath) {
   switch (process.argv[2]) {
-    case "memeTypes":
+    case "gender":
       console.log(gender);
       break;
 
-    case "people":
+    case "id":
       console.log(id);
       break;
 
-    case "countries":
+    case "dateRange":
       console.log(dateRange);
       break;
 
-    case "templateTypes":
+    case "yearListed":
       console.log(yearListed);
       break;
 
-    case "languages":
+    case "type":
       console.log(type);
       break;
 

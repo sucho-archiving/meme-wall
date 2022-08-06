@@ -23,28 +23,20 @@ const description =
   <header>
     <h1>
       <img srcset={`${suchoLogo64x64} 2x`} src={suchoLogo32x32} alt="SUCHO" />
-      <a href={Astro.site.pathname} title="SUCHO Meme Wall">SUCHO Meme Wall
+      <a href={Astro.site.pathname} title="Jane's closet">Jane's closet
       </a>
     </h1>
-    <a class="button" title="Return to the Meme Wall" href="/">
-      <Icon name="arrow-narrow-left" /> Return to the Meme Wall
+    <a class="button" title="Back to the closet" href="/">
+      <Icon name="arrow-narrow-left" /> Back to the closet
     </a>
   </header>
   <main>
     <section>
       <header>
-        <h2>About the Meme Wall</h2>
+        <h2>About Jane's closet</h2>
       </header>
       <p>
-        Ukrainian war memes are an important born-digital element of contemporary culture. They are disseminated mainly
-        through social media and transmit very powerful war-related messages in a playful manner. Because memes are
-        strongly rooted in current events and ideas, their life span is very short and if not preserved, they will be
-        lost. To preserve this cultural phenomenon SUCHO has begun building an archival collection of visual internet
-        memes related to the Russo-Ukrainian war. The collecting is carried out by harvesting social media accounts
-        dedicated to memes and by manual submission of individual memes via a public Google form. Each meme is described
-        using a complex metadata structure. The collection can be previewed as an interactive “SUCHO Meme Wall”, where
-        memes can be filtered or searched by content, language and template as well as by the names of individuals and
-        countries mentioned.
+The Theater and Performance Studies <a href="https://taps.stanford.edu/costume-shop/">Costume Shop</a> has a collection of historic clothing ranging from 1750s-1960s. Not all the pieces belonged to Jane Stanford, but many did!
       </p>
     </section>
     <section>
@@ -52,8 +44,7 @@ const description =
         <h2>About the Site</h2>
       </header>
       <p>
-        This site is built directly from curated submissions to <a title="SUCHO Meme Submission Form"
-          href={submissionFormUrl}>the Google Form</a>. At build-time, the contents of the sheet is fetched and parsed,
+        This site is adapted from the code for the <a href="https://memes.sucho.org">SUCHO meme wall</a>. At build-time, the contents of the sheet is fetched and parsed,
         and the source images are downloaded from the Google Drive folder. The images are then processed to create the
         versions in multiple sizes/formats required to create the site.
       </p>

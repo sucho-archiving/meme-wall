@@ -24,29 +24,29 @@ const getSrcsetFromPicture = (picture) =>
     ]),
   );
 
-const title = "SUCHO Meme Wall";
+const title = "Jane's closet";
 const description =
-  "Collected memes from the SUCHO project concerning the Russian invasion of Ukraine.";
+  "Images of clothes from the Stanford Theater & Performance Studies Historic Collection";
 ---
 <html lang="en">
   <Head {title} {description} />
   <body>
     <header>
       <h1>
-        <img srcset={`${suchoLogo64x64} 2x`} src={suchoLogo32x32} alt="SUCHO" />
-        <a href={Astro.site.pathname} title="SUCHO Meme Wall"
-          >SUCHO Meme Wall
+        <img srcset={`${suchoLogo64x64} 2x`} src={suchoLogo32x32} alt="Jane's Closet" />
+        <a href={Astro.site.pathname} title="Jane's Closet"
+          >Jane's Closet
         </a>
       </h1>
       <div class="controls">
         <span class="count">{memes.length} / {memes.length}</span>
         <Filter
-          title="Filter Memes"
+          title="Filter"
           selectClass="memeType"
           placeHolder="-- Filter by Content --"
           facet="memeTypes"></Filter>
         <div class="search">
-          <button class="search" title="Search Memes"
+          <button class="search" title="Search"
             ><Icon name="search" />
           </button>
           <input id="search-input" type="text" />
@@ -55,43 +55,42 @@ const description =
         <button class="show-filters" title="Show Filters"
           ><Icon name="filter" />
         </button>
-        <button class="shuffle" title="Shuffle Memes"
+        <button class="shuffle" title="Shuffle"
           ><Icon name="shuffle" />
         </button>
-        <a class="button" title="Submit a Meme" href={submissionFormUrl}>
-          <Icon name="upload" />
-        </a>
         <a class="button" title="About" href="/about/">
           <Icon name="info-circle" />
         </a>
       </div>
+	  	  
+	  
       <div class="more-filters">
         <Filter
-          title="Filter by Person"
-          selectClass="person"
-          placeHolder="-- Person --"
-          facet="people"></Filter>
+          title="Filter by Gender"
+          selectClass="gender"
+          placeHolder="-- Gender --"
+          facet="gender"></Filter>
         <Filter
-          title="Filter by Language"
-          selectClass="language"
-          placeHolder="-- Language --"
-          facet="languages"></Filter>
+          title="Filter by ID"
+          selectClass="id"
+          placeHolder="-- ID --"
+          facet="id"></Filter>
         <Filter
-          title="Filter by Country"
-          selectClass="country"
-          placeHolder="-- Country --"
-          facet="countries"></Filter>
+          title="Filter by Type"
+          selectClass="type"
+          placeHolder="-- Type --"
+          facet="type"></Filter>
         <Filter
-          title="Filter by Template Type"
-          selectClass="templateType"
-          placeHolder="-- Template Type --"
-          facet="templateTypes"></Filter>
+          title="Filter by Date range"
+          selectClass="dateRange"
+          placeHolder="-- Date Range --"
+          facet="dateRange"></Filter>
       </div>
     </header>
     <main id="meme-wall" class="loading">
       {memes.map(async (meme, idx) => {
         const { picture } = await renderPicture({
-          src: "/src/../meme_media/" + meme.filename,
+          src: "/src/../closet_media/" + meme.filename,
           fallbackFormat: "jpeg",
           format: "webp",
           alt: meme.title,
@@ -100,44 +99,41 @@ const description =
         })
         const srcsets = getSrcsetFromPicture(picture)
 
+
         return (
           <picture
-            data-meme-type={meme.memeTypes.join("|")}
-            data-person={meme.people.join("|")}
-            data-language={meme.languages.join("|")}
-            data-country={meme.countries.join("|")}
-            data-template-type={meme.templateTypes.join("|")}>
+            data-meme-type={meme.type.join("|")}
+            data-gender={meme.gender.join("|")}
+            data-id={meme.id.join("|")}
+            data-dateRange={meme.dateRange.join("|")}
+            data-yearListed-type={meme.yearListed.join("|")}>
             <source srcset={srcsets.webp} type="image/webp" sizes="15vmax" />
             <img
               data-src={srcsets.jpg}
               style={`aspect-ratio: ${meme.aspectRatio};background-image: url(${meme.thumbnail})`}
               loading={idx > 20 ? "lazy" : "eager"}
               decoding="async"
-              alt={meme.title}
+              alt={meme.id}
               sizes="15vmax"
             />
             <dl>
-              <dt>Title</dt>
-              <dd>{meme.title || "---"}</dd>
-              <dt>Translation</dt>
-              <dd>{meme.textTranslatedIntoEnglish || "---"}</dd>
-              <dt>Content Type</dt>
-              <dd>{meme.memeContentType || "---"}</dd>
-              <dt>Country</dt>
-              <dd>{meme.country || "---"}</dd>
-              <dt>Language</dt>
-              <dd>{meme.language || "---"}</dd>
-              <dt>Template Type</dt>
-              <dd>{meme.memeTemplateType || "---"}</dd>
-              <dt>People</dt>
-              <dd>{meme.peopleIndividuals || "---"}</dd>
+              <dt>Type</dt>
+              <dd>{meme.type || "---"}</dd>
+              <dt>Gender</dt>
+              <dd>{meme.gender || "---"}</dd>
+              <dt>ID</dt>
+              <dd>{meme.id || "---"}</dd>
+              <dt>Date Range</dt>
+              <dd>{meme.dateRange || "---"}</dd>
+              <dt>Year Listed</dt>
+              <dd>{meme.yearListed || "---"}</dd>
             </dl>
           </picture>
         )
       })}
     </main>
     <Loader />
-    <script type="module" hoist>
+    <script type="module">
       import "../js/script.js";
     </script>
   </body>
