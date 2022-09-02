@@ -43,10 +43,11 @@ Running `yarn update-media` will fetch and synchronize the media files and then 
 
 ### Deploy to GH Pages
 
-1. Users with write permissions to this repository can run `yarn gh-deploy` from the project root to install dependencies, build the static assets, and update and push to the `gh-pages` branch.
+1. Users with write permissions to this repository can run `yarn gh-deploy` from the project root to install dependencies, build the static assets, and update and push to the `gh-pages` branch.  
+  **Note:** the GitHub Actions workflow at [`.github/workflows/update-media-and-deploy-site.yml`](.github/workflows/update-media-and-deploy-site.yml) runs once a day and will automatically acquire new media, update the repository, and build and deploy the site as appropriate -- manual deploys should not generally be required.
 
 
 ### Additional Development Commands
 
-* `yarn update-media` (requires `node >= v17.5.0`) will fetch the spreadsheet, update the local working tree with any new (or missing) media files fetched from Google Drive, and delete any media files from `meme_media/` that do not correspond to records in the spreadsheet.
-* `yarn print-dataset` (requires `node >= v17.5.0`) will fetch the spreadsheet, process the data and media files, and then output the parsed dataset to `stdout` in JSON format.
+* `yarn update-media` (requires `node >= v18`) will fetch the spreadsheet, update the local working tree with any new (or missing) media files fetched from Google Drive, and delete any media files from `meme_media/` that do not correspond to records in the spreadsheet.
+* `yarn print-dataset` (requires `node >= v18`) will fetch the spreadsheet, process the data and media files, and then output the parsed dataset to `stdout` in JSON format.

@@ -7,8 +7,8 @@
     "start": "astro dev --experimental-integrations",
     "build": "astro build --experimental-integrations",
     "preview": "astro preview --experimental-integrations",
-    "print-dataset": "node --experimental-fetch src/dataset.mjs",
-    "update-media": "node --experimental-fetch src/fetch-data.mjs",
+    "print-dataset": "node src/dataset.mjs",
+    "update-media": "node src/fetch-data.mjs",
     "gh-deploy": "CNAME=memes.sucho.org bin/astro-gh-deploy.sh"
   },
   "devDependencies": {
