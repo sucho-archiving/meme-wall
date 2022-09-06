@@ -24,30 +24,31 @@ jobs:
         run: yarn update-media
 
       - name: Check for Changes
+        id: check
         run: |
           git add .
           if ! git diff --exit-code --quiet HEAD --; then
             echo "::set-output name=has_new_media::true"
           fi
       - name: Configure git
-        if: steps.vars.outputs.has_new_media == 'true'
+        if: steps.check.outputs.has_new_media == 'true'
         run: |
           git config user.email "simonjwiles@gmail.com"
           git config user.name "Simon Wiles"
 
       - name: Commit Changes
-        if: steps.vars.outputs.has_new_media == 'true'
+        if: steps.check.outputs.has_new_media == 'true'
         run: |
           git commit -m "Automated Media Update $(date +"%Y-%m-%d")"
           git push
 
       # if building the site, graphicsmagick is needed for creating derivative images
       - name: Install graphicsmagick
-        if: steps.vars.outputs.has_new_media == 'true'
+        if: steps.check.outputs.has_new_media == 'true'
         run: |
           sudo apt-get update
           sudo apt-get install -y graphicsmagick
 
       - name: Build and Deploy Site
-        if: steps.vars.outputs.has_new_media == 'true'
+        if: steps.check.outputs.has_new_media == 'true'
         run: yarn gh-deploy
