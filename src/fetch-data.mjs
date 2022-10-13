@@ -27,6 +27,18 @@ const getDriveApiUrl = (id) =>
 
 const timer = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+const parseDriveId = (url) => {
+  // Files submitted via the Google Form get a URL of the form
+  //  https://drive.google.com/open?id=<driveId>
+  let driveId = url.match(/id=([^&]+)/)?.[1];
+
+  // Those manually added to the spreadsheet get a URL of the form
+  //  https://drive.google.com/file/d/<driveId>/view?usp=sharing
+  if (!driveId) driveId = url.match(/file\/d\/([^&\/]+)/)?.[1];
+  if (!driveId) console.warn("Unable to parse a driveId from", url);
+  return driveId;
+};
+
 const downloadFile = async (url, outputPath, fileStem) =>
   await fetch(url)
     .then((response) => {
@@ -71,7 +83,7 @@ const fetchMemes = async () => {
     .filter((meme) => meme.timestamp) // filter out empty rows
     .map((meme) => ({
       ...meme,
-      driveId: meme.uploadFile.match(/id=([^&]+)/)?.[1],
+      driveId: parseDriveId(meme.uploadFile),
     }))
     .filter((meme) => meme.driveId); // filter out rows where we can't derive a driveId
 };
