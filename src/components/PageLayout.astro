@@ -1,0 +1,45 @@
+---
+import { version } from "../../package.json";
+
+import Head from "../components/Head.astro";
+import Icon from "../components/Icon.astro";
+
+import "@fontsource/jost/200.css";
+import "@fontsource/jost/300.css";
+import suchoLogo32x32 from "../img/sucho-logo.32x32.png";
+import suchoLogo64x64 from "../img/sucho-logo.64x64.png";
+
+const { title, description } = Astro.props;
+---
+
+<html lang="en">
+  <Head {title} {description} />
+  <body>
+    <header>
+      <h1>
+        <img srcset={`${suchoLogo64x64} 2x`} src={suchoLogo32x32} alt="SUCHO" />
+        <a href={Astro.site.pathname} title="SUCHO Meme Wall"
+          >SUCHO Meme Wall
+        </a>
+      </h1>
+      <a class="button" title="Return to the Meme Wall" href="/">
+        <Icon name="arrow-narrow-left" /> Return to the Meme Wall
+      </a>
+    </header>
+    <main>
+      <slot />
+    </main>
+    <footer>
+      <a
+        href={`https://github.com/sucho-archiving/meme-wall/releases/tag/v${version}`}
+        target="gh-release"
+        title={`Release v${version} on GitHub`}>v{version}</a
+      >
+    </footer>
+  </body>
+</html>
+
+<style is:global>
+  @import "../styles/shared.css";
+  @import "../styles/about-page.css";
+</style>
