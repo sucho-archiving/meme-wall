@@ -6,6 +6,8 @@ import Icon from "../components/Icon.astro";
 
 import "@fontsource/jost/200.css";
 import "@fontsource/jost/300.css";
+import "../styles/shared.css";
+import "../styles/about-page.css";
 import suchoLogo32x32 from "../img/sucho-logo.32x32.png";
 import suchoLogo64x64 from "../img/sucho-logo.64x64.png";
 
@@ -38,8 +40,3 @@ const { title, description } = Astro.props;
     </footer>
   </body>
 </html>
-
-<style is:global>
-  @import "../styles/shared.css";
-  @import "../styles/about-page.css";
-</style>
