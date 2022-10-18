@@ -1,0 +1,66 @@
+---
+import * as datasetObj from "../dataset.mjs";
+
+const { facet, description } = Astro.props;
+const { memes } = datasetObj;
+const facetValues = datasetObj[facet];
+---
+
+<table>
+  <caption id={facet}>{description}</caption>
+  <thead>
+    <tr><th>Value</th><th>Count</th></tr>
+  </thead>
+  <tbody>
+    {
+      Array.from(facetValues)
+        .map((facetValue) => ({
+          value: facetValue,
+          count: memes.filter((meme) => meme[facet].includes(facetValue))
+            .length,
+        }))
+        .sort((a, b) => b.count - a.count || a.value.localeCompare(b.value))
+        .map((option) => (
+          <tr>
+            <td>{option.value}</td>
+            <td>{option.count}</td>
+          </tr>
+        ))
+    }
+  </tbody>
+</table>
+
+<style>
+  table {
+    border-collapse: collapse;
+    flex-grow: 1;
+    min-width: 25%;
+  }
+
+  caption {
+    font-size: 1.4em;
+    font-variant: petite-caps;
+    scroll-margin-top: 1em;
+  }
+
+  th {
+    font-variant-caps: all-petite-caps;
+  }
+
+  :is(td, th):first-child {
+    text-align: left;
+  }
+
+  :is(td, th):nth-child(2) {
+    text-align: right;
+  }
+
+  tbody td {
+    border-bottom: 1px solid #444;
+    padding: 0 0.5em;
+  }
+
+  tbody tr:hover {
+    background-color: #666;
+  }
+</style>
