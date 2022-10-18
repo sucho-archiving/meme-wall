@@ -6,8 +6,8 @@ const { memes } = datasetObj;
 const facetValues = datasetObj[facet];
 ---
 
-<table>
-  <caption id={facet}>{description}</caption>
+<table id={facet}>
+  <caption>{description}</caption>
   <thead>
     <tr><th>Value</th><th>Count</th></tr>
   </thead>
@@ -35,13 +35,13 @@ const facetValues = datasetObj[facet];
     border-collapse: collapse;
     flex-grow: 1;
     min-width: 25%;
+    scroll-margin-top: 2em;
   }
 
   caption {
     font-size: 1.4em;
     font-variant: petite-caps;
     overflow: hidden;
-    scroll-margin-top: 1em;
 
     &:before,
     &:after {
