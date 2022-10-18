@@ -40,7 +40,29 @@ const facetValues = datasetObj[facet];
   caption {
     font-size: 1.4em;
     font-variant: petite-caps;
+    overflow: hidden;
     scroll-margin-top: 1em;
+
+    &:before,
+    &:after {
+      background-color: #777;
+      content: "";
+      display: inline-block;
+      height: 1px;
+      position: relative;
+      vertical-align: middle;
+      width: 50%;
+    }
+
+    &:before {
+      margin-left: -50%;
+      right: 0.75em;
+    }
+
+    &:after {
+      left: 0.75em;
+      margin-right: -50%;
+    }
   }
 
   th {
