@@ -1,0 +1,56 @@
+---
+import PageLayout from "../components/PageLayout.astro";
+import StatsTable from "../components/StatsTable.astro";
+
+const title = "Stats :: SUCHO Meme Wall";
+const description =
+  "Collected memes from the SUCHO project concerning the Russian invasion of Ukraine.";
+
+const facets = [
+  ["memeTypes", "Meme Types"],
+  ["people", "People"],
+  ["countries", "Countries"],
+  ["templateTypes", "Template Types"],
+  ["languages", "Languages"],
+];
+---
+
+<PageLayout {title} {description}>
+  <section>
+    <header>
+      <h2>Statistics</h2>
+    </header>
+    <nav>
+      {
+        facets.map(([facet, description]) => (
+          <a href={`#${facet}`}>{description}</a>
+        ))
+      }
+    </nav>
+    <div>
+      {
+        facets.map(([facet, description]) => (
+          <StatsTable {facet} {description} />
+        ))
+      }
+    </div>
+  </section>
+</PageLayout>
+
+<style>
+  nav {
+    align-items: center;
+    display: flex;
+    font-variant: all-petite-caps;
+    justify-content: space-evenly;
+    margin-bottom: 3em;
+    margin-top: 0.5em;
+  }
+
+  div {
+    align-items: flex-start;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3em;
+  }
+</style>
