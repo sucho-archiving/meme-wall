@@ -3,6 +3,7 @@ import { version } from "../../package.json";
 
 import Head from "../components/Head.astro";
 import Icon from "../components/Icon.astro";
+import BackToTop from "../components/BackToTop.astro";
 
 import "@fontsource/jost/200.css";
 import "@fontsource/jost/300.css";
@@ -38,5 +39,6 @@ const { title, description } = Astro.props;
         title={`Release v${version} on GitHub`}>v{version}</a
       >
     </footer>
+    <BackToTop />
   </body>
 </html>
