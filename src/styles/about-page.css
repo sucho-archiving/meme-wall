@@ -1,3 +1,8 @@
+:root {
+  --main-wrap: min(1000px, 80vw);
+  --main-gutter: calc((100vw - var(--main-wrap)) / 2);
+}
+
 @media screen and (prefers-reduced-motion: no-preference) {
   html {
     scroll-behavior: smooth;
@@ -7,7 +12,7 @@
 body > header {
   align-items: center;
   justify-content: space-between;
-  padding: 0.25em calc((100vw - min(1000px, 80vw)) / 2) !important;
+  padding: 0.25em var(--main-gutter) !important;
 }
 
 a.button {
@@ -37,7 +42,7 @@ main {
   font-weight: 200;
   line-height: 1.5;
   margin: 4vh auto;
-  width: min(1000px, 80vw);
+  width: var(--main-wrap);
 
   a {
     color: cadetblue;
@@ -65,7 +70,6 @@ section + section {
 footer {
   font-size: 0.8em;
   margin: 0 auto;
-  padding-bottom: 1em;
   text-align: right;
   width: min(1000px, 80vw);
 
