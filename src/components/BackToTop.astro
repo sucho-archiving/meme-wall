@@ -1,11 +1,15 @@
-<div>
+<div id="scroll-to-top">
   <a href="#" aria-label="Scroll to Top">🠹</a>
 </div>
+<script is:inline>
+  if (window.outerHeight > document.body.clientHeight)
+    document.getElementById("scroll-to-top").style.display = "none";
+</script>
 
 <style>
   div {
     position: absolute;
-    top: 100vh;
+    top: min(100vh, 100%);
     right: max(1em, calc(var(--main-gutter) - 4em));
     bottom: -1em;
     pointer-events: none;
