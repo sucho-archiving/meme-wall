@@ -6,8 +6,8 @@ const { memes } = datasetObj;
 const facetValues = datasetObj[facet];
 ---
 
-<table>
-  <caption id={facet}>{description}</caption>
+<table id={facet}>
+  <caption>{description}</caption>
   <thead>
     <tr><th>Value</th><th>Count</th></tr>
   </thead>
@@ -35,12 +35,34 @@ const facetValues = datasetObj[facet];
     border-collapse: collapse;
     flex-grow: 1;
     min-width: 25%;
+    scroll-margin-top: 2em;
   }
 
   caption {
     font-size: 1.4em;
     font-variant: petite-caps;
-    scroll-margin-top: 1em;
+    overflow: hidden;
+
+    &:before,
+    &:after {
+      background-color: #777;
+      content: "";
+      display: inline-block;
+      height: 1px;
+      position: relative;
+      vertical-align: middle;
+      width: 50%;
+    }
+
+    &:before {
+      margin-left: -50%;
+      right: 0.75em;
+    }
+
+    &:after {
+      left: 0.75em;
+      margin-right: -50%;
+    }
   }
 
   th {
@@ -48,7 +70,9 @@ const facetValues = datasetObj[facet];
   }
 
   :is(td, th):first-child {
+    padding-left: 1em;
     text-align: left;
+    text-indent: -1em;
   }
 
   :is(td, th):nth-child(2) {

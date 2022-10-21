@@ -34,9 +34,9 @@ body {
   display: flex;
   flex-direction: column;
   font-family: "Jost", sans-serif;
-  height: 100vh;
   margin: 0;
   padding: 0;
+  position: relative;
 }
 
 body > header {

@@ -1,6 +1,7 @@
 ---
 import PageLayout from "../components/PageLayout.astro";
 import StatsTable from "../components/StatsTable.astro";
+import { memes } from "../dataset.mjs";
 
 const title = "Stats :: SUCHO Meme Wall";
 const description =
@@ -13,6 +14,9 @@ const facets = [
   ["templateTypes", "Template Types"],
   ["languages", "Languages"],
 ];
+
+const memeCount = memes.length;
+const mostRecentMeme = new Date(memes[0].timestamp).toISOString().slice(0, 10);
 ---
 
 <PageLayout {title} {description}>
@@ -27,6 +31,14 @@ const facets = [
         ))
       }
     </nav>
+
+    <table>
+      <tbody>
+        <tr><td>Total Memes:</td><td>{memeCount}</td></tr>
+        <tr><td>Most Recent Updates:</td><td>{mostRecentMeme}</td></tr>
+      </tbody>
+    </table>
+
     <div>
       {
         facets.map(([facet, description]) => (
@@ -41,10 +53,25 @@ const facets = [
   nav {
     align-items: center;
     display: flex;
+    flex-wrap: wrap;
     font-variant: all-petite-caps;
+    gap: 0 1em;
     justify-content: space-evenly;
     margin-bottom: 3em;
     margin-top: 0.5em;
+  }
+
+  table {
+    margin-bottom: 2em;
+    width: 100%;
+  }
+
+  :is(td, th):first-child {
+    text-align: left;
+  }
+
+  :is(td, th):nth-child(2) {
+    text-align: right;
   }
 
   div {
