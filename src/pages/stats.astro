@@ -3,6 +3,8 @@ import PageLayout from "../components/PageLayout.astro";
 import StatsTable from "../components/StatsTable.astro";
 import { memes } from "../dataset.mjs";
 
+import "charts.css";
+
 const title = "Stats :: SUCHO Meme Wall";
 const description =
   "Collected memes from the SUCHO project concerning the Russian invasion of Ukraine.";
@@ -17,6 +19,37 @@ const facets = [
 
 const memeCount = memes.length;
 const mostRecentMeme = new Date(memes[0].timestamp).toISOString().slice(0, 10);
+
+const currentDay = new Date(memes[0].timestamp).getDate();
+
+// Group memes in a object by month added to the spreadsheet
+const memesByDateAdded = memes.reduce(
+  (result, meme) => ({
+    ...result,
+    [`${new Date(meme.timestamp).toISOString().slice(0, 7)}`]: [
+      ...(result[`${new Date(meme.timestamp).toISOString().slice(0, 7)}`] ||
+        []),
+      meme,
+    ],
+  }),
+  {},
+);
+
+// Calculate --start and --size values for the chart
+let size = 0;
+const chartData = Object.keys(memesByDateAdded)
+  .sort((a, b) => new Date(a) - new Date(b))
+  .map((date, index, arr) => ({
+    key: date,
+    start: size,
+    size: (size += memesByDateAdded[date].length),
+    width:
+      // for the last month, calculate width as a percentage of the month elapsed
+      //  (assumes all months are 30 days long -- good enough for this purpose)
+      index === arr.length - 1 && date === mostRecentMeme.slice(0, 7)
+        ? (currentDay / 30) * 100
+        : 100,
+  }));
 ---
 
 <PageLayout {title} {description}>
@@ -36,6 +69,42 @@ const mostRecentMeme = new Date(memes[0].timestamp).toISOString().slice(0, 10);
       <tbody>
         <tr><td>Total Memes:</td><td>{memeCount}</td></tr>
         <tr><td>Most Recent Updates:</td><td>{mostRecentMeme}</td></tr>
+      </tbody>
+    </table>
+
+    <table
+      class:list={[
+        "charts-css",
+        "line",
+        "show-heading",
+        "hide-data",
+        "show-primary-axis",
+        "show-labels",
+        "show-data-axes",
+        "show-data-on-hover",
+      ]}
+    >
+      <caption>Accumulation of Memes</caption>
+      <thead
+        ><tr
+          ><th scope="col">Month</th> <th scope="col">Cumulative Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          chartData.map((dataObj) => (
+            <tr>
+              {dataObj.key && <th scope="row">{dataObj.key}</th>}
+              <td
+                style={`--start: ${dataObj.start / size}; --size: ${
+                  dataObj.size / size
+                }; width: ${dataObj.width}%;`}
+              >
+                <span class="data">{dataObj.size}</span>
+              </td>
+            </tr>
+          ))
+        }
       </tbody>
     </table>
 
@@ -72,6 +141,51 @@ const mostRecentMeme = new Date(memes[0].timestamp).toISOString().slice(0, 10);
 
   :is(td, th):nth-child(2) {
     text-align: right;
+  }
+
+  .charts-css.charts-css {
+    --color: cadetblue;
+    --data-axes-color: #444;
+    --primary-axis-color: #444;
+
+    height: 300px;
+    margin-bottom: 4em;
+    max-width: 100%;
+
+    th,
+    .data {
+      font-size: 0.8em;
+      font-weight: 200;
+    }
+
+    &.show-heading caption {
+      font-size: 1.4em;
+      font-variant: petite-caps;
+      height: auto;
+      margin-bottom: 1em;
+      overflow: hidden;
+
+      &:before,
+      &:after {
+        background-color: #777;
+        content: "";
+        display: inline-block;
+        height: 1px;
+        position: relative;
+        vertical-align: middle;
+        width: 50%;
+      }
+
+      &:before {
+        margin-left: -50%;
+        right: 0.75em;
+      }
+
+      &:after {
+        left: 0.75em;
+        margin-right: -50%;
+      }
+    }
   }
 
   div {
