@@ -140,6 +140,15 @@ const wallItemToggleCb = (img) => {
   }
 };
 
+const goToMeme = (memeId) => {
+  const el = document.querySelector(
+    `[srcset*='${memeId}']`,
+  )?.nextElementSibling;
+  if (!el) return false;
+  el.scrollIntoView();
+  el.click();
+};
+
 // Hook up event listeners
 shuffleButton.addEventListener("click", shuffle);
 
@@ -179,4 +188,5 @@ enableLazyLoading(wallContainer.querySelectorAll("[data-src]"), wallContainer);
 
 // Initialize MemeWall
 memewall = new MemeWall(wallContainer, wallItemToggleCb);
+if (window.location.hash) goToMeme(window.location.hash.substring(1));
 wallContainer.classList.remove("loading");
