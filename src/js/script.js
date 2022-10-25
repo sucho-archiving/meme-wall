@@ -130,13 +130,18 @@ const searchMemes = (searchTerm) => {
   updateWall();
 };
 
+const showMoreListener = ({ currentTarget: target }) =>
+  target.classList.toggle("show-more");
+
 const wallItemToggleCb = (img) => {
   if (img.classList.contains("active")) {
     img.sizes = "100vw";
     img.previousElementSibling.sizes = "100vw";
+    img.nextElementSibling.addEventListener("click", showMoreListener);
   } else {
     img.sizes = "15vmax";
     img.previousElementSibling.sizes = "15vmax";
+    img.nextElementSibling.removeEventListener("click", showMoreListener);
   }
 };
 
@@ -177,10 +182,6 @@ wallContainer.addEventListener("click", ({ target }) => {
     wallContainer.classList.remove("empty");
     shuffle();
   }
-});
-
-document.querySelectorAll("dl").forEach((dl) => {
-  dl.addEventListener("click", (e) => dl.classList.toggle("show-more"));
 });
 
 // Hook up lazy loading
