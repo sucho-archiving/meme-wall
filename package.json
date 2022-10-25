@@ -12,13 +12,13 @@
     "gh-deploy": "CNAME=memes.sucho.org bin/astro-gh-deploy.sh"
   },
   "devDependencies": {
-    "astro": "^1.4.7",
+    "astro": "^1.5.2",
     "astro-imagetools": "^0.6.11",
     "gm": "^1.25.0",
     "image-size": "^1.0.2",
     "neat-csv": "^7.0.0",
     "postcss-nested": "^6.0.0",
-    "prettier-plugin-astro": "^0.5.5"
+    "prettier-plugin-astro": "^0.6.0"
   },
   "dependencies": {
     "@fontsource/jost": "^4.5.12",
