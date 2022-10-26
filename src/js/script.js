@@ -138,23 +138,37 @@ const wallItemToggleCb = (img) => {
     img.sizes = "100vw";
     img.previousElementSibling.sizes = "100vw";
     img.nextElementSibling.addEventListener("click", showMoreListener);
+    history.replaceState(
+      "",
+      document.title,
+      window.location.pathname + "#" + img.parentElement.dataset.id,
+    );
   } else {
     img.sizes = "15vmax";
     img.previousElementSibling.sizes = "15vmax";
     img.nextElementSibling.removeEventListener("click", showMoreListener);
+    history.replaceState("", document.title, window.location.pathname);
   }
 };
 
 const goToMeme = (memeId) => {
-  const el = document.querySelector(
-    `[srcset*='${memeId}']`,
-  )?.nextElementSibling;
+  const el = document.querySelector(`[data-id='${memeId}'] img`);
   if (!el) return false;
-  el.scrollIntoView();
-  el.click();
+  el.previousElementSibling.scrollIntoView();
+  memewall.activateItem(el);
 };
 
 // Hook up event listeners
+window.addEventListener("hashchange", () => {
+  const memeId = window.location.hash.substring(1);
+  if (
+    !document
+      .querySelector(`[data-id='${memeId}'] img`)
+      ?.classList.contains("active")
+  )
+    goToMeme(memeId);
+});
+
 shuffleButton.addEventListener("click", shuffle);
 
 Object.entries(filterSelects).forEach(([filter, filterSelect]) =>
