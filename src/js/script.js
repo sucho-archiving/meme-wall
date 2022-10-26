@@ -7,6 +7,7 @@ const shuffleButton = document.querySelector("button.shuffle");
 const showFiltersButton = document.querySelector("button.show-filters");
 const searchButton = document.querySelector("button.search");
 const searchInput = document.querySelector("div.search input");
+const shareButton = document.querySelector(".share");
 
 const filters = ["memeType", "person", "language", "country", "templateType"];
 const filterSelects = Object.fromEntries(
@@ -138,6 +139,7 @@ const wallItemToggleCb = (img) => {
     img.sizes = "100vw";
     img.previousElementSibling.sizes = "100vw";
     img.nextElementSibling.addEventListener("click", showMoreListener);
+    shareButton.style.opacity = 1;
     history.replaceState(
       "",
       document.title,
@@ -147,6 +149,7 @@ const wallItemToggleCb = (img) => {
     img.sizes = "15vmax";
     img.previousElementSibling.sizes = "15vmax";
     img.nextElementSibling.removeEventListener("click", showMoreListener);
+    shareButton.style.opacity = 0;
     history.replaceState("", document.title, window.location.pathname);
   }
 };
@@ -197,6 +200,20 @@ wallContainer.addEventListener("click", ({ target }) => {
     shuffle();
   }
 });
+
+if (navigator.share) {
+  shareButton.addEventListener("click", (event) => {
+    event.preventDefault();
+    navigator
+      .share({
+        title: "From the SUCHO Meme Wall",
+        url: window.location,
+      })
+      .catch((error) => {});
+  });
+} else {
+  shareButton.classList.add("disabled");
+}
 
 // Hook up lazy loading
 enableLazyLoading(wallContainer.querySelectorAll("[data-src]"), wallContainer);
