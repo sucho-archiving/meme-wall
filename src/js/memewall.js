@@ -87,17 +87,22 @@ export default class MemeWall {
     block.classList.remove("active");
   }
 
+  activateItem(block) {
+    [...this.container.getElementsByClassName("active")].forEach(
+      this.resetItem,
+    );
+    this.expand(block);
+    this.onItemToggleCb(block);
+  }
+
   toggleItem(event) {
     const block = event.target;
     if (block.classList.contains("active")) {
       this.shrink(false);
+      this.onItemToggleCb(block);
     } else {
-      [...this.container.getElementsByClassName("active")].forEach((block) =>
-        block.classList.remove("active"),
-      );
-      this.expand(block);
+      this.activateItem(block);
     }
-    this.onItemToggleCb(block);
     event.stopPropagation();
   }
 

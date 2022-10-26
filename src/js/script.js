@@ -7,6 +7,7 @@ const shuffleButton = document.querySelector("button.shuffle");
 const showFiltersButton = document.querySelector("button.show-filters");
 const searchButton = document.querySelector("button.search");
 const searchInput = document.querySelector("div.search input");
+const shareButton = document.querySelector(".share");
 
 const filters = ["memeType", "person", "language", "country", "templateType"];
 const filterSelects = Object.fromEntries(
@@ -130,17 +131,47 @@ const searchMemes = (searchTerm) => {
   updateWall();
 };
 
+const showMoreListener = ({ currentTarget: target }) =>
+  target.classList.toggle("show-more");
+
 const wallItemToggleCb = (img) => {
   if (img.classList.contains("active")) {
     img.sizes = "100vw";
     img.previousElementSibling.sizes = "100vw";
+    img.nextElementSibling.addEventListener("click", showMoreListener);
+    shareButton.style.opacity = 1;
+    history.replaceState(
+      "",
+      document.title,
+      window.location.pathname + "#" + img.parentElement.dataset.id,
+    );
   } else {
     img.sizes = "15vmax";
     img.previousElementSibling.sizes = "15vmax";
+    img.nextElementSibling.removeEventListener("click", showMoreListener);
+    shareButton.style.opacity = 0;
+    history.replaceState("", document.title, window.location.pathname);
   }
 };
 
+const goToMeme = (memeId) => {
+  const el = document.querySelector(`[data-id='${memeId}'] img`);
+  if (!el) return false;
+  el.previousElementSibling.scrollIntoView();
+  memewall.activateItem(el);
+};
+
 // Hook up event listeners
+window.addEventListener("hashchange", () => {
+  const memeId = window.location.hash.substring(1);
+  if (
+    !document
+      .querySelector(`[data-id='${memeId}'] img`)
+      ?.classList.contains("active")
+  )
+    goToMeme(memeId);
+});
+
 shuffleButton.addEventListener("click", shuffle);
 
 Object.entries(filterSelects).forEach(([filter, filterSelect]) =>
@@ -170,13 +201,24 @@ wallContainer.addEventListener("click", ({ target }) => {
   }
 });
 
-document.querySelectorAll("dl").forEach((dl) => {
-  dl.addEventListener("click", (e) => dl.classList.toggle("show-more"));
-});
+if (navigator.share) {
+  shareButton.addEventListener("click", (event) => {
+    event.preventDefault();
+    navigator
+      .share({
+        title: "From the SUCHO Meme Wall",
+        url: window.location,
+      })
+      .catch((error) => {});
+  });
+} else {
+  shareButton.classList.add("disabled");
+}
 
 // Hook up lazy loading
 enableLazyLoading(wallContainer.querySelectorAll("[data-src]"), wallContainer);
 
 // Initialize MemeWall
 memewall = new MemeWall(wallContainer, wallItemToggleCb);
+if (window.location.hash) goToMeme(window.location.hash.substring(1));
 wallContainer.classList.remove("loading");
