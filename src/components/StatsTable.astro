@@ -4,12 +4,23 @@ import * as datasetObj from "../dataset.mjs";
 const { facet, description } = Astro.props;
 const { memes } = datasetObj;
 const facetValues = datasetObj[facet];
+
+const maxCount = Math.max(
+  ...Array.from(facetValues).map(
+    (facetValue) =>
+      memes.filter((meme) => meme[facet].includes(facetValue)).length,
+  ),
+);
 ---
 
-<table id={facet}>
+<table
+  id={facet}
+  onclick="this.classList.toggle('charts-css');"
+  class="bar hide-data data-spacing-2 show-heading"
+>
   <caption>{description}</caption>
   <thead>
-    <tr><th>Value</th><th>Count</th></tr>
+    <tr><th scope="col">Value</th><th scope="col">Count</th></tr>
   </thead>
   <tbody>
     {
@@ -22,8 +33,10 @@ const facetValues = datasetObj[facet];
         .sort((a, b) => b.count - a.count || a.value.localeCompare(b.value))
         .map((option) => (
           <tr>
-            <td>{option.value}</td>
-            <td>{option.count}</td>
+            <th scope="row">{option.value}</th>
+            <td style={`--size: ${option.count / maxCount}`}>
+              <span class="data">{option.count}</span>
+            </td>
           </tr>
         ))
     }
@@ -36,6 +49,7 @@ const facetValues = datasetObj[facet];
     flex-grow: 1;
     min-width: 25%;
     scroll-margin-top: 2em;
+    --color: linear-gradient(transparent, cadetblue 5%, transparent);
   }
 
   caption {
@@ -65,8 +79,12 @@ const facetValues = datasetObj[facet];
     }
   }
 
-  th {
+  th[scope="col"] {
     font-variant-caps: all-petite-caps;
+  }
+
+  th[scope="row"] {
+    font-weight: 200;
   }
 
   :is(td, th):first-child {
@@ -79,9 +97,13 @@ const facetValues = datasetObj[facet];
     text-align: right;
   }
 
-  tbody td {
+  tbody td,
+  tbody th {
     border-bottom: 1px solid #444;
     padding: 0 0.5em;
+
+    border-radius: 0 6px 6px 0;
+    padding-left: 8px;
   }
 
   tbody tr:hover {
