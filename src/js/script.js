@@ -11,7 +11,7 @@ const shareButton = document.querySelector(".share");
 
 const filters = ["memeType", "person", "language", "country", "templateType"];
 const filterSelects = Object.fromEntries(
-  filters.map((filter) => [filter, document.querySelector(`select.${filter}`)]),
+  filters.map((filter) => [filter, document.querySelector(`select#${filter}`)]),
 );
 
 const enableLazyLoading = (images, root) => {
@@ -102,16 +102,22 @@ const shuffle = () => {
   }, 200);
 };
 
-const filterMemes = (facet, value) => {
+const filterMemes = (facet, values) => {
   const delay = searchInput.value ? 200 : 0;
   resetUi(facet);
   setTimeout(() => {
-    items.forEach((item) => {
-      toggleItem(
-        item.querySelector("img"),
-        item.dataset[facet].split("|").includes(value),
-      );
-    });
+    values.length
+      ? items.forEach((item) => {
+          toggleItem(
+            item.querySelector("img"),
+            values.some((value) =>
+              item.dataset[facet].split("|").includes(value),
+            ),
+          );
+        })
+      : items.forEach((item) => {
+          toggleItem(item.querySelector("img"), true);
+        });
     updateWall();
   }, delay);
 };
@@ -174,11 +180,12 @@ window.addEventListener("hashchange", () => {
 
 shuffleButton.addEventListener("click", shuffle);
 
-Object.entries(filterSelects).forEach(([filter, filterSelect]) =>
-  filterSelect.addEventListener("change", ({ target: { value } }) =>
-    filterMemes(filter, value),
-  ),
-);
+Object.entries(filterSelects).forEach(([filter, filterSelect]) => {
+  filterSelect.addEventListener("updated", ({ target }) => {
+    const selected = [...target.selectedOptions].map(({ value }) => value);
+    filterMemes(filter, selected);
+  });
+});
 
 showFiltersButton.addEventListener("click", () => {
   document.querySelector("div.more-filters").classList.toggle("show");

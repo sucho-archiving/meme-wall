@@ -40,13 +40,6 @@ div.controls {
     white-space: nowrap;
   }
 
-  div.select {
-    flex-grow: 1;
-    flex-shrink: 1;
-    height: 39px;
-    max-width: 20em;
-  }
-
   svg {
     display: inline-block;
     fill: transparent;
@@ -91,19 +84,36 @@ div.more-filters {
   gap: 0.5em;
   height: 0;
   justify-content: center;
-  overflow: hidden;
+  /* overflow: hidden; */
   transition: height 200ms ease, margin-bottom 100ms 100ms ease;
   width: 100%;
+
+  & .container::after {
+    opacity: 0 !important;
+  }
 
   &.show {
     height: 39px;
     margin-bottom: 0.5em;
     transition: height 200ms ease, margin-bottom 200ms ease;
+
+    & .container::after {
+      opacity: 1 !important;
+      transition: opacity 0.1s 0.1s ease;
+    }
   }
 
-  div {
+  > div {
     max-width: calc(25% - 0.375em);
   }
+}
+
+div.filter {
+  flex-grow: 1;
+  flex-shrink: 0;
+  max-height: 39px;
+  max-width: 20em;
+  width: calc(25% - 1em);
 }
 
 a.share {
@@ -113,7 +123,7 @@ a.share {
   top: calc(100% + 0.5em);
   transition: box-shadow 200ms ease, opacity 200ms ease;
   right: 1em;
-  z-index: 9;
+  z-index: 2;
 
   &.disabled {
     display: none;

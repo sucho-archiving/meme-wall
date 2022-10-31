@@ -49,9 +49,10 @@ const description =
         <span class="count">{memes.length} / {memes.length}</span>
         <Filter
           title="Filter Memes"
-          selectClass="memeType"
+          selectId="memeType"
           placeHolder="-- Filter by Content --"
           facet="memeTypes"
+          containerClass="filter"
         />
         <div class="search">
           <button class="search" title="Search Memes"
@@ -76,27 +77,31 @@ const description =
       <div class="more-filters">
         <Filter
           title="Filter by Person"
-          selectClass="person"
+          selectId="person"
           placeHolder="-- Person --"
           facet="people"
+          containerClass="filter"
         />
         <Filter
           title="Filter by Language"
-          selectClass="language"
+          selectId="language"
           placeHolder="-- Language --"
           facet="languages"
+          containerClass="filter"
         />
         <Filter
           title="Filter by Country"
-          selectClass="country"
+          selectId="country"
           placeHolder="-- Country --"
           facet="countries"
+          containerClass="filter"
         />
         <Filter
           title="Filter by Template Type"
-          selectClass="templateType"
+          selectId="templateType"
           placeHolder="-- Template Type --"
           facet="templateTypes"
+          containerClass="filter"
         />
       </div>
       <a href="#" class="share overlay-button" aria-label="Share">
