@@ -12,6 +12,7 @@
     "gh-deploy": "CNAME=memes.sucho.org bin/astro-gh-deploy.sh"
   },
   "devDependencies": {
+    "@astrojs/svelte": "^1.0.2",
     "astro": "^2.0.4",
     "astro-imagetools": "^0.7.6",
     "csv-writer": "^1.6.0",
@@ -19,7 +20,8 @@
     "image-size": "^1.0.2",
     "neat-csv": "^7.0.0",
     "postcss-nested": "^6.0.0",
-    "prettier-plugin-astro": "^0.8.0"
+    "prettier-plugin-astro": "^0.8.0",
+    "svelte": "^3.52.0"
   },
   "dependencies": {
     "@fontsource/jost": "^4.5.13",
