@@ -1,9 +1,13 @@
+:root {
+  --primary-accent: cadetblue;
+}
+
 * {
   box-sizing: border-box;
 }
 
 ::selection {
-  background: cadetblue;
+  background: var(--primary-accent);
   color: white;
 }
 
@@ -29,7 +33,7 @@ a {
 
   &.overlay-button {
     align-items: center;
-    background-color: cadetblue;
+    background-color: var(--primary-accent);
     border-radius: 50%;
     color: white;
     display: flex;

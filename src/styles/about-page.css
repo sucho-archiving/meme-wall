@@ -45,12 +45,12 @@ main {
   width: var(--main-wrap);
 
   a {
-    color: cadetblue;
+    color: var(--primary-accent);
     font-weight: 300;
     text-decoration: none;
 
     &:visited {
-      color: cadetblue;
+      color: var(--primary-accent);
     }
 
     &:hover {
@@ -74,7 +74,7 @@ footer {
   width: min(1000px, 80vw);
 
   a:hover {
-    color: cadetblue;
+    color: var(--primary-accent);
   }
 }
 
