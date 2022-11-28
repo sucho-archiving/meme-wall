@@ -5,6 +5,7 @@ import sizeOf from "image-size";
 
 import { memeMediaFolder } from "./config.mjs";
 import { fetchMemes, fetchFile, purgeFiles } from "./fetch-data.mjs";
+import memeTypeGroups from "./meme-type-groups.json" assert { type: "json" };
 
 const getAspectRatio = (imgPath) => {
   const dimensions = sizeOf(imgPath);
@@ -71,6 +72,10 @@ const memeTypes = [
   .map((memeType) => ({
     value: memeType,
     count: memes.filter((meme) => meme.memeTypes.includes(memeType)).length,
+    group:
+      Object.entries(memeTypeGroups).find(([group, memeTypes]) =>
+        memeTypes.includes(memeType),
+      )?.[0] || "Other",
   }))
   .sort((a, b) => b.count - a.count || a.value.localeCompare(b.value));
 
