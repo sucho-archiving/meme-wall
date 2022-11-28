@@ -60,36 +60,76 @@ for (const meme of memes) {
 }
 
 // Prepare facets and facet counts
-const memeTypes = new Set(
-  memes
-    .map((meme) => meme.memeTypes)
-    .flat()
-    .filter((x) => x),
-);
-const people = new Set(
-  memes
-    .map((meme) => meme.people)
-    .flat()
-    .filter((x) => x),
-);
-const languages = new Set(
-  memes
-    .map((meme) => meme.languages)
-    .flat()
-    .filter((x) => x),
-);
-const countries = new Set(
-  memes
-    .map((meme) => meme.countries)
-    .flat()
-    .filter((x) => x),
-);
-const templateTypes = new Set(
-  memes
-    .map((meme) => meme.templateTypes)
-    .flat()
-    .filter((x) => x && x !== "Other"),
-);
+const memeTypes = [
+  ...new Set(
+    memes
+      .map((meme) => meme.memeTypes)
+      .flat()
+      .filter((x) => x),
+  ),
+]
+  .map((memeType) => ({
+    value: memeType,
+    count: memes.filter((meme) => meme.memeTypes.includes(memeType)).length,
+  }))
+  .sort((a, b) => b.count - a.count || a.value.localeCompare(b.value));
+
+const people = [
+  ...new Set(
+    memes
+      .map((meme) => meme.people)
+      .flat()
+      .filter((x) => x),
+  ),
+]
+  .map((person) => ({
+    value: person,
+    count: memes.filter((meme) => meme.people.includes(person)).length,
+  }))
+  .sort((a, b) => b.count - a.count || a.value.localeCompare(b.value));
+
+const languages = [
+  ...new Set(
+    memes
+      .map((meme) => meme.languages)
+      .flat()
+      .filter((x) => x),
+  ),
+]
+  .map((language) => ({
+    value: language,
+    count: memes.filter((meme) => meme.languages.includes(language)).length,
+  }))
+  .sort((a, b) => b.count - a.count || a.value.localeCompare(b.value));
+
+const countries = [
+  ...new Set(
+    memes
+      .map((meme) => meme.countries)
+      .flat()
+      .filter((x) => x),
+  ),
+]
+  .map((country) => ({
+    value: country,
+    count: memes.filter((meme) => meme.countries.includes(country)).length,
+  }))
+  .sort((a, b) => b.count - a.count || a.value.localeCompare(b.value));
+
+const templateTypes = [
+  ...new Set(
+    memes
+      .map((meme) => meme.templateTypes)
+      .flat()
+      .filter((x) => x && x !== "Other"),
+  ),
+]
+  .map((templateType) => ({
+    value: templateType,
+    count: memes.filter((meme) => meme.templateTypes.includes(templateType))
+      .length,
+  }))
+  .sort((a, b) => b.count - a.count || a.value.localeCompare(b.value));
 
 export { memes, memeTypes, people, languages, countries, templateTypes };
 
