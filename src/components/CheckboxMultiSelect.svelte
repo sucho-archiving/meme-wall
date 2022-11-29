@@ -83,17 +83,22 @@
   >
 
   <div class="dropdown" class:open bind:this={dropdown}>
-    {#each filteredOptions as option}
-      <label>
-        <input
-          type="checkbox"
-          value={option.value}
-          bind:group={selectedOptions}
-          on:change={selectedOptionsUpdated}
-        />
-        {option.label}
-      </label>
+    {#each options as option}
+      {#if filteredOptions.includes(option)}
+        <label>
+          <input
+            type="checkbox"
+            value={option.value}
+            bind:group={selectedOptions}
+            on:change={selectedOptionsUpdated}
+          />
+          {option.label}
+        </label>
+      {/if}
     {/each}
+    {#if !filteredOptions.length}
+      <label>No matching options</label>
+    {/if}
   </div>
 </div>
 
