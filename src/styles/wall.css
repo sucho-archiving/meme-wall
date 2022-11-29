@@ -85,6 +85,7 @@ div.more-filters {
   height: 0;
   justify-content: center;
   /* overflow: hidden; */
+  pointer-events: none;
   transition: height 200ms ease, margin-bottom 100ms 100ms ease;
   width: 100%;
 
@@ -95,6 +96,7 @@ div.more-filters {
   &.show {
     height: 39px;
     margin-bottom: 0.5em;
+    pointer-events: auto;
     transition: height 200ms ease, margin-bottom 200ms ease;
 
     & .container::after {
