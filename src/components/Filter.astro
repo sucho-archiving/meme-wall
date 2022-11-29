@@ -5,11 +5,28 @@ import * as datasetObj from "../dataset.mjs";
 
 const { title, selectId, placeHolder, containerClass, facet } = Astro.props;
 const facetValues = datasetObj[facet];
+let options;
 
-const options = facetValues.map(({ value, count }) => ({
+const makeLabels = ({ value, count }) => ({
   value,
   label: `${value} [${count}]`,
-}));
+});
+
+if (facetValues[0].group) {
+  // group options and add counts
+  options = facetValues.reduce(
+    (hash, obj) => ({
+      ...hash,
+      [obj.group]: {
+        options: (hash[obj.group]?.options || []).concat(makeLabels(obj)),
+        count: (hash[obj.group]?.count || 0) + obj.count,
+      },
+    }),
+    {},
+  );
+} else {
+  options = facetValues.map(makeLabels);
+}
 ---
 
 <CheckboxMultiSelect

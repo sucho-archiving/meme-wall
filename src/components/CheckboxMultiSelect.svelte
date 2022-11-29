@@ -9,16 +9,27 @@
   export let title = undefined;
   export let placeHolder = "Select an item...";
 
+  let filteredOptions;
   let selectedOptions = [];
-  let filteredOptions = options;
   let open = false;
   let dropdown;
   let input;
   let selectEl;
+  let hasGroups = !Array.isArray(options);
+
+  const resetFilteredOptions = () => {
+    if (hasGroups) {
+      filteredOptions = Object.values(options)
+        .map((group) => group.options)
+        .flat();
+    } else {
+      filteredOptions = options;
+    }
+  };
 
   const activateDropdown = async () => {
     if (open) return;
-    filteredOptions = options;
+    resetFilteredOptions();
     open = true;
     await tick();
     input.innerHTML = "";
@@ -35,7 +46,7 @@
 
   const search = async () => {
     open = true;
-    filteredOptions = options;
+    resetFilteredOptions();
 
     if (!input.innerHTML) return;
 
@@ -84,7 +95,7 @@
 
   <div class="dropdown" class:open bind:this={dropdown}>
     {#each options as option}
-      {#if filteredOptions.includes(option)}
+      {#if filteredOptions?.includes(option)}
         <label>
           <input
             type="checkbox"
@@ -96,7 +107,7 @@
         </label>
       {/if}
     {/each}
-    {#if !filteredOptions.length}
+    {#if !filteredOptions?.length}
       <label>No matching options</label>
     {/if}
   </div>
