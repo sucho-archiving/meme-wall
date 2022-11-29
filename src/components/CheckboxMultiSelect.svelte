@@ -42,9 +42,9 @@
     if (input.innerText) {
       const searchParts = input.innerText.toLowerCase().split(" ");
 
-      filteredOptions = filteredOptions.filter((options) =>
+      filteredOptions = filteredOptions.filter((option) =>
         searchParts.every((searchPart) =>
-          options.label.toLowerCase().includes(searchPart),
+          option.label.toLowerCase().includes(searchPart),
         ),
       );
     }
@@ -54,26 +54,22 @@
     if (selectEl) {
       await tick();
       selectEl.dispatchEvent(
-        new Event("updated", { bubbles: false, target: selectEl }),
+        new CustomEvent("updated", {
+          bubbles: false,
+          detail: selectedOptions,
+        }),
       );
     }
   };
-
-  $: selectedOptions, selectedOptionsUpdated();
 </script>
 
-<div {title} class={`container ${containerClass || ""}`}>
-  <select
-    multiple
-    id={selectId}
-    bind:value={selectedOptions}
-    bind:this={selectEl}
-  >
-    {#each options as option}
-      <option value={option.value}>{option.label}</option>
-    {/each}
-  </select>
-
+<div
+  {title}
+  id={selectId}
+  bind:this={selectEl}
+  class={`container ${containerClass || ""}`}
+  on:clear={() => (selectedOptions = [])}
+>
   <span
     class="input"
     spellcheck="false"
@@ -93,6 +89,7 @@
           type="checkbox"
           value={option.value}
           bind:group={selectedOptions}
+          on:change={selectedOptionsUpdated}
         />
         {option.label}
       </label>

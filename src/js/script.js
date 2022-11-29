@@ -11,7 +11,7 @@ const shareButton = document.querySelector(".share");
 
 const filters = ["memeType", "person", "language", "country", "templateType"];
 const filterSelects = Object.fromEntries(
-  filters.map((filter) => [filter, document.querySelector(`select#${filter}`)]),
+  filters.map((filter) => [filter, document.querySelector(`div#${filter}`)]),
 );
 
 const enableLazyLoading = (images, root) => {
@@ -78,7 +78,8 @@ const resetUi = (except = []) => {
   }
 
   Object.entries(filterSelects).forEach(([filter, filterSelect]) => {
-    if (!except.includes(filter)) filterSelect.value = "";
+    if (!except.includes(filter))
+      filterSelect.dispatchEvent(new Event("clear"));
   });
 };
 
@@ -181,8 +182,7 @@ window.addEventListener("hashchange", () => {
 shuffleButton.addEventListener("click", shuffle);
 
 Object.entries(filterSelects).forEach(([filter, filterSelect]) => {
-  filterSelect.addEventListener("updated", ({ target }) => {
-    const selected = [...target.selectedOptions].map(({ value }) => value);
+  filterSelect.addEventListener("updated", ({ detail: selected }) => {
     filterMemes(filter, selected);
   });
 });
