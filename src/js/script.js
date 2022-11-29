@@ -146,7 +146,7 @@ const wallItemToggleCb = (img) => {
     img.sizes = "100vw";
     img.previousElementSibling.sizes = "100vw";
     img.nextElementSibling.addEventListener("click", showMoreListener);
-    shareButton.style.opacity = 1;
+    shareButton.classList.add("active");
     history.replaceState(
       "",
       document.title,
@@ -156,7 +156,7 @@ const wallItemToggleCb = (img) => {
     img.sizes = "15vmax";
     img.previousElementSibling.sizes = "15vmax";
     img.nextElementSibling.removeEventListener("click", showMoreListener);
-    shareButton.style.opacity = 0;
+    shareButton.classList.remove("active");
     history.replaceState("", document.title, window.location.pathname);
   }
 };
