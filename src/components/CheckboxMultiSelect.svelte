@@ -10,7 +10,7 @@
   export let placeHolder = "Select an item...";
 
   let filteredOptions;
-  let selectedOptions = [];
+  let selectedValues = [];
   let open = false;
   let dropdown;
   let input;
@@ -61,13 +61,13 @@
     }
   };
 
-  const selectedOptionsUpdated = async () => {
+  const selectedValuesUpdated = async () => {
     if (selectEl) {
       await tick();
       selectEl.dispatchEvent(
         new CustomEvent("updated", {
           bubbles: false,
-          detail: selectedOptions,
+          detail: selectedValues,
         }),
       );
     }
@@ -79,14 +79,14 @@
   id={selectId}
   bind:this={selectEl}
   class={`container ${containerClass || ""}`}
-  on:clear={() => (selectedOptions = [])}
+  on:clear={() => (selectedValues = [])}
 >
   <span
     class="input"
     spellcheck="false"
     contenteditable="true"
-    data-selected={selectedOptions.length}
-    class:show-indicator={selectedOptions.length}
+    data-selected={selectedValues.length}
+    class:show-indicator={selectedValues.length}
     bind:this={input}
     on:input={search}
     on:focus={activateDropdown}
@@ -94,19 +94,66 @@
   >
 
   <div class="dropdown" class:open bind:this={dropdown}>
-    {#each options as option}
-      {#if filteredOptions?.includes(option)}
-        <label>
+    {#if hasGroups}
+      {#each Object.keys(options) as group}
+        {@const subOptions = options[group].options}
+        {@const optionValues = subOptions.map((o) => o.value)}
+        <label class="group">
           <input
             type="checkbox"
-            value={option.value}
-            bind:group={selectedOptions}
-            on:change={selectedOptionsUpdated}
+            checked={optionValues.every((option) =>
+              selectedValues.includes(option),
+            )}
+            indeterminate={optionValues.some((option) =>
+              selectedValues.includes(option),
+            ) &&
+              !optionValues.every((option) => selectedValues.includes(option))}
+            on:change={({ target }) => {
+              if (target.checked) {
+                // select all options for this group
+                selectedValues = [
+                  ...new Set([...selectedValues, ...optionValues]),
+                ];
+              } else {
+                // unselect all options for this group
+                selectedValues = selectedValues.filter(
+                  (option) => !optionValues.includes(option),
+                );
+              }
+              selectedValuesUpdated();
+            }}
           />
-          {option.label}
+          {group} [{options[group].count}]
         </label>
-      {/if}
-    {/each}
+        {#each subOptions as option}
+          {#if filteredOptions?.includes(option)}
+            <label class="suboption">
+              <input
+                type="checkbox"
+                value={option.value}
+                bind:group={selectedValues}
+                on:change={selectedValuesUpdated}
+              />
+              {option.label}
+            </label>
+          {/if}
+        {/each}
+      {/each}
+    {:else}
+      {#each options as option}
+        {#if filteredOptions?.includes(option)}
+          <label>
+            <input
+              type="checkbox"
+              value={option.value}
+              bind:group={selectedValues}
+              on:change={selectedValuesUpdated}
+            />
+            {option.label}
+          </label>
+        {/if}
+      {/each}
+    {/if}
     {#if !filteredOptions?.length}
       <label>No matching options</label>
     {/if}
@@ -185,6 +232,18 @@
       position: absolute;
       right: 26px;
       top: 7px;
+    }
+  }
+
+  label {
+    &.group {
+      font-size: 1.1em;
+      font-weight: bold;
+      margin: 1em 0 0.5em;
+    }
+
+    &.suboption {
+      margin-left: 10px;
     }
   }
 </style>
