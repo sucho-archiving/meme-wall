@@ -104,6 +104,7 @@ const shuffle = () => {
 };
 
 const filterMemes = (facet, values) => {
+  wallContainer.classList.add("loading");
   const delay = searchInput.value ? 200 : 0;
   resetUi(facet);
   setTimeout(() => {
@@ -120,6 +121,7 @@ const filterMemes = (facet, values) => {
           toggleItem(item.querySelector("img"), true);
         });
     updateWall();
+    wallContainer.classList.remove("loading");
   }, delay);
 };
 
@@ -228,4 +230,4 @@ enableLazyLoading(wallContainer.querySelectorAll("[data-src]"), wallContainer);
 // Initialize MemeWall
 memewall = new MemeWall(wallContainer, wallItemToggleCb);
 if (window.location.hash) goToMeme(window.location.hash.substring(1));
-wallContainer.classList.remove("loading");
+wallContainer.classList.remove("initializing");

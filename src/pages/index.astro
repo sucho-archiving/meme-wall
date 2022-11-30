@@ -120,7 +120,7 @@ const description =
         </svg>
       </a>
     </header>
-    <main id="meme-wall" class="loading">
+    <main id="meme-wall" class="initializing">
       {
         memes.map(async (meme, idx) => {
           const { picture } = await renderPicture({
@@ -182,4 +182,8 @@ const description =
       @import "../styles/wall.css";
     </style>
   </body>
+  <style is:global>
+    @import "../styles/shared.css";
+    @import "../styles/wall.css";
+  </style>
 </html>

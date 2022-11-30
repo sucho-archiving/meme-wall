@@ -156,11 +156,16 @@ div.loader {
   overflow-y: scroll;
   transition: opacity 1s ease-in-out;
 
-  &.loading {
+  &.loading,
+  &.initializing {
     transition: none;
 
-    img {
+    &:is(.initializing) img {
       opacity: 0;
+    }
+
+    &:not(.initializing) img {
+      opacity: 0.2;
     }
 
     & + div.loader {
