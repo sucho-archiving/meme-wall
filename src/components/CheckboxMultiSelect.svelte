@@ -198,11 +198,15 @@
 
   .dropdown {
     background-color: inherit;
+    border: 1px solid white;
     border-radius: 4px;
     display: none;
     flex-direction: column;
-    position: absolute;
+    max-height: 90vh;
     min-width: 100%;
+    overflow-y: auto;
+    padding: 0.5em 0.5em 1em;
+    position: absolute;
     width: max-content;
     z-index: 9;
 
