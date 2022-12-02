@@ -163,7 +163,7 @@
       {/each}
     {/if}
     {#if !filteredOptions?.length}
-      <label>No matching options</label>
+      <span>No matching options</span>
     {/if}
   </div>
 </div>
@@ -180,10 +180,6 @@
 />
 
 <style>
-  select {
-    display: none;
-  }
-
   .container {
     background-color: #555;
     border-radius: 4px;
