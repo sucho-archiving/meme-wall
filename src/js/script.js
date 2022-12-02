@@ -13,6 +13,7 @@ const filters = ["memeType", "person", "language", "country", "templateType"];
 const filterSelects = Object.fromEntries(
   filters.map((filter) => [filter, document.querySelector(`div#${filter}`)]),
 );
+const activeFilters = {};
 
 const enableLazyLoading = (images, root) => {
   const imageObserver = new IntersectionObserver(
@@ -103,19 +104,19 @@ const shuffle = () => {
   }, 200);
 };
 
-const filterMemes = (facet, values) => {
+const filterMemes = () => {
   wallContainer.classList.add("loading");
   const delay = searchInput.value ? 200 : 0;
-  resetUi(facet);
+
+  const showHide = (item) =>
+    Object.entries(activeFilters).some(([facet, values]) =>
+      values.some((value) => item.dataset[facet].split("|").includes(value)),
+    );
+
   setTimeout(() => {
-    values.length
+    Object.values(activeFilters).flat().length
       ? items.forEach((item) => {
-          toggleItem(
-            item.querySelector("img"),
-            values.some((value) =>
-              item.dataset[facet].split("|").includes(value),
-            ),
-          );
+          toggleItem(item.querySelector("img"), showHide(item));
         })
       : items.forEach((item) => {
           toggleItem(item.querySelector("img"), true);
@@ -186,6 +187,7 @@ shuffleButton.addEventListener("click", shuffle);
 Object.entries(filterSelects).forEach(([filter, filterSelect]) => {
   filterSelect.addEventListener("updated", ({ detail: selected }) => {
     filterMemes(filter, selected);
+    activeFilters[filter] = selected;
   });
 });
 
