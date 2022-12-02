@@ -92,6 +92,14 @@
     on:focus={activateDropdown}
     on:mousedown|preventDefault={toggleDropdown}>{@html placeHolder}</span
   >
+  {#if selectedValues.length}
+    <button
+      on:click={() => {
+        selectedValues = [];
+        selectedValuesUpdated();
+      }}>×</button
+    >
+  {/if}
 
   <div class="dropdown" class:open bind:this={dropdown}>
     {#if hasGroups}
@@ -221,7 +229,7 @@
     height: 100%;
     line-height: calc(2.25em - 4px);
     overflow: hidden;
-    padding: 5px 60px 5px 11px;
+    padding: 5px 75px 5px 11px;
     text-overflow: ellipsis;
     white-space: nowrap;
     width: 100%;
@@ -234,9 +242,18 @@
       line-height: 25px;
       padding: 0 6px;
       position: absolute;
-      right: 26px;
+      right: 48px;
       top: 7px;
     }
+  }
+
+  button {
+    color: white;
+    font-size: 25px;
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
   }
 
   label {

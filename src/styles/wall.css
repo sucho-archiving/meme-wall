@@ -89,7 +89,8 @@ div.more-filters {
   transition: height 200ms ease, margin-bottom 100ms 100ms ease;
   width: 100%;
 
-  & .container::after {
+  & .container::after,
+  & button {
     opacity: 0 !important;
   }
 
@@ -99,7 +100,8 @@ div.more-filters {
     pointer-events: auto;
     transition: height 200ms ease, margin-bottom 200ms ease;
 
-    & .container::after {
+    & .container::after,
+    & button {
       opacity: 1 !important;
       transition: opacity 0.1s 0.1s ease;
     }
