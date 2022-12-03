@@ -67,27 +67,42 @@ const updateWall = () => {
   wallContainer.classList.remove("loading");
 };
 
-const resetUi = (except = []) => {
-  except = [].concat(except);
-
+const resetFilters = () => {
   wallContainer.classList.remove("empty");
   wallContainer.classList.remove("single");
+  history.replaceState("", document.title, window.location.pathname);
 
-  if (!except.includes("search")) {
-    document.querySelector("div.controls").classList.remove("searching");
-    searchInput.value = "";
+  Object.values(filterSelects).forEach((filterSelect) =>
+    filterSelect.dispatchEvent(new Event("clear")),
+  );
+};
+
+const resetSearch = (ui = true) => {
+  wallContainer.classList.add("loading");
+  wallContainer.classList.remove("empty");
+  wallContainer.classList.remove("single");
+  wallContainer.classList.remove("zoomed");
+  history.replaceState("", document.title, window.location.pathname);
+  document.querySelector("div.controls").classList.remove("searching");
+  searchInput.value = "";
+
+  if (ui) {
+    setTimeout(() => {
+      items.forEach((item) => {
+        toggleItem(item.querySelector("img"), true);
+      });
+      updateWall();
+      wallContainer.classList.remove("loading");
+    }, 200);
   }
-
-  Object.entries(filterSelects).forEach(([filter, filterSelect]) => {
-    if (!except.includes(filter))
-      filterSelect.dispatchEvent(new Event("clear"));
-  });
 };
 
 const shuffle = () => {
   wallContainer.classList.add("loading");
+  wallContainer.classList.remove("empty");
   wallContainer.classList.remove("single");
-  resetUi();
+  wallContainer.classList.remove("zoomed");
+  resetFilters();
   setTimeout(() => {
     memewall.reset();
     memewall.destroy();
@@ -106,6 +121,10 @@ const shuffle = () => {
 
 const filterMemes = () => {
   wallContainer.classList.add("loading");
+  wallContainer.classList.remove("empty");
+  wallContainer.classList.remove("single");
+  wallContainer.classList.remove("zoomed");
+  resetSearch(false);
   const delay = searchInput.value ? 200 : 0;
 
   const showHide = (item) =>
@@ -127,7 +146,7 @@ const filterMemes = () => {
 };
 
 const searchMemes = (searchTerm) => {
-  resetUi("search");
+  resetFilters();
   items.forEach((item) =>
     toggleItem(
       item.querySelector("img"),
@@ -197,8 +216,13 @@ showFiltersButton.addEventListener("click", () => {
 });
 
 searchButton.addEventListener("click", () => {
-  document.querySelector("div.controls").classList.toggle("searching");
-  searchInput.focus();
+  const controls = document.querySelector("div.controls");
+  if (controls.classList.contains("searching")) {
+    resetSearch();
+  } else {
+    controls.classList.add("searching");
+    searchInput.focus();
+  }
 });
 
 searchInput.addEventListener("change", ({ target: { value } }) =>
