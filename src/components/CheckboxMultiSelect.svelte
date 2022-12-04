@@ -38,7 +38,9 @@
 
   const closeDropdown = () => {
     open = false;
-    input.innerHTML = placeHolder;
+    input.innerHTML = selectedValues.length
+      ? selectedValues.join(" | ")
+      : placeHolder;
     input.blur();
   };
 
@@ -62,15 +64,13 @@
   };
 
   const selectedValuesUpdated = async () => {
-    if (selectEl) {
-      await tick();
-      selectEl.dispatchEvent(
-        new CustomEvent("updated", {
-          bubbles: false,
-          detail: selectedValues,
-        }),
-      );
-    }
+    await tick();
+    selectEl.dispatchEvent(
+      new CustomEvent("updated", {
+        bubbles: false,
+        detail: selectedValues,
+      }),
+    );
   };
 </script>
 
