@@ -136,7 +136,19 @@ const templateTypes = [
   }))
   .sort((a, b) => b.count - a.count || a.value.localeCompare(b.value));
 
-export { memes, memeTypes, people, languages, countries, templateTypes };
+const groupOrders = {
+  memeTypes: Object.keys(memeTypeGroups),
+};
+
+export {
+  memes,
+  memeTypes,
+  people,
+  languages,
+  countries,
+  templateTypes,
+  groupOrders,
+};
 
 // If called as a node script, print memes to stdout.
 // See `yarn print-dataset`  (requires node >= v17.5.0)
