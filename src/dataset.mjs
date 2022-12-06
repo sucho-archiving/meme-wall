@@ -138,6 +138,10 @@ const templateTypes = [
     value: templateType,
     count: memes.filter((meme) => meme.templateTypes.includes(templateType))
       .length,
+    group:
+      Object.entries(metadataHierarchies.templateTypes).find(
+        ([group, templateTypes]) => templateTypes.includes(templateType),
+      )?.[0] || "Other",
   }))
   .sort((a, b) => b.count - a.count || a.value.localeCompare(b.value));
 

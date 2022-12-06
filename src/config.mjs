@@ -19,5 +19,5 @@ export const hierarchiesSheetId =
   "1S3Elj_XMXmDM_BdYQg3HJPVORHa8fNGGw7gePpc7jPo";
 export const hierarchiesTabIds = {
   memeTypes: "0",
-  template: "1959459937",
+  templateTypes: "1959459937",
 };
