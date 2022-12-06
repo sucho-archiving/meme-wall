@@ -4,8 +4,12 @@ import gm from "gm";
 import sizeOf from "image-size";
 
 import { memeMediaFolder } from "./config.mjs";
-import { fetchMemes, fetchFile, purgeFiles } from "./fetch-data.mjs";
-import memeTypeGroups from "./meme-type-groups.json" assert { type: "json" };
+import {
+  fetchMemes,
+  fetchMetadataHierarchies,
+  fetchFile,
+  purgeFiles,
+} from "./fetch-data.mjs";
 
 const getAspectRatio = (imgPath) => {
   const dimensions = sizeOf(imgPath);
@@ -22,8 +26,9 @@ const generate3x3Thumbnail = (imgPath) => {
   });
 };
 
-// fetch minimally-parsed data from the spreadsheet
+// fetch minimally-parsed data from the spreadsheet(s)
 let memes = await fetchMemes();
+let metadataHierarchies = await fetchMetadataHierarchies();
 
 // parse some of the metadata values and sort by date
 memes = memes
@@ -73,7 +78,7 @@ const memeTypes = [
     value: memeType,
     count: memes.filter((meme) => meme.memeTypes.includes(memeType)).length,
     group:
-      Object.entries(memeTypeGroups).find(([group, memeTypes]) =>
+      Object.entries(metadataHierarchies.memeTypes).find(([group, memeTypes]) =>
         memeTypes.includes(memeType),
       )?.[0] || "Other",
   }))
@@ -136,9 +141,12 @@ const templateTypes = [
   }))
   .sort((a, b) => b.count - a.count || a.value.localeCompare(b.value));
 
-const groupOrders = {
-  memeTypes: Object.keys(memeTypeGroups),
-};
+const groupOrders = Object.fromEntries(
+  Object.entries(metadataHierarchies).map(([key, value]) => [
+    key,
+    Object.keys(value),
+  ]),
+);
 
 export {
   memes,

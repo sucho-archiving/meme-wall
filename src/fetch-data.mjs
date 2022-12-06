@@ -11,9 +11,9 @@ import {
   readyTabId,
   driveApiKey,
   memeMediaFolder,
+  hierarchiesSheetId,
+  hierarchiesTabIds,
 } from "./config.mjs";
-
-const sheetUrl = `https://docs.google.com/spreadsheets/d/${formResponsesSheetId}/export?format=csv&gid=${readyTabId}`;
 
 const toCamelCase = (str) =>
   str
@@ -77,7 +77,8 @@ const memeExists = (fileStem, memeMediaFolder) => {
   return false;
 };
 
-const fetchSheet = async (sheetUrl) => {
+const fetchSheet = async (sheetId, tabId) => {
+  const sheetUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&gid=${tabId}`;
   const response = await fetch(sheetUrl);
   return await neatCsv(await response.text(), {
     mapHeaders: ({ header, index }) => toCamelCase(header.trim()),
@@ -86,7 +87,7 @@ const fetchSheet = async (sheetUrl) => {
 };
 
 const fetchMemes = async () => {
-  const memes = await fetchSheet(sheetUrl);
+  const memes = await fetchSheet(formResponsesSheetId, readyTabId);
   return memes
     .filter((meme) => meme.timestamp) // filter out empty rows
     .map((meme) => ({
@@ -94,6 +95,21 @@ const fetchMemes = async () => {
       driveId: parseDriveId(meme.uploadFile),
     }))
     .filter((meme) => meme.driveId); // filter out rows where we can't derive a driveId
+};
+
+const fetchMetadataHierarchies = async () => {
+  const hierarchies = {};
+  for (const [metadataType, tabId] of Object.entries(hierarchiesTabIds)) {
+    const data = await fetchSheet(hierarchiesSheetId, tabId);
+    hierarchies[metadataType] = data.reduce(
+      (acc, row) => ({
+        ...acc,
+        [row.category]: [...(acc[row.category] || []), row.value],
+      }),
+      {},
+    );
+  }
+  return hierarchies;
 };
 
 const fetchFile = async (meme, memeMediaFolder, delay = 1000) => {
@@ -124,7 +140,7 @@ const purgeFiles = (memes, memeMediaFolder) => {
   }
 };
 
-export { fetchMemes, fetchFile, purgeFiles };
+export { fetchMemes, fetchMetadataHierarchies, fetchFile, purgeFiles };
 
 // If called as a node script, fetch and parse the spreadsheet and ensure the
 //  media files cache is up to date.
