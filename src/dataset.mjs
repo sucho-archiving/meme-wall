@@ -82,7 +82,11 @@ const memeTypes = [
         memeTypes.includes(memeType),
       )?.[0] || "Other",
   }))
-  .sort((a, b) => a.value.localeCompare(b.value));
+  .sort((a, b) =>
+    a.value
+      .replace(/^["“'‘]+/, "")
+      .localeCompare(b.value.replace(/^["“'‘]+/, "")),
+  );
 
 const people = [
   ...new Set(
