@@ -82,7 +82,7 @@ const memeTypes = [
         memeTypes.includes(memeType),
       )?.[0] || "Other",
   }))
-  .sort((a, b) => b.count - a.count || a.value.localeCompare(b.value));
+  .sort((a, b) => a.value.localeCompare(b.value));
 
 const people = [
   ...new Set(
@@ -96,7 +96,7 @@ const people = [
     value: person,
     count: memes.filter((meme) => meme.people.includes(person)).length,
   }))
-  .sort((a, b) => b.count - a.count || a.value.localeCompare(b.value));
+  .sort((a, b) => a.value.localeCompare(b.value));
 
 const languages = [
   ...new Set(
@@ -110,7 +110,7 @@ const languages = [
     value: language,
     count: memes.filter((meme) => meme.languages.includes(language)).length,
   }))
-  .sort((a, b) => b.count - a.count || a.value.localeCompare(b.value));
+  .sort((a, b) => a.value.localeCompare(b.value));
 
 const countries = [
   ...new Set(
@@ -124,7 +124,7 @@ const countries = [
     value: country,
     count: memes.filter((meme) => meme.countries.includes(country)).length,
   }))
-  .sort((a, b) => b.count - a.count || a.value.localeCompare(b.value));
+  .sort((a, b) => a.value.localeCompare(b.value));
 
 const templateTypes = [
   ...new Set(
@@ -143,7 +143,7 @@ const templateTypes = [
         ([group, templateTypes]) => templateTypes.includes(templateType),
       )?.[0] || "Other",
   }))
-  .sort((a, b) => b.count - a.count || a.value.localeCompare(b.value));
+  .sort((a, b) => a.value.localeCompare(b.value));
 
 const groupOrders = Object.fromEntries(
   Object.entries(metadataHierarchies).map(([key, value]) => [
