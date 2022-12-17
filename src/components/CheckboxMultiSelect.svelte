@@ -64,6 +64,7 @@
   };
 
   const selectedValuesUpdated = async () => {
+    input.focus();
     await tick();
     selectEl.dispatchEvent(
       new CustomEvent("updated", {
@@ -185,6 +186,10 @@
     border-radius: 4px;
     position: relative;
 
+    &:focus-visible {
+      outline: none;
+    }
+
     &:after {
       border-left: 5px solid transparent;
       border-right: 5px solid transparent;
@@ -214,12 +219,16 @@
     width: max-content;
     z-index: 9;
 
+    right: -2px;
+    min-width: calc(100% + 3px);
+
     &.open {
       display: flex;
     }
   }
 
   span.input {
+    border-radius: 4px;
     cursor: pointer;
     display: inline-block;
     height: 100%;
@@ -229,6 +238,10 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     width: 100%;
+
+    &:focus-visible {
+      outline: 1px solid white;
+    }
 
     &.show-indicator::after {
       background-color: var(--primary-accent);
