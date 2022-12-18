@@ -90,6 +90,7 @@ div.more-filters {
   width: 100%;
 
   & .container::after,
+  & .show-indicator::after,
   & button {
     opacity: 0 !important;
   }
@@ -101,6 +102,7 @@ div.more-filters {
     transition: height 200ms ease, margin-bottom 200ms ease;
 
     & .container::after,
+    & .show-indicator::after,
     & button {
       opacity: 1 !important;
       transition: opacity 0.1s 0.1s ease;
