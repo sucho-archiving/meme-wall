@@ -75,6 +75,7 @@ const resetFilters = () => {
   Object.values(filterSelects).forEach((filterSelect) =>
     filterSelect.dispatchEvent(new Event("clear")),
   );
+  activeFilters = {};
 };
 
 const resetSearch = (ui = true) => {
@@ -141,6 +142,14 @@ const filterMemes = () => {
           toggleItem(item.querySelector("img"), true);
         });
     updateWall();
+    const activeFilterCount = Object.values(activeFilters).reduce(
+      (acc, values) => {
+        return (acc += values.length);
+      },
+      0,
+    );
+    showFiltersButton.dataset.activeFilterCount = activeFilterCount;
+    showFiltersButton.classList.toggle("show-indicator", activeFilterCount > 0);
     wallContainer.classList.remove("loading");
   }, delay);
 };

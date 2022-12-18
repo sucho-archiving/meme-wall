@@ -75,8 +75,28 @@ div.controls {
   }
 }
 
-button.show-filters.on {
-  background-color: #555;
+button.show-filters {
+  &.on {
+    background-color: #555;
+  }
+
+  &::after {
+    background-color: var(--primary-accent);
+    border-radius: 3px;
+    color: white;
+    content: "0";
+    display: inline-block;
+    opacity: 0;
+    padding: 2px;
+    position: absolute;
+    top: 0;
+    transition: opacity 200ms ease-in-out;
+  }
+
+  &.show-indicator::after {
+    content: attr(data-active-filter-count);
+    opacity: 1;
+  }
 }
 
 div.more-filters {
