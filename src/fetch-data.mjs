@@ -47,17 +47,25 @@ const downloadFile = async (url, outputPath, fileStem) =>
       process.exit(1);
     })
     .then(async (response) => {
-      const mimeType = response.headers.get("content-type");
       const buffer = await response.arrayBuffer();
-      const filename = `${fileStem}.${mimeType.split("/")[1]}`;
+
+      const mimeType = response.headers.get("content-type");
+      const extension = mimeType.split("/")[1];
+      const filename = `${fileStem}.${extension}`;
       const destination = path.join(outputPath, filename);
-      // calling sharp.rotate with no arguments will rotate the image according
-      //  to the jpeg EXIF `Orientation` tag (if it exists), and then remove the
-      //  tag.  Should be a noop otherwise.
-      const rotatedBuffer = await sharp(Buffer.from(buffer))
-        .rotate()
-        .toBuffer();
-      writeFilePromise(destination, rotatedBuffer);
+
+      if (extension === "jpeg") {
+        // calling sharp.rotate with no arguments will rotate the image according
+        //  to the jpeg EXIF `Orientation` tag (if it exists), and then remove the
+        //  tag.  Should be a noop otherwise.
+        const rotatedBuffer = await sharp(Buffer.from(buffer))
+          .rotate()
+          .toBuffer();
+        writeFilePromise(destination, rotatedBuffer);
+      } else {
+        writeFilePromise(destination, Buffer.from(buffer));
+      }
+
       return filename;
     });
 
