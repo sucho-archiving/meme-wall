@@ -110,7 +110,7 @@ button.show-filters {
     content: "0";
     display: inline-block;
     opacity: 0;
-    padding: 2px;
+    padding: 2px 4px;
     position: absolute;
     top: 0;
     transition: opacity 200ms ease-in-out;

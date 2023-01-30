@@ -128,10 +128,8 @@ const filterMemes = () => {
       values.some((value) => item.dataset[facet].split("|").includes(value)),
     );
 
-  const activeFilterCount = Object.values(activeFilters).reduce(
-    (acc, values) => {
-      return (acc += values.length);
-    },
+  const activeFilterCount = Object.entries(activeFilters).reduce(
+    (acc, [key, values]) => (acc += key === "memeType" ? 0 : values.length),
     0,
   );
   showFiltersButton.dataset.activeFilterCount = activeFilterCount;
