@@ -46,7 +46,12 @@ const description =
         </a>
       </h1>
       <div class="controls">
-        <span class="count">{memes.length} / {memes.length}</span>
+        <div class="count">
+          <span>{memes.length} / {memes.length}</span>
+          <button class="reset-wall" title="Reset Wall"
+            ><Icon name="reset" />
+          </button>
+        </div>
         <Filter
           title="Filter Memes"
           selectId="memeType"
@@ -63,9 +68,6 @@ const description =
         </div>
         <button class="show-filters" title="Show Filters"
           ><Icon name="filter" />
-        </button>
-        <button class="shuffle" title="Shuffle Memes"
-          ><Icon name="shuffle" />
         </button>
         <a class="button" title="Submit a Meme" href={submissionFormUrl}>
           <Icon name="upload" />

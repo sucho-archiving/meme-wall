@@ -80,7 +80,10 @@
   id={selectId}
   bind:this={selectEl}
   class={`container ${containerClass || ""}`}
-  on:clear={() => (selectedValues = [])}
+  on:clear={() => {
+    selectedValues = [];
+    closeDropdown();
+  }}
 >
   <span
     class="input"

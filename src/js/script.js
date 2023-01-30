@@ -3,7 +3,7 @@ import MemeWall from "./memewall.js";
 let memewall;
 const wallContainer = document.getElementById("meme-wall");
 const items = wallContainer.querySelectorAll("picture");
-const shuffleButton = document.querySelector("button.shuffle");
+const resetButton = document.querySelector("button.reset-wall");
 const showFiltersButton = document.querySelector("button.show-filters");
 const searchButton = document.querySelector("button.search");
 const searchInput = document.querySelector("div.search input");
@@ -13,7 +13,7 @@ const filters = ["memeType", "person", "language", "country", "templateType"];
 const filterSelects = Object.fromEntries(
   filters.map((filter) => [filter, document.querySelector(`div#${filter}`)]),
 );
-const activeFilters = {};
+let activeFilters = {};
 
 const enableLazyLoading = (images, root) => {
   const imageObserver = new IntersectionObserver(
@@ -43,11 +43,15 @@ const toggleItem = (img, condition = true) => {
 };
 
 const updateCount = () => {
-  const count = document.querySelector("span.count");
-  count.textContent =
-    wallContainer.querySelectorAll("img:not(.hidden").length +
-    " / " +
-    wallContainer.querySelectorAll("img").length;
+  const countSpan = document.querySelector("div.count span");
+  const shownMemeCount =
+    wallContainer.querySelectorAll("img:not(.hidden").length;
+  const totalMemeCount = wallContainer.querySelectorAll("img").length;
+  countSpan.textContent = shownMemeCount + " / " + totalMemeCount;
+  countSpan.parentElement.classList.toggle(
+    "show-reset",
+    shownMemeCount !== totalMemeCount,
+  );
 };
 
 const updateWall = () => {
@@ -72,10 +76,12 @@ const resetFilters = () => {
   wallContainer.classList.remove("single");
   history.replaceState("", document.title, window.location.pathname);
 
-  Object.values(filterSelects).forEach((filterSelect) =>
-    filterSelect.dispatchEvent(new Event("clear")),
-  );
+  Object.values(filterSelects).forEach((filterSelect) => {
+    console.log("clearing", filterSelect);
+    filterSelect.dispatchEvent(new Event("clear"));
+  });
   activeFilters = {};
+  filterMemes();
 };
 
 const resetSearch = (ui = true) => {
@@ -98,24 +104,13 @@ const resetSearch = (ui = true) => {
   }
 };
 
-const shuffle = () => {
+const reset = () => {
   wallContainer.classList.add("loading");
   wallContainer.classList.remove("empty");
   wallContainer.classList.remove("single");
   wallContainer.classList.remove("zoomed");
   resetFilters();
   setTimeout(() => {
-    memewall.reset();
-    memewall.destroy();
-    wallContainer.querySelectorAll("img").forEach((img) => toggleItem(img));
-    updateCount();
-    // Modified Fisher–Yates shuffle
-    for (let i = wallContainer.children.length; i >= 0; i--) {
-      wallContainer.appendChild(
-        wallContainer.children[(Math.random() * i) | 0],
-      );
-    }
-    memewall = new MemeWall(wallContainer);
     wallContainer.classList.remove("loading");
   }, 200);
 };
@@ -133,6 +128,15 @@ const filterMemes = () => {
       values.some((value) => item.dataset[facet].split("|").includes(value)),
     );
 
+  const activeFilterCount = Object.values(activeFilters).reduce(
+    (acc, values) => {
+      return (acc += values.length);
+    },
+    0,
+  );
+  showFiltersButton.dataset.activeFilterCount = activeFilterCount;
+  showFiltersButton.classList.toggle("show-indicator", activeFilterCount > 0);
+
   setTimeout(() => {
     Object.values(activeFilters).flat().length
       ? items.forEach((item) => {
@@ -142,14 +146,6 @@ const filterMemes = () => {
           toggleItem(item.querySelector("img"), true);
         });
     updateWall();
-    const activeFilterCount = Object.values(activeFilters).reduce(
-      (acc, values) => {
-        return (acc += values.length);
-      },
-      0,
-    );
-    showFiltersButton.dataset.activeFilterCount = activeFilterCount;
-    showFiltersButton.classList.toggle("show-indicator", activeFilterCount > 0);
     wallContainer.classList.remove("loading");
   }, delay);
 };
@@ -210,12 +206,12 @@ window.addEventListener("hashchange", () => {
     goToMeme(memeId);
 });
 
-shuffleButton.addEventListener("click", shuffle);
+resetButton.addEventListener("click", reset);
 
 Object.entries(filterSelects).forEach(([filter, filterSelect]) => {
   filterSelect.addEventListener("updated", ({ detail: selected }) => {
-    filterMemes(filter, selected);
     activeFilters[filter] = selected;
+    filterMemes(filter, selected);
   });
 });
 
@@ -241,7 +237,7 @@ searchInput.addEventListener("change", ({ target: { value } }) =>
 wallContainer.addEventListener("click", ({ target }) => {
   if (target === wallContainer && target.classList.contains("empty")) {
     wallContainer.classList.remove("empty");
-    shuffle();
+    reset();
   }
 });
 
