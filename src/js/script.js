@@ -151,17 +151,18 @@ const filterMemes = () => {
 };
 
 const searchMemes = (searchTerm) => {
-  resetFilters();
-  items.forEach((item) =>
-    toggleItem(
-      item.querySelector("img"),
-      [...item.querySelectorAll("dd")].some((dd) =>
-        dd.textContent
-          .toLocaleLowerCase()
-          .includes(searchTerm.toLocaleLowerCase()),
+  [...items]
+    .filter((item) => !item.querySelector("img").classList.contains("hidden"))
+    .forEach((item) =>
+      toggleItem(
+        item.querySelector("img"),
+        [...item.querySelectorAll("dd")].some((dd) =>
+          dd.textContent
+            .toLocaleLowerCase()
+            .includes(searchTerm.toLocaleLowerCase()),
+        ),
       ),
-    ),
-  );
+    );
   updateWall();
 };
 
