@@ -140,7 +140,7 @@ const description =
               <source srcset={srcsets.webp} type="image/webp" sizes="15vmax" />
               <img
                 data-src={srcsets.jpg}
-                style={`aspect-ratio: ${meme.aspectRatio};background-image: url(${meme.thumbnail})`}
+                style={`aspect-ratio:${meme.aspectRatio};background-image:url(${meme.thumbnail})`}
                 loading={idx > 20 ? "lazy" : "eager"}
                 decoding="async"
                 alt={meme.title}
