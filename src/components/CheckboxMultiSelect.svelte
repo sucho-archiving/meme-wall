@@ -183,7 +183,7 @@
   }}
 />
 
-<style>
+<style lang="postcss">
   .container {
     background-color: #555;
     border-radius: 4px;
