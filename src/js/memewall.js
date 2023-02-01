@@ -24,7 +24,7 @@ export default class MemeWall {
 
   init() {
     this.items = [...this.container.querySelectorAll("img")];
-    this.resize();
+    this.initializeRows();
     this.container.classList.remove("loading");
 
     this.shrink = this.shrink.bind(this);
@@ -55,23 +55,35 @@ export default class MemeWall {
       block.classList.remove("active");
     });
     this.shrink(false);
-    this.resize();
+    this.initializeRows();
   }
 
-  resize() {
-    this.items
-      .reduce(function (rows, block) {
-        var _a;
-        const offsetTop = block.offsetTop;
-        if (!rows.has(offsetTop)) {
-          rows.set(offsetTop, []);
-        }
-        (_a = rows.get(offsetTop)) === null || _a === void 0
-          ? void 0
-          : _a.push(block);
-        return rows;
-      }, new Map())
-      .forEach((row) => MemeWall.resizeRow(row));
+  initializeRows() {
+    this.rows = this.items.reduce((rows, block) => {
+      const offsetTop = block.offsetTop;
+      if (!rows.has(offsetTop)) {
+        return rows.set(offsetTop, [block]);
+      }
+      rows.get(offsetTop).push(block);
+      return rows;
+    }, new Map());
+
+    this.layoutObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const row = this.rows.get(entry.target.rowKey);
+            MemeWall.resizeRow(row);
+          }
+        });
+      },
+      { rootMargin: "100px 0px 0px 0px" },
+    );
+
+    this.rows.forEach((row, key) => {
+      row[0].rowKey = key;
+      this.layoutObserver.observe(row[0]);
+    });
   }
 
   shrink(event) {
