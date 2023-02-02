@@ -60,6 +60,7 @@ export default class MemeWall {
 
   initializeRows() {
     this.rows = this.items.reduce((rows, block) => {
+      block.classList.add("offcanvas");
       const offsetTop = block.offsetTop;
       if (!rows.has(offsetTop)) {
         return rows.set(offsetTop, [block]);
@@ -74,6 +75,7 @@ export default class MemeWall {
           if (entry.isIntersecting) {
             const row = this.rows.get(entry.target.rowKey);
             MemeWall.resizeRow(row);
+            row.forEach((item) => item.classList.remove("offcanvas"));
           }
         });
       },

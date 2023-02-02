@@ -190,6 +190,11 @@ div.loader {
     &.hidden {
       display: none;
     }
+
+    &.offcanvas {
+      opacity: 0;
+      transform: translateY(50%);
+    }
   }
 
   dl {
