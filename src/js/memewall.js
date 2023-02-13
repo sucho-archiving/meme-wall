@@ -69,11 +69,13 @@ export default class MemeWall {
       return rows;
     }, new Map());
 
+    this.rows = [...this.rows.values()];
+
     this.layoutObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            const row = this.rows.get(entry.target.rowKey);
+            const row = this.rows[entry.target.rowIndex];
             MemeWall.resizeRow(row);
             row.forEach((item) => item.classList.remove("offcanvas"));
           }
@@ -82,8 +84,8 @@ export default class MemeWall {
       { rootMargin: "100px 0px 0px 0px" },
     );
 
-    this.rows.forEach((row, key) => {
-      row[0].rowKey = key;
+    this.rows.forEach((row, idx) => {
+      row.forEach((block) => (block.rowIndex = idx));
       this.layoutObserver.observe(row[0]);
     });
   }
@@ -144,9 +146,7 @@ export default class MemeWall {
     }
 
     // determine what blocks are on this row
-    const selectedRow = this.items.filter(
-      (item) => item.offsetTop == block.offsetTop,
-    );
+    const selectedRow = this.rows[block.rowIndex];
 
     // calculate scale
     let scale = targetHeight / blockHeight;
@@ -181,26 +181,12 @@ export default class MemeWall {
       );
     const leftOffsetX = parentWidth / 2 - (blockWidth * scale) / 2 - leftWidth;
 
-    const rows = this.items.reduce(function (rows, block) {
-      var _a;
-      // group rows
-      const offsetTop = block.offsetTop;
-      if (!rows.has(offsetTop)) {
-        rows.set(offsetTop, []);
-      }
-      (_a = rows.get(offsetTop)) === null || _a === void 0
-        ? void 0
-        : _a.push(block);
-      return rows;
-    }, new Map());
-
-    const selectedIndex = [...rows.keys()].indexOf(block.offsetTop);
-    const rowHeights = [...rows.values()].map((r) =>
+    const selectedIndex = block.rowIndex;
+    const rowHeights = this.rows.map((r) =>
       parseInt(window.getComputedStyle(r[0]).height, 10),
     );
 
-    rows.forEach((row, offsetTop, rows) => {
-      const rowIndex = [...rows.keys()].indexOf(offsetTop);
+    this.rows.forEach((row, rowIndex) => {
       // compute the y offset based on the distance from this row to the selected row
       const rowOffsetY =
         Math.sign(rowIndex - selectedIndex) *
