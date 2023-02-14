@@ -160,9 +160,12 @@ export default class MemeWall {
       this.container.offsetTop -
       this.container.scrollTop +
       block.offsetTop;
+
     const metadataHeight =
       block.nextElementSibling.getBoundingClientRect().height;
+
     const availableHeight = targetHeight - metadataHeight;
+
     if (offsetY > 0) {
       if (blockHeight * scale < availableHeight) {
         offsetY -= availableHeight / 2 - (blockHeight * scale) / 2;
@@ -199,33 +202,26 @@ export default class MemeWall {
             )
             .reduce((offset, height) => offset + height, 0) -
         offsetY;
-      row
-        .map((item) => ({
-          item: item,
-          width: parseInt(window.getComputedStyle(item).width, 10),
-        }))
-        .forEach((item, columnIndex, items) => {
-          const offsetX =
-            items
-              .slice(0, columnIndex)
-              .reduce((offset, elem) => offset + elem.width, 0) *
-            (scale - 1);
-          const percentageOffsetX =
-            ((offsetX + leftOffsetX) / item.width) * 100;
-          const percentageOffsetY =
-            (rowOffsetY /
-              parseInt(window.getComputedStyle(item.item).height, 10)) *
-            100;
-          item.item.style.transformOrigin = "0% 0%";
-          item.item.style.transform =
-            "translate(" +
-            percentageOffsetX.toFixed(8) +
-            "%, " +
-            percentageOffsetY.toFixed(8) +
-            "%) scale(" +
-            scale.toFixed(8) +
-            ")";
-        });
+
+      row.forEach((item, columnIndex, items) => {
+        const width = parseInt(window.getComputedStyle(item).width, 10);
+        const offsetX =
+          items
+            .slice(0, columnIndex)
+            .reduce((offset, elem) => offset + elem.width, 0) *
+          (scale - 1);
+
+        const percentageOffsetX = ((offsetX + leftOffsetX) / width) * 100;
+
+        const percentageOffsetY =
+          (rowOffsetY / parseInt(window.getComputedStyle(item).height, 10)) *
+          100;
+
+        item.style.transformOrigin = "0% 0%";
+        item.style.transform = `translate(${percentageOffsetX.toFixed(
+          8,
+        )}%, ${percentageOffsetY.toFixed(8)}%) scale(${scale.toFixed(8)})`;
+      });
     });
   }
 }
