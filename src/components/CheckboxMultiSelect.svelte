@@ -237,7 +237,7 @@
     height: 100%;
     line-height: calc(2.25em - 4px);
     overflow: hidden;
-    padding: 5px 75px 5px 11px;
+    padding: 5px 11px;
     text-overflow: ellipsis;
     white-space: nowrap;
     width: 100%;
@@ -246,16 +246,20 @@
       outline: 1px solid white;
     }
 
-    &.show-indicator::after {
-      background-color: var(--primary-accent);
-      border-radius: 8px;
-      content: attr(data-selected);
-      display: block;
-      line-height: 25px;
-      padding: 0 6px;
-      position: absolute;
-      right: 48px;
-      top: 7px;
+    &.show-indicator {
+      padding: 5px 75px 5px 11px;
+
+      &::after {
+        background-color: var(--primary-accent);
+        border-radius: 8px;
+        content: attr(data-selected);
+        display: block;
+        line-height: 25px;
+        padding: 0 6px;
+        position: absolute;
+        right: 48px;
+        top: 7px;
+      }
     }
   }
 
