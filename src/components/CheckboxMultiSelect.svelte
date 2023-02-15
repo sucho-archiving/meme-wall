@@ -89,6 +89,7 @@
     class="input"
     spellcheck="false"
     contenteditable="true"
+    placeholder="Type to filter..."
     data-selected={selectedValues.length}
     class:show-indicator={selectedValues.length}
     bind:this={input}
@@ -244,6 +245,12 @@
 
     &:focus-visible {
       outline: 1px solid white;
+    }
+
+    &[contenteditable="true"]:empty:before {
+      content: attr(placeholder);
+      opacity: 0.5;
+      pointer-events: none;
     }
 
     &.show-indicator {
