@@ -1,0 +1,83 @@
+---
+import { renderImg } from "astro-imagetools/api";
+import ShareButton from "../components/ShareButton.astro";
+import ExtendedFilters from "../components/ExtendedFilters.astro";
+import MainControls from "../components/MainControls.astro";
+
+const getRefToOptimizedImage = async (src) => {
+  const { img } = await renderImg({ src, alt: "" });
+  return img.match(/srcset="([^"]*?)"/)[1];
+};
+
+const logo32x32 = await getRefToOptimizedImage("/src/img/sucho-logo.32x32.png");
+const logo64x64 = await getRefToOptimizedImage("/src/img/sucho-logo.64x64.png");
+---
+
+<header>
+  <h1>
+    <img srcset={`${logo64x64} 2x`} src={logo32x32} alt="SUCHO" />
+    <a href={Astro.site.pathname} title="SUCHO Meme Wall">SUCHO Meme Wall</a>
+  </h1>
+  <MainControls />
+  <ExtendedFilters />
+  <ShareButton />
+</header>
+
+<style>
+  header {
+    align-items: flex-start;
+    border-bottom: 5px solid #777;
+    border-top: 5px solid #777;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.5em 1em;
+    justify-content: center;
+    padding: 0.5em 0.5em 0;
+    position: relative;
+
+    h1 {
+      align-items: center;
+      display: flex;
+      font-variant-caps: petite-caps;
+      font-weight: 300;
+      gap: 0.5rem;
+      line-height: 39px;
+      margin: 0;
+    }
+
+    img {
+      height: 32px;
+      margin-right: 0.25em;
+      margin-top: -2px;
+      vertical-align: text-top;
+      width: 32px;
+    }
+
+    a {
+      color: white;
+
+      &:visited {
+        color: white;
+      }
+
+      &:hover {
+        text-decoration: none;
+      }
+    }
+  }
+
+  @media (min-width: 1100px) {
+    header {
+      gap: 0.5em 1em;
+      justify-content: space-between;
+      padding: 0.5em 1em 0;
+    }
+  }
+
+  @media (min-width: 1150px) {
+    body > header {
+      align-items: center;
+    }
+  }
+</style>

@@ -1,0 +1,84 @@
+---
+import Filter from "../components/Filter.astro";
+---
+
+<div class="more-filters">
+  <Filter
+    title="Filter by Person"
+    selectId="person"
+    placeHolder="-- Person --"
+    facet="people"
+    containerClass="filter"
+  />
+  <Filter
+    title="Filter by Language"
+    selectId="language"
+    placeHolder="-- Language --"
+    facet="languages"
+    containerClass="filter"
+  />
+  <Filter
+    title="Filter by Country"
+    selectId="country"
+    placeHolder="-- Country --"
+    facet="countries"
+    containerClass="filter"
+  />
+  <Filter
+    title="Filter by Template Type"
+    selectId="templateType"
+    placeHolder="-- Template Type --"
+    facet="templateTypes"
+    containerClass="filter"
+  />
+</div>
+
+<style>
+  div.more-filters {
+    display: flex;
+    gap: 0.5em;
+    height: 0;
+    justify-content: center;
+    overflow: hidden;
+    pointer-events: none;
+    transition: height 200ms ease, margin-bottom 100ms 100ms ease;
+    width: 100%;
+
+    & .container::after,
+    & .show-indicator::after,
+    & button {
+      opacity: 0 !important;
+    }
+
+    &.show {
+      height: 39px;
+      margin-bottom: 0.5em;
+      pointer-events: auto;
+      transition: height 200ms ease, margin-bottom 200ms ease;
+      overflow: visible;
+
+      & .container::after,
+      & .show-indicator::after,
+      & button {
+        opacity: 1 !important;
+        transition: opacity 0.1s 0.1s ease;
+      }
+    }
+
+    > div {
+      max-width: calc(25% - 0.375em);
+    }
+  }
+
+  @media (min-width: 1100px) {
+    div.more-filters {
+      justify-content: flex-end;
+    }
+  }
+
+  @media (min-width: 1150px) {
+    div.more-filters {
+      gap: 1em;
+    }
+  }
+</style>

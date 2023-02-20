@@ -1,12 +1,9 @@
 ---
-import { renderImg, renderPicture } from "astro-imagetools/api";
-
-import { submissionFormUrl } from "../config.mjs";
+import { renderPicture } from "astro-imagetools/api";
 
 import Head from "../components/Head.astro";
+import Header from "../components/Header.astro";
 import Loader from "../components/Loader.astro";
-import Filter from "../components/Filter.astro";
-import Icon from "../components/Icon.astro";
 import { memes } from "../dataset.mjs";
 
 import "@fontsource/jost/300.css";
@@ -22,14 +19,6 @@ const getSrcsetFromPicture = (picture) =>
     ]),
   );
 
-const getRefToOptimizedImage = async (src) => {
-  const { img } = await renderImg({ src, alt: "" });
-  return img.match(/srcset="([^"]*?)"/)[1];
-};
-
-const logo32x32 = await getRefToOptimizedImage("/src/img/sucho-logo.32x32.png");
-const logo64x64 = await getRefToOptimizedImage("/src/img/sucho-logo.64x64.png");
-
 const title = "SUCHO Meme Wall";
 const description =
   "Collected memes from the SUCHO project concerning the Russian invasion of Ukraine.";
@@ -38,90 +27,7 @@ const description =
 <html lang="en">
   <Head {title} {description} />
   <body>
-    <header>
-      <h1>
-        <img srcset={`${logo64x64} 2x`} src={logo32x32} alt="SUCHO" />
-        <a href={Astro.site.pathname} title="SUCHO Meme Wall"
-          >SUCHO Meme Wall
-        </a>
-      </h1>
-      <div class="controls">
-        <div class="count">
-          <span>{memes.length} / {memes.length}</span>
-          <button class="reset-wall" title="Reset Wall"
-            ><Icon name="reset" />
-          </button>
-        </div>
-        <Filter
-          title="Filter Memes"
-          selectId="memeType"
-          placeHolder="-- Filter by Content --"
-          facet="memeTypes"
-          containerClass="filter"
-        />
-        <div class="search">
-          <button class="search" title="Search Memes"
-            ><Icon name="search" />
-          </button>
-          <input id="search-input" type="text" />
-          <label for="search-input" class="visually-hidden">Search Term</label>
-        </div>
-        <button class="show-filters" title="Show Filters"
-          ><Icon name="filter" />
-        </button>
-        <a class="button" title="Submit a Meme" href={submissionFormUrl}>
-          <Icon name="upload" />
-        </a>
-        <a class="button" title="About" href="/about/">
-          <Icon name="info-circle" />
-        </a>
-      </div>
-      <div class="more-filters">
-        <Filter
-          title="Filter by Person"
-          selectId="person"
-          placeHolder="-- Person --"
-          facet="people"
-          containerClass="filter"
-        />
-        <Filter
-          title="Filter by Language"
-          selectId="language"
-          placeHolder="-- Language --"
-          facet="languages"
-          containerClass="filter"
-        />
-        <Filter
-          title="Filter by Country"
-          selectId="country"
-          placeHolder="-- Country --"
-          facet="countries"
-          containerClass="filter"
-        />
-        <Filter
-          title="Filter by Template Type"
-          selectId="templateType"
-          placeHolder="-- Template Type --"
-          facet="templateTypes"
-          containerClass="filter"
-        />
-      </div>
-      <a href="#" class="share overlay-button" aria-label="Share">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          stroke-width="1"
-          stroke="currentColor"
-          fill="none"
-        >
-          <circle cx="6" cy="12" r="3"></circle>
-          <circle cx="18" cy="6" r="3"></circle>
-          <circle cx="18" cy="18" r="3"></circle>
-          <line x1="8.7" y1="10.7" x2="15.3" y2="7.3"></line>
-          <line x1="8.7" y1="13.3" x2="15.3" y2="16.7"></line>
-        </svg>
-      </a>
-    </header>
+    <Header />
     <main id="meme-wall" class="initializing">
       {
         memes.map(async (meme, idx) => {

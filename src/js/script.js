@@ -240,20 +240,6 @@ wallContainer.addEventListener("click", ({ target }) => {
   }
 });
 
-if (navigator.share) {
-  shareButton.addEventListener("click", (event) => {
-    event.preventDefault();
-    navigator
-      .share({
-        title: "From the SUCHO Meme Wall",
-        url: window.location,
-      })
-      .catch((error) => {});
-  });
-} else {
-  shareButton.classList.add("disabled");
-}
-
 // Hook up lazy loading
 enableLazyLoading(wallContainer.querySelectorAll("[data-src]"), wallContainer);
 
