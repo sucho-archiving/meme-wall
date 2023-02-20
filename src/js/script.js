@@ -222,6 +222,10 @@ showFiltersButton.addEventListener("click", () => {
 searchButton.addEventListener("click", () => {
   const controls = document.querySelector("div.controls");
   if (controls.classList.contains("searching")) {
+    if (searchInput.value == "") {
+      controls.classList.remove("searching");
+      return;
+    }
     resetSearch();
   } else {
     controls.classList.add("searching");
