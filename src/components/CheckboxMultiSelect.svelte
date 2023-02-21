@@ -2,6 +2,7 @@
 
 <script>
   import { tick } from "svelte";
+  import { computePosition, shift } from "@floating-ui/dom";
 
   export let options;
   export let selectId;
@@ -27,10 +28,25 @@
     }
   };
 
+  const positionDropdown = () => {
+    computePosition(input, dropdown, {
+      placement: "bottom-start",
+      middleware: [shift({ padding: 2 })],
+    }).then(({ x, y }) => {
+      const inputTop = input.getBoundingClientRect().top;
+      Object.assign(dropdown.style, {
+        left: `${x}px`,
+        top: `${y + 6}px`,
+        maxHeight: `calc(100vh - ${inputTop + y + 10}px)`,
+      });
+    });
+  };
+
   const activateDropdown = async () => {
     if (open) return;
     resetFilteredOptions();
     open = true;
+    positionDropdown();
     await tick();
     input.innerHTML = "";
     input.focus();
@@ -216,15 +232,14 @@
     display: none;
     flex-direction: column;
     max-height: 90vh;
-    min-width: 100%;
     overflow-y: auto;
     padding: 0.5em 0.5em 1em;
     position: absolute;
     width: max-content;
     z-index: 9;
 
-    right: -2px;
     min-width: calc(100% + 3px);
+    max-width: calc(100vw - 4px);
 
     &.open {
       display: flex;
