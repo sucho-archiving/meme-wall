@@ -37,12 +37,12 @@ import Filter from "../components/Filter.astro";
   div.more-filters {
     display: flex;
     gap: 0.5em;
+    grid-area: extended-filters;
     height: 0;
     justify-content: center;
     overflow: hidden;
     pointer-events: none;
     transition: height 200ms ease, margin-bottom 100ms 100ms ease;
-    width: 100%;
 
     & .container::after,
     & .show-indicator::after,
@@ -65,14 +65,9 @@ import Filter from "../components/Filter.astro";
       }
     }
 
-    > div {
-      max-width: calc(25% - 0.375em);
-    }
-  }
-
-  @media (min-width: 1100px) {
-    div.more-filters {
-      justify-content: flex-end;
+    :global(.filter) {
+      min-width: 0; /* prevents div from overflowing designated grid area */
+      width: 25%;
     }
   }
 

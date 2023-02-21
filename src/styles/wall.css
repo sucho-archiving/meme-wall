@@ -15,14 +15,6 @@ button {
   }
 }
 
-div.filter {
-  flex-grow: 1;
-  flex-shrink: 0;
-  max-height: 39px;
-  max-width: 20em;
-  width: calc(25% - 1em);
-}
-
 div.loader {
   opacity: 0;
   pointer-events: none;
