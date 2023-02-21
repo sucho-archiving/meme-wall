@@ -24,6 +24,7 @@
     "svelte": "^3.55.1"
   },
   "dependencies": {
+    "@floating-ui/dom": "^1.2.1",
     "@fontsource/jost": "^4.5.13",
     "charts.css": "^0.9.0"
   },
