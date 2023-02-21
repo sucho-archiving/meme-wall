@@ -303,6 +303,8 @@
 
     &.suboption {
       margin-left: 10px;
+      padding-left: 3em;
+      text-indent: -3em;
     }
   }
 </style>
