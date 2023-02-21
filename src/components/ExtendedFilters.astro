@@ -40,6 +40,7 @@ import Filter from "../components/Filter.astro";
     grid-area: extended-filters;
     height: 0;
     justify-content: center;
+    min-width: 0; /* prevents div from overflowing designated grid area */
     overflow: hidden;
     pointer-events: none;
     transition: height 200ms ease, margin-bottom 100ms 100ms ease;
