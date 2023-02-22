@@ -43,13 +43,6 @@ jobs:
           git commit -m "Automated Media Update $(date +"%Y-%m-%d")"
           git push --force
 
-      # if building the site, graphicsmagick is needed for creating derivative images
-      - name: Install graphicsmagick
-        if: steps.check.outputs.has_new_media == 'true'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y graphicsmagick
-
       - name: Build and Deploy Site
         if: steps.check.outputs.has_new_media == 'true'
         run: yarn gh-deploy
