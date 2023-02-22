@@ -16,7 +16,6 @@
     "astro": "^2.0.4",
     "astro-imagetools": "^0.7.6",
     "csv-writer": "^1.6.0",
-    "gm": "^1.25.0",
     "image-size": "^1.0.2",
     "neat-csv": "^7.0.0",
     "postcss-nested": "^6.0.0",
