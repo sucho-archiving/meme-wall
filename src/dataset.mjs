@@ -1,6 +1,5 @@
 import path from "path";
 
-import gm from "gm";
 import sizeOf from "image-size";
 
 import { memeMediaFolder } from "./config.mjs";
@@ -14,16 +13,6 @@ import {
 const getAspectRatio = (imgPath) => {
   const dimensions = sizeOf(imgPath);
   return dimensions.width / dimensions.height;
-};
-
-const generate3x3Thumbnail = (imgPath) => {
-  return new Promise(async (resolve, reject) => {
-    gm(imgPath)
-      .resize(3, 3)
-      .toBuffer("GIF", (error, buffer) => {
-        resolve(`data:image/gif;base64,${buffer.toString("base64")}`);
-      });
-  });
 };
 
 // fetch minimally-parsed data from the spreadsheet(s)
@@ -58,10 +47,9 @@ memes = memes.filter((meme) =>
   meme.filename.match(/\.jpg|\.jpeg|\.png|\.webp$/i),
 );
 
-// parse the images and generate thumbnails and aspect ratios
+// parse the images and calculate aspect ratios
 for (const meme of memes) {
   const filepath = path.join(memeMediaFolder, meme.filename);
-  meme.thumbnail = await generate3x3Thumbnail(filepath);
   meme.aspectRatio = getAspectRatio(filepath);
 }
 
