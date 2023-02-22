@@ -191,33 +191,33 @@ export default class MemeWall {
 
     this.rows.forEach((row, rowIndex) => {
       // compute the y offset based on the distance from this row to the selected row
-      const rowOffsetY =
-        Math.sign(rowIndex - selectedIndex) *
-          (scale - 1) *
-          rowHeights
-            .slice(
-              ...(rowIndex >= selectedIndex
-                ? [selectedIndex, rowIndex]
-                : [rowIndex, selectedIndex]),
-            )
-            .reduce((offset, height) => offset + height, 0) -
+      const [start, end] =
+        rowIndex >= selectedIndex
+          ? [selectedIndex, rowIndex]
+          : [rowIndex, selectedIndex];
+
+      let rowOffsetY = 0;
+      for (let i = start; i < end; i++) {
+        rowOffsetY += rowHeights[i];
+      }
+
+      rowOffsetY =
+        Math.sign(rowIndex - selectedIndex) * (scale - 1) * rowOffsetY -
         offsetY;
 
       row.forEach((item, columnIndex, items) => {
-        const width = parseInt(window.getComputedStyle(item).width, 10);
-        const offsetX =
-          items
-            .slice(0, columnIndex)
-            .reduce((offset, elem) => offset + elem.width, 0) *
-          (scale - 1);
+        let { width, height } = window.getComputedStyle(item);
+        width = parseInt(width, 10);
+        height = parseInt(height, 10);
+
+        let offsetX = 0;
+        let i = columnIndex;
+        while (i--) offsetX += items[i].width;
+        offsetX = offsetX * (scale - 1);
 
         const percentageOffsetX = ((offsetX + leftOffsetX) / width) * 100;
+        const percentageOffsetY = (rowOffsetY / height) * 100;
 
-        const percentageOffsetY =
-          (rowOffsetY / parseInt(window.getComputedStyle(item).height, 10)) *
-          100;
-
-        item.style.transformOrigin = "0% 0%";
         item.style.transform = `translate(${percentageOffsetX.toFixed(
           8,
         )}%, ${percentageOffsetY.toFixed(8)}%) scale(${scale.toFixed(8)})`;
