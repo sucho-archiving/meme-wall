@@ -61,7 +61,7 @@ div.loader {
   }
 
   img {
-    background-size: cover;
+    box-shadow: inset 3px 3px 20px 1px rgb(255 255 255 / 40%);
     display: inline-block;
     height: 15vmax;
     opacity: 1;
@@ -78,7 +78,6 @@ div.loader {
 
     &.offcanvas {
       opacity: 0;
-      transform: translateY(50%);
     }
   }
 

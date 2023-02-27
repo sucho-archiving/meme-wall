@@ -72,13 +72,27 @@ export default class MemeWall {
 
     this.layoutObserver = new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
+        entries
+          .filter((entry) => entry.isIntersecting)
+          .forEach((entry, idx) => {
             const row = this.rows[entry.target.rowIndex];
             MemeWall.resizeRow(row);
-            row.forEach((item) => item.classList.remove("offcanvas"));
-          }
-        });
+            row.forEach((item, blockIdx) => {
+              // calculate a transition delay such that items fade in from left to right
+              // and multiple rows that are revealed at the same time are offset a little
+              // (on slower connections the images will come as the network can provide them,
+              //  but the placeholders should still exhibit this effect, at least).
+              const delay = blockIdx * 0.05 + idx * 0.1;
+              item.style.transitionDelay = `${delay}s`;
+              item.classList.remove("offcanvas");
+              setTimeout(() => {
+                // once the delay has elapsed (i.e. once the transition has completed),
+                // reset the CSS transition-delay property so it doesn't interfere with the
+                // zoom in/out animation.
+                item.style.transitionDelay = `0s`;
+              }, delay * 1000);
+            });
+          });
       },
       { rootMargin: "100px 0px 0px 0px" },
     );
