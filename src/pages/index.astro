@@ -28,7 +28,8 @@ const description =
   <Head {title} {description} />
   <body>
     <Header />
-    <main id="meme-wall" class="initializing">
+    <Loader />
+    <main id="meme-wall">
       {
         memes.map(async (meme, idx) => {
           const { picture } = await renderPicture({
@@ -81,7 +82,6 @@ const description =
         })
       }
     </main>
-    <Loader />
     <script type="module" hoist>
       import "../js/script.js";
     </script>

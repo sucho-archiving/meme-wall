@@ -56,7 +56,6 @@ const updateCount = () => {
 
 const updateWall = () => {
   updateCount();
-  wallContainer.classList.add("loading");
   memewall.reset();
   if (wallContainer.querySelectorAll("img:not(.hidden)").length === 0) {
     wallContainer.classList.add("empty");
@@ -68,7 +67,6 @@ const updateWall = () => {
     });
     wallContainer.classList.add("single");
   }
-  wallContainer.classList.remove("loading");
 };
 
 const resetFilters = () => {
@@ -85,7 +83,6 @@ const resetFilters = () => {
 };
 
 const resetSearch = (ui = true) => {
-  wallContainer.classList.add("loading");
   wallContainer.classList.remove("empty");
   wallContainer.classList.remove("single");
   wallContainer.classList.remove("zoomed");
@@ -99,24 +96,18 @@ const resetSearch = (ui = true) => {
         toggleItem(item.querySelector("img"), true);
       });
       updateWall();
-      wallContainer.classList.remove("loading");
     }, 200);
   }
 };
 
 const reset = () => {
-  wallContainer.classList.add("loading");
   wallContainer.classList.remove("empty");
   wallContainer.classList.remove("single");
   wallContainer.classList.remove("zoomed");
   resetFilters();
-  setTimeout(() => {
-    wallContainer.classList.remove("loading");
-  }, 200);
 };
 
 const filterMemes = () => {
-  wallContainer.classList.add("loading");
   wallContainer.classList.remove("empty");
   wallContainer.classList.remove("single");
   wallContainer.classList.remove("zoomed");
@@ -144,7 +135,6 @@ const filterMemes = () => {
           toggleItem(item.querySelector("img"), true);
         });
     updateWall();
-    wallContainer.classList.remove("loading");
   }, delay);
 };
 
@@ -250,4 +240,3 @@ enableLazyLoading(wallContainer.querySelectorAll("[data-src]"), wallContainer);
 // Initialize MemeWall
 memewall = new MemeWall(wallContainer, wallItemToggleCb);
 if (window.location.hash) goToMeme(window.location.hash.substring(1));
-wallContainer.classList.remove("initializing");

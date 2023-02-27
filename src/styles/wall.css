@@ -16,9 +16,9 @@ button {
 }
 
 div.loader {
-  opacity: 0;
   pointer-events: none;
   transition: opacity 0.4s ease-in-out;
+  z-index: -1;
 }
 
 #meme-wall {
@@ -32,17 +32,8 @@ div.loader {
   &.initializing {
     transition: none;
 
-    &:is(.initializing) img {
-      opacity: 0;
-    }
-
     &:not(.initializing) img {
       opacity: 0.2;
-    }
-
-    & + div.loader {
-      opacity: 1;
-      transition: opacity 1s ease-in-out;
     }
   }
 
