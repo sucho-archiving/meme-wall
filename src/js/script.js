@@ -15,23 +15,6 @@ const filterSelects = Object.fromEntries(
 );
 let activeFilters = {};
 
-const enableLazyLoading = (images, root) => {
-  const imageObserver = new IntersectionObserver(
-    (entries, observer) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const image = entry.target;
-          image.src = image.dataset.src;
-          image.removeAttribute("data-src");
-          imageObserver.unobserve(image);
-        }
-      });
-    },
-    { root, rootMargin: "0px 0px 100% 0px" },
-  );
-  images.forEach((image) => imageObserver.observe(image));
-};
-
 const toggleItem = (img, condition = true) => {
   if (condition) {
     img.style.removeProperty("width");
@@ -233,9 +216,6 @@ wallContainer.addEventListener("click", ({ target }) => {
     reset();
   }
 });
-
-// Hook up lazy loading
-enableLazyLoading(wallContainer.querySelectorAll("[data-src]"), wallContainer);
 
 // Initialize MemeWall
 memewall = new MemeWall(wallContainer, wallItemToggleCb);
