@@ -38,8 +38,7 @@ export default class MemeWall {
       item.addEventListener("click", this.toggleItem),
     );
 
-    // add key down listener
-    // keys(this.container);
+    // TODO: add keyboard controls?
   }
 
   destroy() {
