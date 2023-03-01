@@ -34,8 +34,9 @@ const description =
         memes.map(async (meme, idx) => {
           const { picture } = await renderPicture({
             src: "/src/../meme_media/" + meme.filename,
-            fallbackFormat: "jpeg",
             format: "webp",
+            fallbackFormat: false,
+            includeSourceFormat: false,
             alt: meme.title,
             placeholder: "none",
             includeSourceFormat: false,
@@ -51,9 +52,8 @@ const description =
               data-country={meme.countries.join("|")}
               data-template-type={meme.templateTypes.join("|")}
             >
-              <source srcset={srcsets.webp} type="image/webp" sizes="15vmax" />
               <img
-                srcset={srcsets.jpeg}
+                srcset={srcsets.webp}
                 style={`aspect-ratio:${meme.aspectRatio}`}
                 loading={idx > 20 ? "lazy" : "eager"}
                 decoding="async"

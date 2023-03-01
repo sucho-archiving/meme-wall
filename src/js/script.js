@@ -143,7 +143,6 @@ const showMoreListener = ({ currentTarget: target }) =>
 const wallItemToggleCb = (img) => {
   if (img.classList.contains("active")) {
     img.sizes = "100vw";
-    img.previousElementSibling.sizes = "100vw";
     img.nextElementSibling.addEventListener("click", showMoreListener);
     shareButton.classList.add("active");
     history.replaceState(
@@ -153,7 +152,6 @@ const wallItemToggleCb = (img) => {
     );
   } else {
     img.sizes = "15vmax";
-    img.previousElementSibling.sizes = "15vmax";
     img.nextElementSibling.removeEventListener("click", showMoreListener);
     shareButton.classList.remove("active");
     history.replaceState("", document.title, window.location.pathname);
