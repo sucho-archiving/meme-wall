@@ -5,12 +5,17 @@ overrides:
   file-type: ^16.5.4
   sharp: ^0.30.6
 
+patchedDependencies:
+  astro-imagetools@0.8.1:
+    hash: pkzgyzj4cyad35uwdhrt6ipqyq
+    path: patches/astro-imagetools@0.8.1.patch
+
 specifiers:
   '@astrojs/svelte': ^2.0.1
   '@floating-ui/dom': ^1.2.1
   '@fontsource/jost': ^4.5.13
   astro: ^2.0.4
-  astro-imagetools: ^0.7.6
+  astro-imagetools: ^0.8.1
   charts.css: ^0.9.0
   csv-writer: ^1.6.0
   image-size: ^1.0.2
@@ -27,7 +32,7 @@ dependencies:
 devDependencies:
   '@astrojs/svelte': 2.0.2_astro@2.0.16+svelte@3.55.1
   astro: 2.0.16
-  astro-imagetools: 0.7.6_astro@2.0.16
+  astro-imagetools: 0.8.1_pkzgyzj4cyad35uwdhrt6ipqyq_astro@2.0.16
   csv-writer: 1.6.0
   image-size: 1.0.2
   neat-csv: 7.0.0
@@ -1236,8 +1241,8 @@ packages:
     resolution: {integrity: sha512-I1jXZMjAgCMmxT4qxXfPXa6SthSoE8h6gkSI9BGGNv8mP8G/v0blc+qFnZu6K42vTOiuME596QaLO0TP3Lk0xg==}
     dev: true
 
-  /astro-imagetools/0.7.6_astro@2.0.16:
-    resolution: {integrity: sha512-HqUQEQeUTqKfUwanmosT5+aS1hYaajUGjdrb5p9oOZpkqNukPhPIa/ZMvhGPatyGR8/uMl/1rumPRPZ55+mzmw==}
+  /astro-imagetools/0.8.1_pkzgyzj4cyad35uwdhrt6ipqyq_astro@2.0.16:
+    resolution: {integrity: sha512-2E737IBqzuwkuK4FMYB9UmE1xmQWghn1HOHNMERrzZmGsKpGSAdQGo7nSnYwpy8amF+Do8sUx9wtCe2+6T4k+A==}
     engines: {node: ^14.15.0 || >=16.0.0}
     peerDependencies:
       astro: '>=0.26 || >=1.0.0-beta'
@@ -1252,6 +1257,7 @@ packages:
     optionalDependencies:
       imagetools-core: 3.0.2
     dev: true
+    patched: true
 
   /astro/2.0.16:
     resolution: {integrity: sha512-noQL+bbBZaCLbh7wmpVON+e4kDxymDsIQkEUzzuMKLQodYynxr/Sp7RBA/JnEqXz4CRyd7IrgeQBN0cKOuBtzQ==}

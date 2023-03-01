@@ -1,0 +1,15 @@
+diff --git a/api/utils/getImage.js b/api/utils/getImage.js
+index 12bc1a8fe664f77614d46df0619724239c07af60..147d0d012c06ec976eb90aa81883dd272c309971 100644
+--- a/api/utils/getImage.js
++++ b/api/utils/getImage.js
+@@ -37,7 +37,9 @@ export default async function ({
+ 
+   rest.aspect = `${imageWidth / imageHeight}`;
+ 
+-  if (!fallbackFormat) {
++  if (fallbackFormat === false) {
++    fallbackFormat = format;
++  } else if (!fallbackFormat) {
+     fallbackFormat = imageFormat;
+   }
+ 
