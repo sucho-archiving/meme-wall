@@ -15,13 +15,13 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
-          cache: "yarn"
+          cache: "pnpm"
 
       - name: Install Dependencies
-        run: yarn install --frozen-lockfile
+        run: pnpm install --frozen-lockfile
 
       - name: Update Media Assets
-        run: yarn update-media
+        run: pnpm update-media
 
       - name: Check for Changes
         id: check
@@ -45,4 +45,4 @@ jobs:
 
       - name: Build and Deploy Site
         if: steps.check.outputs.has_new_media == 'true'
-        run: yarn gh-deploy
+        run: pnpm gh-deploy

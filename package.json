@@ -27,9 +27,11 @@
     "@fontsource/jost": "^4.5.13",
     "charts.css": "^0.9.0"
   },
-  "resolutions": {
-    "astro-imagetools/file-type": "^17.1.3",
-    "file-type": "^16.5.4",
-    "sharp": "^0.30.6"
+  "pnpm": {
+    "overrides": {
+      "astro-imagetools>file-type": "^17.1.3",
+      "file-type": "^16.5.4",
+      "sharp": "^0.30.6"
+    }
   }
 }
