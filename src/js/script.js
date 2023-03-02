@@ -58,7 +58,6 @@ const resetFilters = () => {
   history.replaceState("", document.title, window.location.pathname);
 
   Object.values(filterSelects).forEach((filterSelect) => {
-    console.log("clearing", filterSelect);
     filterSelect.dispatchEvent(new Event("clear"));
   });
   activeFilters = {};
