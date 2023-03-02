@@ -120,8 +120,8 @@ export default class MemeWall {
     [...this.container.getElementsByClassName("active")].forEach(
       this.resetItem,
     );
-    this.expand(block);
     this.onItemToggleCb(block);
+    this.expand(block);
   }
 
   toggleItem(event) {
@@ -231,10 +231,16 @@ export default class MemeWall {
         const percentageOffsetX = ((offsetX + leftOffsetX) / width) * 100;
         const percentageOffsetY = (rowOffsetY / height) * 100;
 
-        item.style.transform = `translate(${percentageOffsetX.toFixed(
+        item.dataset.transform = `translate(${percentageOffsetX.toFixed(
           8,
         )}%, ${percentageOffsetY.toFixed(8)}%) scale(${scale.toFixed(8)})`;
       });
+    });
+
+    this.items.forEach((item) => {
+      if (!item.classList.contains("offcanvas")) {
+        item.style.transform = item.dataset.transform;
+      }
     });
   }
 }
