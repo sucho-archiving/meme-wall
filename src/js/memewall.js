@@ -72,9 +72,8 @@ export default class MemeWall {
 
     this.layoutObserver = new IntersectionObserver(
       (entries) => {
-        entries
-          .filter((entry) => entry.isIntersecting)
-          .forEach((entry, idx) => {
+        entries.forEach((entry, idx) => {
+          if (entry.isIntersecting) {
             const row = this.rows[entry.target.rowIndex];
             MemeWall.resizeRow(row);
             row.forEach((item, blockIdx) => {
@@ -92,9 +91,17 @@ export default class MemeWall {
                 item.style.transitionDelay = `0s`;
               }, delay * 1000);
             });
-          });
+          } else {
+            if (!this.container.classList.contains("zoomed")) {
+              const row = this.rows[entry.target.rowIndex];
+              row.forEach((item) => {
+                item.classList.add("offcanvas");
+              });
+            }
+          }
+        });
       },
-      { rootMargin: "100px 0px 0px 0px" },
+      { rootMargin: "200px 0px 200px 0px" },
     );
 
     this.rows.forEach((row, idx) => {
