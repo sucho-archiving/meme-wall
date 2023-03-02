@@ -225,22 +225,20 @@ export default class MemeWall {
         Math.sign(rowIndex - selectedIndex) * (scale - 1) * rowOffsetY -
         offsetY;
 
-      row.forEach((item, columnIndex, items) => {
+      let offsetX = 0;
+      row.forEach((item) => {
         let { width, height } = window.getComputedStyle(item);
         width = parseInt(width, 10);
         height = parseInt(height, 10);
 
-        let offsetX = 0;
-        let i = columnIndex;
-        while (i--) offsetX += items[i].width;
-        offsetX = offsetX * (scale - 1);
-
-        const percentageOffsetX = ((offsetX + leftOffsetX) / width) * 100;
+        const percentageOffsetX =
+          ((offsetX * (scale - 1) + leftOffsetX) / width) * 100;
         const percentageOffsetY = (rowOffsetY / height) * 100;
 
         item.dataset.transform = `translate(${percentageOffsetX.toFixed(
           8,
         )}%, ${percentageOffsetY.toFixed(8)}%) scale(${scale.toFixed(8)})`;
+        offsetX += width;
       });
     });
 
