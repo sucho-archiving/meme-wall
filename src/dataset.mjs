@@ -19,9 +19,11 @@ const getAspectRatio = (imgPath) => {
 };
 
 // fetch minimally-parsed data from the spreadsheet(s)
+let start = performance.now();
 log.info(" --> Fetching data from Google Sheets...");
 let memes = await fetchMemes();
 let metadataHierarchies = await fetchMetadataHierarchies();
+log.info(`     ... completed in ${(performance.now() - start).toFixed(0)}ms.`);
 
 // parse some of the metadata values and sort by date
 memes = memes
@@ -37,10 +39,24 @@ memes = memes
   .sort((a, b) => b.timestamp - a.timestamp);
 
 // ensure all media files are available locally
+start = performance.now();
+let downloadedCount = 0;
+let skippedCount = 0;
 log.info(" --> Fetching needed media files from Google Drive...");
 for (const meme of memes) {
-  meme.filename = await fetchFile(meme, memeMediaFolder);
+  const [filename, downloaded] = await fetchFile(meme, memeMediaFolder);
+  meme.filename = filename;
+  if (downloaded) {
+    downloadedCount++;
+  } else {
+    skippedCount++;
+  }
 }
+log.info(
+  `     ... completed in ${(performance.now() - start).toFixed(
+    0,
+  )}ms -- ${skippedCount} file(s) already available locally, ${downloadedCount} file(s) downloaded.`,
+);
 
 purgeFiles(memes, memeMediaFolder);
 

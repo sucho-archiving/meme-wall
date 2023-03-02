@@ -119,7 +119,7 @@ const fetchFile = async (meme, memeMediaFolder, delay = 1000) => {
 
   if (typeof (filename = memeExists(driveId, memeMediaFolder)) === "string") {
     log.debug(`${driveId}: exists (skipping)`);
-    return filename;
+    return [filename, false];
   }
 
   log.info(`${driveId}: downloading...`);
@@ -127,7 +127,7 @@ const fetchFile = async (meme, memeMediaFolder, delay = 1000) => {
   const url = getDriveApiUrl(driveId);
   filename = await downloadFile(url, memeMediaFolder, driveId);
   await timer(delay);
-  return filename;
+  return [filename, true];
 };
 
 const purgeFiles = (memes, memeMediaFolder) => {
