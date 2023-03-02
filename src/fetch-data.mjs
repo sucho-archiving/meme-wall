@@ -3,6 +3,7 @@ import path from "path";
 import { writeFile } from "fs";
 import { promisify } from "util";
 
+import log from "loglevel";
 import neatCsv from "neat-csv";
 import sharp from "sharp";
 
@@ -35,7 +36,7 @@ const parseDriveId = (url) => {
   // Those manually added to the spreadsheet get a URL of the form
   //  https://drive.google.com/file/d/<driveId>/view?usp=sharing
   if (!driveId) driveId = url.match(/file\/d\/([^&\/]+)/)?.[1];
-  if (!driveId) console.warn("Unable to parse a driveId from", url);
+  if (!driveId) log.warn("Unable to parse a driveId from", url);
   return driveId;
 };
 
@@ -117,11 +118,11 @@ const fetchFile = async (meme, memeMediaFolder, delay = 1000) => {
   let filename;
 
   if (typeof (filename = memeExists(driveId, memeMediaFolder)) === "string") {
-    console.log(`${driveId}: exists (skipping)`);
+    log.debug(`${driveId}: exists (skipping)`);
     return filename;
   }
 
-  console.log(`${driveId}: downloading...`);
+  log.info(`${driveId}: downloading...`);
 
   const url = getDriveApiUrl(driveId);
   filename = await downloadFile(url, memeMediaFolder, driveId);
@@ -134,7 +135,7 @@ const purgeFiles = (memes, memeMediaFolder) => {
   const driveIds = memes.map((meme) => meme.driveId);
   for (let filename of files) {
     if (!driveIds.includes(path.parse(filename).name)) {
-      console.log(`purging ${filename}...`);
+      log.info(`purging ${filename}...`);
       fs.unlinkSync(path.join(memeMediaFolder, filename));
     }
   }

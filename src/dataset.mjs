@@ -1,5 +1,6 @@
 import path from "path";
 
+import log from "loglevel";
 import sizeOf from "image-size";
 
 import { memeMediaFolder } from "./config.mjs";
@@ -10,12 +11,15 @@ import {
   purgeFiles,
 } from "./fetch-data.mjs";
 
+log.setLevel(log.levels[process.env.LOG_LEVEL || "INFO"]);
+
 const getAspectRatio = (imgPath) => {
   const dimensions = sizeOf(imgPath);
   return dimensions.width / dimensions.height;
 };
 
 // fetch minimally-parsed data from the spreadsheet(s)
+log.info(" --> Fetching data from Google Sheets...");
 let memes = await fetchMemes();
 let metadataHierarchies = await fetchMetadataHierarchies();
 
@@ -33,6 +37,7 @@ memes = memes
   .sort((a, b) => b.timestamp - a.timestamp);
 
 // ensure all media files are available locally
+log.info(" --> Fetching needed media files from Google Drive...");
 for (const meme of memes) {
   meme.filename = await fetchFile(meme, memeMediaFolder);
 }
@@ -162,26 +167,26 @@ const modulePath = path.resolve(fileURLToPath(import.meta.url));
 if (nodePath === modulePath) {
   switch (process.argv[2]) {
     case "memeTypes":
-      console.log(memeTypes);
+      log.info(memeTypes);
       break;
 
     case "people":
-      console.log(people);
+      log.info(people);
       break;
 
     case "countries":
-      console.log(countries);
+      log.info(countries);
       break;
 
     case "templateTypes":
-      console.log(templateTypes);
+      log.info(templateTypes);
       break;
 
     case "languages":
-      console.log(languages);
+      log.info(languages);
       break;
 
     default:
-      console.log(JSON.stringify(memes, null, 2));
+      log.info(JSON.stringify(memes, null, 2));
   }
 }

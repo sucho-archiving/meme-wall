@@ -51,3 +51,5 @@ Running `pnpm update-media` will fetch and synchronize the media files and then 
 
 * `pnpm update-media` (requires `node >= v18`) will fetch the spreadsheet, update the local working tree with any new (or missing) media files fetched from Google Drive, and delete any media files from `meme_media/` that do not correspond to records in the spreadsheet.
 * `pnpm print-dataset` (requires `node >= v18`) will fetch the spreadsheet, process the data and media files, and then output the parsed dataset to `stdout` in JSON format.
+
+* All `pnpm` commands can be prepended with `LOG_LEVEL=DEBUG` for additional debugging information on the console.

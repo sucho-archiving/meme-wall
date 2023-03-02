@@ -17,6 +17,7 @@
     "astro-imagetools": "^0.8.1",
     "csv-writer": "^1.6.0",
     "image-size": "^1.0.2",
+    "loglevel": "^1.8.1",
     "neat-csv": "^7.0.0",
     "postcss-nested": "^6.0.0",
     "prettier-plugin-astro": "^0.8.0",
