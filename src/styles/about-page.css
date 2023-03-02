@@ -9,22 +9,6 @@
   }
 }
 
-body > header {
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.25em var(--main-gutter) !important;
-}
-
-a.button {
-  overflow: hidden;
-  transition: flex 0.3s ease;
-
-  &:hover {
-    font-weight: 300;
-    flex: 0 0 14em;
-  }
-}
-
 h1,
 h2 {
   margin: 0;
@@ -33,8 +17,10 @@ h2 {
 }
 
 h2 {
-  letter-spacing: 5px;
   border-bottom: 1px solid #555;
+  letter-spacing: 5px;
+  line-height: 1;
+  padding-bottom: 0.5em;
 }
 
 main {
@@ -60,6 +46,7 @@ main {
 
   p {
     margin: 1em 0 0;
+    text-align: justify;
   }
 }
 
@@ -69,7 +56,7 @@ section + section {
 
 footer {
   font-size: 0.8em;
-  margin: 0 auto;
+  margin: 0 auto 2em;
   text-align: right;
   width: min(1000px, 80vw);
 
@@ -79,7 +66,7 @@ footer {
 }
 
 @media (max-width: 700px) {
-  header > a.button {
-    display: none;
+  h2 {
+    text-align: center;
   }
 }

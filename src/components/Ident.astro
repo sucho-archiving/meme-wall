@@ -1,0 +1,55 @@
+---
+import { renderImg } from "astro-imagetools/api";
+const getRefToOptimizedImage = async (src) => {
+  const { img } = await renderImg({ src, alt: "" });
+  return img.match(/srcset="([^"]*?)"/)[1];
+};
+
+const logo32x32 = await getRefToOptimizedImage("/src/img/sucho-logo.32x32.png");
+const logo64x64 = await getRefToOptimizedImage("/src/img/sucho-logo.64x64.png");
+---
+
+<h1>
+  <img srcset={`${logo64x64} 2x`} src={logo32x32} alt="SUCHO" />
+  <a href={Astro.site.pathname} title="SUCHO Meme Wall">SUCHO Meme Wall</a>
+</h1>
+
+<style>
+  h1 {
+    align-items: center;
+    display: flex;
+    font-variant-caps: petite-caps;
+    font-weight: 300;
+    gap: 0.5rem;
+    line-height: 39px;
+    margin: 0;
+    justify-content: center;
+    white-space: nowrap;
+  }
+
+  img {
+    height: 32px;
+    margin-right: 0.25em;
+    margin-top: -2px;
+    vertical-align: text-top;
+    width: 32px;
+  }
+
+  a {
+    color: white;
+
+    &:visited {
+      color: white;
+    }
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  @media (min-width: 1150px) {
+    h1 {
+      justify-content: flex-start;
+    }
+  }
+</style>
