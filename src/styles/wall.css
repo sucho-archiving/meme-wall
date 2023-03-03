@@ -1,6 +1,7 @@
 body {
   -webkit-tap-highlight-color: transparent;
-  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100); /* see script.js#setVh */
+  min-height: -webkit-fill-available;
   overflow: hidden;
 }
 

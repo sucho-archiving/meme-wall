@@ -215,6 +215,16 @@ wallContainer.addEventListener("click", ({ target }) => {
   }
 });
 
+// the `vh` unit is problematic on mobile; this workaround sets a CSS variable
+//  to 1% of `window.innerHeight` which can be used instead
+const setVh = () =>
+  document.documentElement.style.setProperty(
+    "--vh",
+    `${window.innerHeight * 0.01}px`,
+  );
+window.addEventListener("resize", setVh);
+setVh();
+
 // Initialize MemeWall
 memewall = new MemeWall(wallContainer, wallItemToggleCb);
 if (window.location.hash) goToMeme(window.location.hash.substring(1));
