@@ -39,6 +39,7 @@ const updateCount = () => {
 
 const updateWall = () => {
   updateCount();
+  shareButton.classList.remove("active");
   memewall.reset();
   if (wallContainer.querySelectorAll("img:not(.hidden)").length === 0) {
     wallContainer.classList.add("empty");

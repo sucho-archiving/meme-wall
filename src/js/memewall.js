@@ -127,8 +127,8 @@ export default class MemeWall {
     [...this.container.getElementsByClassName("active")].forEach(
       this.resetItem,
     );
-    this.onItemToggleCb(block);
     this.expand(block);
+    this.onItemToggleCb(block);
   }
 
   toggleItem(event) {
