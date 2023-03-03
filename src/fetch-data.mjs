@@ -118,11 +118,11 @@ const fetchFile = async (meme, memeMediaFolder, delay = 1000) => {
   let filename;
 
   if (typeof (filename = memeExists(driveId, memeMediaFolder)) === "string") {
-    log.debug(`${driveId}: exists (skipping)`);
+    log.debug(`     ${driveId}: exists (skipping)`);
     return [filename, false];
   }
 
-  log.info(`${driveId}: downloading...`);
+  log.info(`     ${driveId}: downloading...`);
 
   const url = getDriveApiUrl(driveId);
   filename = await downloadFile(url, memeMediaFolder, driveId);
@@ -135,7 +135,7 @@ const purgeFiles = (memes, memeMediaFolder) => {
   const driveIds = memes.map((meme) => meme.driveId);
   for (let filename of files) {
     if (!driveIds.includes(path.parse(filename).name)) {
-      log.info(`purging ${filename}...`);
+      log.info(`     purging ${filename}...`);
       fs.unlinkSync(path.join(memeMediaFolder, filename));
     }
   }
