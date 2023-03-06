@@ -31,8 +31,6 @@ dependencies:
   '@floating-ui/dom': 1.2.2
   '@fontsource/jost': 4.5.13
   charts.css: 0.9.0
-  p-event: 5.0.1
-  playwright: 1.31.2
 
 devDependencies:
   '@astrojs/svelte': 2.0.2_astro@2.0.16+svelte@3.55.1
@@ -42,6 +40,8 @@ devDependencies:
   image-size: 1.0.2
   loglevel: 1.8.1
   neat-csv: 7.0.0
+  p-event: 5.0.1
+  playwright: 1.31.2
   postcss-nested: 6.0.1
   prettier-plugin-astro: 0.8.0
   svelte: 3.55.1
@@ -2949,7 +2949,7 @@ packages:
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
     dependencies:
       p-timeout: 5.1.0
-    dev: false
+    dev: true
 
   /p-limit/2.3.0:
     resolution: {integrity: sha512-//88mFWSJx8lxCzwdAABTJL2MyWB12+eIY7MDL2SqLmAkeKU9qxRvWuSyTjm3FUmpBEMuFfckAIqEaVGUDxb6w==}
@@ -2996,7 +2996,7 @@ packages:
   /p-timeout/5.1.0:
     resolution: {integrity: sha512-auFDyzzzGZZZdHz3BtET9VEz0SE/uMEAx7uWfGPucfzEwwe/xH0iVeZibQmANYE/hp9T2+UUZT5m+BKyrDp3Ew==}
     engines: {node: '>=12'}
-    dev: false
+    dev: true
 
   /p-try/2.2.0:
     resolution: {integrity: sha512-R4nPAVTAU0B9D35/Gk3uJf/7XYbQcyohSKdvAxIRSNghFl4e71hVoGnBNQz9cWaXxO2I10KTC+3jMdvvoKw6dQ==}
@@ -3114,7 +3114,7 @@ packages:
     resolution: {integrity: sha512-a1dFgCNQw4vCsG7bnojZjDnPewZcw7tZUNFN0ZkcLYKj+mPmXvg4MpaaKZ5SgqPsOmqIf2YsVRkgqiRDxD+fDQ==}
     engines: {node: '>=14'}
     hasBin: true
-    dev: false
+    dev: true
 
   /playwright/1.31.2:
     resolution: {integrity: sha512-jpC47n2PKQNtzB7clmBuWh6ftBRS/Bt5EGLigJ9k2QAKcNeYXZkEaDH5gmvb6+AbcE0DO6GnXdbl9ogG6Eh+og==}
@@ -3123,7 +3123,7 @@ packages:
     requiresBuild: true
     dependencies:
       playwright-core: 1.31.2
-    dev: false
+    dev: true
 
   /pngjs/3.4.0:
     resolution: {integrity: sha512-NCrCHhWmnQklfH4MtJMRjZ2a8c80qXeMlQMv2uVp9ISJMTt562SbGd6n2oq0PaPgKm7Z6pL9E2UlLIhC+SHL3w==}
