@@ -15,7 +15,7 @@ const memewallOgImage = (): AstroIntegration => ({
   hooks: {
     "astro:build:start": async () => {
       const astroServerProcess = spawn("pnpm", ["dev"]);
-      let astroServerUrl: string;
+      let astroServerUrl: string | undefined;
 
       const asyncIterator = pEventIterator(astroServerProcess.stdout, "data");
       for await (const chunk of asyncIterator) {
@@ -27,6 +27,10 @@ const memewallOgImage = (): AstroIntegration => ({
         ) {
           break;
         }
+      }
+
+      if (!astroServerUrl) {
+        throw new Error("Server exited without reporting a URL!");
       }
 
       console.log(` --> Spawned Astro server listening at ${astroServerUrl}`);
