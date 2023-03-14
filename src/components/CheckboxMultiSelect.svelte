@@ -288,6 +288,7 @@
   button {
     color: white;
     font-size: 25px;
+    padding: 0 4px;
     position: absolute;
     right: 20px;
     top: 50%;
