@@ -9,18 +9,6 @@ import Icon from "../components/Icon.astro";
 <style>
   a.overlay-button {
     background-color: #555;
-    opacity: 0;
-    pointer-events: none;
-    position: absolute;
-    top: calc(100% + 0.5em);
-    transition: box-shadow 200ms ease, opacity 200ms ease;
-    right: 1em;
-    z-index: 2;
-
-    &.active {
-      opacity: 1;
-      pointer-events: auto;
-    }
 
     &.disabled {
       display: none;

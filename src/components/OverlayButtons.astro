@@ -1,0 +1,49 @@
+---
+import Icon from "../components/Icon.astro";
+---
+
+<div id="overlay-buttons">
+  <a href="#" class="share overlay-button" aria-label="Share">
+    <Icon name="share" />
+  </a>
+</div>
+
+<style>
+  div {
+    display: flex;
+    gap: 1em;
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+    top: calc(100% + 1em);
+    transition: box-shadow 200ms ease, opacity 200ms ease;
+    right: 1em;
+    z-index: 2;
+
+    &.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    a.share :global(svg) {
+      margin-left: -4px;
+    }
+  }
+</style>
+
+<script>
+  const shareButton = document.querySelector(".share");
+  if (navigator.share) {
+    shareButton.addEventListener("click", (event) => {
+      event.preventDefault();
+      navigator
+        .share({
+          title: "From the SUCHO Meme Wall",
+          url: window.location.toString(),
+        })
+        .catch((error) => {});
+    });
+  } else {
+    shareButton.classList.add("disabled");
+  }
+</script>

@@ -9,7 +9,7 @@ const resetButton = document.querySelector("button.reset-wall");
 const showFiltersButton = document.querySelector("button.show-filters");
 const searchButton = document.querySelector("button.search");
 const searchInput = document.querySelector("div.search input");
-const shareButton = document.querySelector(".share");
+const overlayButtons = document.getElementById("overlay-buttons");
 
 const filters = ["memeType", "person", "language", "country", "templateType"];
 const filterSelects = Object.fromEntries(
@@ -41,7 +41,7 @@ const updateCount = () => {
 
 const updateWall = () => {
   updateCount();
-  shareButton.classList.remove("active");
+  overlayButtons.classList.remove("active");
   memewall.reset();
   if (wallContainer.querySelectorAll("img:not(.hidden)").length === 0) {
     wallContainer.classList.add("empty");
@@ -152,7 +152,7 @@ const wallItemToggleCb = (img) => {
   if (img.classList.contains("active")) {
     img.sizes = "100vw";
     img.nextElementSibling.addEventListener("click", showMoreListener);
-    shareButton.classList.add("active");
+    overlayButtons.classList.add("active");
     history.replaceState(
       "",
       document.title,
@@ -161,7 +161,7 @@ const wallItemToggleCb = (img) => {
   } else {
     img.sizes = "15vmax";
     img.nextElementSibling.removeEventListener("click", showMoreListener);
-    shareButton.classList.remove("active");
+    overlayButtons.classList.remove("active");
     history.replaceState("", document.title, window.location.pathname);
   }
 };

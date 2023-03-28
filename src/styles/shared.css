@@ -33,7 +33,7 @@ a {
 
   &.overlay-button {
     align-items: center;
-    background-color: var(--primary-accent);
+    background-color: #555;
     border-radius: 50%;
     color: white;
     display: flex;
@@ -44,7 +44,12 @@ a {
     width: 3rem;
 
     &:hover {
+      background-color: var(--primary-accent);
       box-shadow: 0px 0px 4px inset white;
+    }
+
+    &.disabled {
+      display: none;
     }
   }
 }
