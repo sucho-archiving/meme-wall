@@ -1,5 +1,7 @@
 import MemeWall from "./memewall.js";
 
+const supportsCssHasSelector = CSS.supports("selector(:has(img))");
+
 let memewall;
 const wallContainer = document.getElementById("meme-wall");
 const items = wallContainer.querySelectorAll("picture");
@@ -50,6 +52,12 @@ const updateWall = () => {
       stopPropagation: () => {},
     });
     wallContainer.classList.add("single");
+  }
+  if (!supportsCssHasSelector) {
+    setTimeout(() => {
+      document.querySelector(".loader").style.opacity =
+        +!!wallContainer.querySelectorAll("img:not(.hidden).offcanvas").length;
+    }, 0);
   }
 };
 

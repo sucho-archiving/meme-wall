@@ -207,3 +207,12 @@ div.loader {
       var(--primary-accent);
   }
 }
+
+@supports selector(:has(img)) {
+  body:not(:has(img:not(.hidden).offcanvas)) .loader {
+    /* hide the loader if there are no active memes that are off canvas --
+     i.e. if we have a screenful's or less, and the loader might be showing
+          through on uncovered parts of the wall. */
+    opacity: 0;
+  }
+}
