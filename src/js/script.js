@@ -223,6 +223,30 @@ wallContainer.addEventListener("click", ({ target }) => {
   }
 });
 
+window.addEventListener("keydown", (event) => {
+  if (wallContainer.classList.contains("zoomed")) {
+    switch (event.key) {
+      case "Escape": {
+        memewall.toggleItem({
+          target: wallContainer.querySelector("img.active"),
+          stopPropagation: () => {},
+        });
+        break;
+      }
+
+      case "ArrowLeft":
+      case "ArrowUp":
+        memewall.previous();
+        break;
+
+      case "ArrowRight":
+      case "ArrowDown":
+        memewall.next();
+        break;
+    }
+  }
+});
+
 // the `vh` unit is problematic on mobile; this workaround sets a CSS variable
 //  to 1% of `window.innerHeight` which can be used instead
 const setVh = () =>

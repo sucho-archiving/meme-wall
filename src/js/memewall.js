@@ -37,8 +37,6 @@ export default class MemeWall {
     this.items.forEach((item) =>
       item.addEventListener("click", this.toggleItem),
     );
-
-    // TODO: add keyboard controls?
   }
 
   destroy() {
@@ -248,5 +246,17 @@ export default class MemeWall {
         item.style.transform = item.dataset.transform;
       }
     });
+  }
+
+  next() {
+    const block = this.items.find((item) => item.classList.contains("active"));
+    const next = block.parentElement.nextElementSibling?.children[0];
+    if (next) this.activateItem(next);
+  }
+
+  previous() {
+    const block = this.items.find((item) => item.classList.contains("active"));
+    const previous = block.parentElement.previousElementSibling?.children[0];
+    if (previous) this.activateItem(previous);
   }
 }
