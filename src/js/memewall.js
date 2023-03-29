@@ -144,6 +144,7 @@ export default class MemeWall {
 
   expand(block) {
     block.classList.add("active");
+    block.classList.remove("offcanvas");
     this.container.classList.add("zoomed");
 
     // parent dimensions
