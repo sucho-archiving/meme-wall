@@ -237,6 +237,7 @@ window.addEventListener("keydown", (event) => {
   if (wallContainer.classList.contains("zoomed")) {
     switch (event.key) {
       case "Escape": {
+        flash(document.querySelector('[aria-label="Close"]'));
         memewall.toggleItem({
           target: wallContainer.querySelector("img.active"),
           stopPropagation: () => {},
@@ -271,5 +272,7 @@ setVh();
 
 // Initialize MemeWall
 memewall = new MemeWall(wallContainer, wallItemToggleCb);
-self.memewall = memewall;
 if (window.location.hash) goToMeme(window.location.hash.substring(1));
+
+self.memewall = memewall;
+self.wallContainer = wallContainer;

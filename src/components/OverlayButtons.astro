@@ -9,6 +9,9 @@ import Icon from "../components/Icon.astro";
   <a href="#" class="overlay-button" aria-label="Next">
     <Icon name="arrow-narrow-right" />
   </a>
+  <a href="#" class="overlay-button" aria-label="Close">
+    <Icon name="x" />
+  </a>
   <a href="#" class="overlay-button" aria-label="Share">
     <Icon name="share" />
   </a>
@@ -63,5 +66,14 @@ import Icon from "../components/Icon.astro";
     .querySelector('[aria-label="Next"]')
     .addEventListener("click", (event) => {
       memewall.next();
+    });
+
+  document
+    .querySelector('[aria-label="Close"]')
+    .addEventListener("click", (event) => {
+      memewall.toggleItem({
+        target: wallContainer.querySelector("img.active"),
+        stopPropagation: () => {},
+      });
     });
 </script>
