@@ -43,6 +43,10 @@ a {
     transition: box-shadow 0.2s ease;
     width: 3rem;
 
+    &.flash {
+      animation: flash 400ms;
+    }
+
     &:hover {
       background-color: var(--primary-accent);
       box-shadow: 0px 0px 4px inset white;
@@ -63,4 +67,11 @@ body {
   margin: 0;
   padding: 0;
   position: relative;
+}
+
+@keyframes flash {
+  25% {
+    background-color: var(--primary-accent);
+    box-shadow: 0px 0px 4px inset white;
+  }
 }

@@ -223,6 +223,16 @@ wallContainer.addEventListener("click", ({ target }) => {
   }
 });
 
+const flash = (el) => {
+  el.classList.add("flash");
+  const animation = el.getAnimations()[0];
+  if (animation !== undefined) {
+    animation.onfinish = () => el.classList.remove("flash");
+  } else {
+    el.classList.remove("flash");
+  }
+};
+
 window.addEventListener("keydown", (event) => {
   if (wallContainer.classList.contains("zoomed")) {
     switch (event.key) {
@@ -236,11 +246,13 @@ window.addEventListener("keydown", (event) => {
 
       case "ArrowLeft":
       case "ArrowUp":
+        flash(document.querySelector('[aria-label="Previous"]'));
         memewall.previous();
         break;
 
       case "ArrowRight":
       case "ArrowDown":
+        flash(document.querySelector('[aria-label="Next"]'));
         memewall.next();
         break;
     }
@@ -259,4 +271,5 @@ setVh();
 
 // Initialize MemeWall
 memewall = new MemeWall(wallContainer, wallItemToggleCb);
+self.memewall = memewall;
 if (window.location.hash) goToMeme(window.location.hash.substring(1));

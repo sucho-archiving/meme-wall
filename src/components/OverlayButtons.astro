@@ -3,7 +3,13 @@ import Icon from "../components/Icon.astro";
 ---
 
 <div id="overlay-buttons">
-  <a href="#" class="share overlay-button" aria-label="Share">
+  <a href="#" class="overlay-button" aria-label="Previous">
+    <Icon name="arrow-narrow-left" />
+  </a>
+  <a href="#" class="overlay-button" aria-label="Next">
+    <Icon name="arrow-narrow-right" />
+  </a>
+  <a href="#" class="overlay-button" aria-label="Share">
     <Icon name="share" />
   </a>
 </div>
@@ -25,14 +31,14 @@ import Icon from "../components/Icon.astro";
       pointer-events: auto;
     }
 
-    a.share :global(svg) {
+    a[aria-label="Share"] :global(svg) {
       margin-left: -4px;
     }
   }
 </style>
 
 <script>
-  const shareButton = document.querySelector(".share");
+  const shareButton = document.querySelector('[aria-label="Share"]');
   if (navigator.share) {
     shareButton.addEventListener("click", (event) => {
       event.preventDefault();
@@ -46,4 +52,16 @@ import Icon from "../components/Icon.astro";
   } else {
     shareButton.classList.add("disabled");
   }
+
+  document
+    .querySelector('[aria-label="Previous"]')
+    .addEventListener("click", (event) => {
+      memewall.previous();
+    });
+
+  document
+    .querySelector('[aria-label="Next"]')
+    .addEventListener("click", (event) => {
+      memewall.next();
+    });
 </script>
