@@ -250,13 +250,19 @@ export default class MemeWall {
 
   next() {
     const block = this.items.find((item) => item.classList.contains("active"));
-    const next = block.parentElement.nextElementSibling?.children[0];
+    let next = block.parentElement.nextElementSibling?.children[0];
+    while (next && next.classList.contains("hidden")) {
+      next = next.parentElement.nextElementSibling?.children[0];
+    }
     if (next) this.activateItem(next);
   }
 
   previous() {
     const block = this.items.find((item) => item.classList.contains("active"));
-    const previous = block.parentElement.previousElementSibling?.children[0];
+    let previous = block.parentElement.previousElementSibling?.children[0];
+    while (previous && previous.classList.contains("hidden")) {
+      previous = previous.parentElement.previousElementSibling?.children[0];
+    }
     if (previous) this.activateItem(previous);
   }
 }

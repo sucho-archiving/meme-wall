@@ -30,7 +30,7 @@ const toggleItem = (img, condition = true) => {
 const updateCount = () => {
   const countSpan = document.querySelector("div.count span");
   const shownMemeCount =
-    wallContainer.querySelectorAll("img:not(.hidden").length;
+    wallContainer.querySelectorAll("img:not(.hidden)").length;
   const totalMemeCount = wallContainer.querySelectorAll("img").length;
   countSpan.textContent = shownMemeCount + " / " + totalMemeCount;
   countSpan.parentElement.classList.toggle(
