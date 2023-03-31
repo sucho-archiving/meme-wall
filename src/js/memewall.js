@@ -70,7 +70,8 @@ export default class MemeWall {
 
     this.layoutObserver = new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry, idx) => {
+        let rowIdx = 0; // index only rows that are intersecting (i.e. visible)
+        entries.forEach((entry) => {
           if (entry.isIntersecting) {
             const row = this.rows[entry.target.rowIndex];
             MemeWall.resizeRow(row);
@@ -79,7 +80,7 @@ export default class MemeWall {
               // and multiple rows that are revealed at the same time are offset a little
               // (on slower connections the images will come as the network can provide them,
               //  but the placeholders should still exhibit this effect, at least).
-              const delay = blockIdx * 0.05 + idx * 0.1;
+              const delay = blockIdx * 0.05 + rowIdx * 0.1;
               item.style.transitionDelay = `${delay}s`;
               item.classList.remove("offcanvas");
               setTimeout(() => {
@@ -89,6 +90,7 @@ export default class MemeWall {
                 item.style.transitionDelay = `0s`;
               }, delay * 1000);
             });
+            rowIdx++;
           } else {
             if (!this.container.classList.contains("zoomed")) {
               const row = this.rows[entry.target.rowIndex];

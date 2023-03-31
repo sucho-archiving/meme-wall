@@ -169,8 +169,14 @@ const wallItemToggleCb = (img) => {
 const goToMeme = (memeId) => {
   const el = document.querySelector(`[data-id='${memeId}'] img`);
   if (!el) return false;
-  el.previousElementSibling.scrollIntoView();
-  memewall.activateItem(el);
+  const observer = new MutationObserver(() => {
+    if (!el.classList.contains("offcanvas")) {
+      observer.disconnect();
+      memewall.activateItem(el);
+    }
+  });
+  observer.observe(el, { attributes: true });
+  el.scrollIntoView({ behavior: "instant" });
 };
 
 // Hook up event listeners
