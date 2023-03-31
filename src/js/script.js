@@ -276,3 +276,4 @@ if (window.location.hash) goToMeme(window.location.hash.substring(1));
 
 self.memewall = memewall;
 self.wallContainer = wallContainer;
+self.flash = flash;

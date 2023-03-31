@@ -47,9 +47,11 @@ a {
       animation: flash 400ms;
     }
 
-    &:hover {
-      background-color: var(--primary-accent);
-      box-shadow: 0px 0px 4px inset white;
+    @media (hover: hover) {
+      &:hover {
+        background-color: var(--primary-accent);
+        box-shadow: 0px 0px 4px inset white;
+      }
     }
 
     &.disabled {

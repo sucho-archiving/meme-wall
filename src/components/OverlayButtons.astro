@@ -58,19 +58,22 @@ import Icon from "../components/Icon.astro";
 
   document
     .querySelector('[aria-label="Previous"]')
-    .addEventListener("click", (event) => {
+    .addEventListener("click", function () {
       memewall.previous();
+      flash(this);
     });
 
   document
     .querySelector('[aria-label="Next"]')
-    .addEventListener("click", (event) => {
+    .addEventListener("click", function () {
       memewall.next();
+      flash(this);
     });
 
   document
     .querySelector('[aria-label="Close"]')
-    .addEventListener("click", (event) => {
+    .addEventListener("click", function () {
+      flash(this);
       memewall.toggleItem({
         target: wallContainer.querySelector("img.active"),
         stopPropagation: () => {},
