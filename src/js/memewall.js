@@ -24,7 +24,7 @@ export default class MemeWall {
 
   init() {
     this.items = [...this.container.querySelectorAll("img")];
-    this.resize();
+    this.initializeRows();
     this.container.classList.remove("loading");
 
     this.shrink = this.shrink.bind(this);
@@ -37,9 +37,6 @@ export default class MemeWall {
     this.items.forEach((item) =>
       item.addEventListener("click", this.toggleItem),
     );
-
-    // add key down listener
-    // keys(this.container);
   }
 
   destroy() {
@@ -55,23 +52,62 @@ export default class MemeWall {
       block.classList.remove("active");
     });
     this.shrink(false);
-    this.resize();
+    this.initializeRows();
   }
 
-  resize() {
-    this.items
-      .reduce(function (rows, block) {
-        var _a;
-        const offsetTop = block.offsetTop;
-        if (!rows.has(offsetTop)) {
-          rows.set(offsetTop, []);
-        }
-        (_a = rows.get(offsetTop)) === null || _a === void 0
-          ? void 0
-          : _a.push(block);
-        return rows;
-      }, new Map())
-      .forEach((row) => MemeWall.resizeRow(row));
+  initializeRows() {
+    this.rows = this.items.reduce((rows, block) => {
+      block.classList.add("offcanvas");
+      const offsetTop = block.offsetTop;
+      if (!rows.has(offsetTop)) {
+        return rows.set(offsetTop, [block]);
+      }
+      rows.get(offsetTop).push(block);
+      return rows;
+    }, new Map());
+
+    this.rows = [...this.rows.values()];
+
+    this.layoutObserver = new IntersectionObserver(
+      (entries) => {
+        let rowIdx = 0; // index only rows that are intersecting (i.e. visible)
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const row = this.rows[entry.target.rowIndex];
+            MemeWall.resizeRow(row);
+            row.forEach((item, blockIdx) => {
+              // calculate a transition delay such that items fade in from left to right
+              // and multiple rows that are revealed at the same time are offset a little
+              // (on slower connections the images will come as the network can provide them,
+              //  but the placeholders should still exhibit this effect, at least).
+              const delay = blockIdx * 0.05 + rowIdx * 0.1;
+              item.style.transitionDelay = `${delay}s`;
+              item.classList.remove("offcanvas");
+              setTimeout(() => {
+                // once the delay has elapsed (i.e. once the transition has completed),
+                // reset the CSS transition-delay property so it doesn't interfere with the
+                // zoom in/out animation.
+                item.style.transitionDelay = `0s`;
+              }, delay * 1000);
+            });
+            rowIdx++;
+          } else {
+            if (!this.container.classList.contains("zoomed")) {
+              const row = this.rows[entry.target.rowIndex];
+              row.forEach((item) => {
+                item.classList.add("offcanvas");
+              });
+            }
+          }
+        });
+      },
+      { rootMargin: "200px 0px 200px 0px" },
+    );
+
+    this.rows.forEach((row, idx) => {
+      row.forEach((block) => (block.rowIndex = idx));
+      this.layoutObserver.observe(row[0]);
+    });
   }
 
   shrink(event) {
@@ -108,6 +144,7 @@ export default class MemeWall {
 
   expand(block) {
     block.classList.add("active");
+    block.classList.remove("offcanvas");
     this.container.classList.add("zoomed");
 
     // parent dimensions
@@ -130,9 +167,7 @@ export default class MemeWall {
     }
 
     // determine what blocks are on this row
-    const selectedRow = this.items.filter(
-      (item) => item.offsetTop == block.offsetTop,
-    );
+    const selectedRow = this.rows[block.rowIndex];
 
     // calculate scale
     let scale = targetHeight / blockHeight;
@@ -146,9 +181,12 @@ export default class MemeWall {
       this.container.offsetTop -
       this.container.scrollTop +
       block.offsetTop;
+
     const metadataHeight =
       block.nextElementSibling.getBoundingClientRect().height;
+
     const availableHeight = targetHeight - metadataHeight;
+
     if (offsetY > 0) {
       if (blockHeight * scale < availableHeight) {
         offsetY -= availableHeight / 2 - (blockHeight * scale) / 2;
@@ -167,65 +205,66 @@ export default class MemeWall {
       );
     const leftOffsetX = parentWidth / 2 - (blockWidth * scale) / 2 - leftWidth;
 
-    const rows = this.items.reduce(function (rows, block) {
-      var _a;
-      // group rows
-      const offsetTop = block.offsetTop;
-      if (!rows.has(offsetTop)) {
-        rows.set(offsetTop, []);
-      }
-      (_a = rows.get(offsetTop)) === null || _a === void 0
-        ? void 0
-        : _a.push(block);
-      return rows;
-    }, new Map());
-
-    const selectedIndex = [...rows.keys()].indexOf(block.offsetTop);
-    const rowHeights = [...rows.values()].map((r) =>
+    const selectedIndex = block.rowIndex;
+    const rowHeights = this.rows.map((r) =>
       parseInt(window.getComputedStyle(r[0]).height, 10),
     );
 
-    rows.forEach((row, offsetTop, rows) => {
-      const rowIndex = [...rows.keys()].indexOf(offsetTop);
+    this.rows.forEach((row, rowIndex) => {
       // compute the y offset based on the distance from this row to the selected row
-      const rowOffsetY =
-        Math.sign(rowIndex - selectedIndex) *
-          (scale - 1) *
-          rowHeights
-            .slice(
-              ...(rowIndex >= selectedIndex
-                ? [selectedIndex, rowIndex]
-                : [rowIndex, selectedIndex]),
-            )
-            .reduce((offset, height) => offset + height, 0) -
+      const [start, end] =
+        rowIndex >= selectedIndex
+          ? [selectedIndex, rowIndex]
+          : [rowIndex, selectedIndex];
+
+      let rowOffsetY = 0;
+      for (let i = start; i < end; i++) {
+        rowOffsetY += rowHeights[i];
+      }
+
+      rowOffsetY =
+        Math.sign(rowIndex - selectedIndex) * (scale - 1) * rowOffsetY -
         offsetY;
-      row
-        .map((item) => ({
-          item: item,
-          width: parseInt(window.getComputedStyle(item).width, 10),
-        }))
-        .forEach((item, columnIndex, items) => {
-          const offsetX =
-            items
-              .slice(0, columnIndex)
-              .reduce((offset, elem) => offset + elem.width, 0) *
-            (scale - 1);
-          const percentageOffsetX =
-            ((offsetX + leftOffsetX) / item.width) * 100;
-          const percentageOffsetY =
-            (rowOffsetY /
-              parseInt(window.getComputedStyle(item.item).height, 10)) *
-            100;
-          item.item.style.transformOrigin = "0% 0%";
-          item.item.style.transform =
-            "translate(" +
-            percentageOffsetX.toFixed(8) +
-            "%, " +
-            percentageOffsetY.toFixed(8) +
-            "%) scale(" +
-            scale.toFixed(8) +
-            ")";
-        });
+
+      let offsetX = 0;
+      row.forEach((item) => {
+        let { width, height } = window.getComputedStyle(item);
+        width = parseInt(width, 10);
+        height = parseInt(height, 10);
+
+        const percentageOffsetX =
+          ((offsetX * (scale - 1) + leftOffsetX) / width) * 100;
+        const percentageOffsetY = (rowOffsetY / height) * 100;
+
+        item.dataset.transform = `translate(${percentageOffsetX.toFixed(
+          8,
+        )}%, ${percentageOffsetY.toFixed(8)}%) scale(${scale.toFixed(8)})`;
+        offsetX += width;
+      });
     });
+
+    this.items.forEach((item) => {
+      if (!item.classList.contains("offcanvas")) {
+        item.style.transform = item.dataset.transform;
+      }
+    });
+  }
+
+  next() {
+    const block = this.items.find((item) => item.classList.contains("active"));
+    let next = block.parentElement.nextElementSibling?.children[0];
+    while (next && next.classList.contains("hidden")) {
+      next = next.parentElement.nextElementSibling?.children[0];
+    }
+    if (next) this.activateItem(next);
+  }
+
+  previous() {
+    const block = this.items.find((item) => item.classList.contains("active"));
+    let previous = block.parentElement.previousElementSibling?.children[0];
+    while (previous && previous.classList.contains("hidden")) {
+      previous = previous.parentElement.previousElementSibling?.children[0];
+    }
+    if (previous) this.activateItem(previous);
   }
 }

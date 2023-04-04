@@ -1,9 +1,8 @@
 ---
-import { renderImg } from "astro-imagetools/api";
-
 import { version } from "../../package.json";
 
 import Head from "../components/Head.astro";
+import Ident from "../components/Ident.astro";
 import Icon from "../components/Icon.astro";
 import BackToTop from "../components/BackToTop.astro";
 
@@ -12,14 +11,6 @@ import "@fontsource/jost/300.css";
 import "../styles/shared.css";
 import "../styles/about-page.css";
 
-const getRefToOptimizedImage = async (src) => {
-  const { img } = await renderImg({ src, alt: "" });
-  return img.match(/srcset="([^"]*?)"/)[1];
-};
-
-const logo32x32 = await getRefToOptimizedImage("/src/img/sucho-logo.32x32.png");
-const logo64x64 = await getRefToOptimizedImage("/src/img/sucho-logo.64x64.png");
-
 const { title, description } = Astro.props;
 ---
 
@@ -27,12 +18,7 @@ const { title, description } = Astro.props;
   <Head {title} {description} />
   <body>
     <header>
-      <h1>
-        <img srcset={`${logo64x64} 2x`} src={logo32x32} alt="SUCHO" />
-        <a href={Astro.site.pathname} title="SUCHO Meme Wall"
-          >SUCHO Meme Wall
-        </a>
-      </h1>
+      <Ident />
       <a class="button" title="Return to the Meme Wall" href="/">
         <Icon name="arrow-narrow-left" /> Return to the Meme Wall
       </a>
@@ -48,5 +34,28 @@ const { title, description } = Astro.props;
       >
     </footer>
     <BackToTop />
+
+    <style>
+      body > header {
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.25em var(--main-gutter) !important;
+        border-bottom: 5px solid #777;
+        border-top: 5px solid #777;
+        display: flex;
+      }
+
+      a.button {
+        overflow: hidden;
+        transition: flex 0.3s ease;
+      }
+
+      @media (min-width: 700px) {
+        a.button:hover {
+          font-weight: 300;
+          flex: 0 0 14em;
+        }
+      }
+    </style>
   </body>
 </html>

@@ -1,0 +1,82 @@
+---
+import Icon from "../components/Icon.astro";
+---
+
+<div id="overlay-buttons">
+  <a href="#" class="overlay-button" aria-label="Previous">
+    <Icon name="arrow-narrow-left" />
+  </a>
+  <a href="#" class="overlay-button" aria-label="Next">
+    <Icon name="arrow-narrow-right" />
+  </a>
+  <a href="#" class="overlay-button" aria-label="Close">
+    <Icon name="x" />
+  </a>
+  <a href="#" class="overlay-button" aria-label="Share">
+    <Icon name="share" />
+  </a>
+</div>
+
+<style>
+  div {
+    display: flex;
+    gap: 1em;
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+    top: calc(100% + 1em);
+    transition: box-shadow 200ms ease, opacity 200ms ease;
+    right: 1em;
+    z-index: 2;
+
+    &.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    a[aria-label="Share"] :global(svg) {
+      margin-left: -4px;
+    }
+  }
+</style>
+
+<script>
+  const shareButton = document.querySelector('[aria-label="Share"]');
+  if (navigator.share) {
+    shareButton.addEventListener("click", (event) => {
+      event.preventDefault();
+      navigator
+        .share({
+          title: "From the SUCHO Meme Wall",
+          url: window.location.toString(),
+        })
+        .catch((error) => {});
+    });
+  } else {
+    shareButton.classList.add("disabled");
+  }
+
+  document
+    .querySelector('[aria-label="Previous"]')
+    .addEventListener("click", function () {
+      memewall.previous();
+      flash(this);
+    });
+
+  document
+    .querySelector('[aria-label="Next"]')
+    .addEventListener("click", function () {
+      memewall.next();
+      flash(this);
+    });
+
+  document
+    .querySelector('[aria-label="Close"]')
+    .addEventListener("click", function () {
+      flash(this);
+      memewall.toggleItem({
+        target: wallContainer.querySelector("img.active"),
+        stopPropagation: () => {},
+      });
+    });
+</script>

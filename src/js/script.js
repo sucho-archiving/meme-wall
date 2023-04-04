@@ -1,35 +1,21 @@
 import MemeWall from "./memewall.js";
 
+const supportsCssHasSelector = CSS.supports("selector(:has(img))");
+
 let memewall;
 const wallContainer = document.getElementById("meme-wall");
 const items = wallContainer.querySelectorAll("picture");
-const shuffleButton = document.querySelector("button.shuffle");
+const resetButton = document.querySelector("button.reset-wall");
 const showFiltersButton = document.querySelector("button.show-filters");
 const searchButton = document.querySelector("button.search");
 const searchInput = document.querySelector("div.search input");
-const shareButton = document.querySelector(".share");
+const overlayButtons = document.getElementById("overlay-buttons");
 
 const filters = ["memeType", "person", "language", "country", "templateType"];
 const filterSelects = Object.fromEntries(
-  filters.map((filter) => [filter, document.querySelector(`select.${filter}`)]),
+  filters.map((filter) => [filter, document.querySelector(`div#${filter}`)]),
 );
-
-const enableLazyLoading = (images, root) => {
-  const imageObserver = new IntersectionObserver(
-    (entries, observer) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const image = entry.target;
-          image.src = image.dataset.src;
-          image.removeAttribute("data-src");
-          imageObserver.unobserve(image);
-        }
-      });
-    },
-    { root, rootMargin: "0px 0px 100% 0px" },
-  );
-  images.forEach((image) => imageObserver.observe(image));
-};
+let activeFilters = {};
 
 const toggleItem = (img, condition = true) => {
   if (condition) {
@@ -42,16 +28,20 @@ const toggleItem = (img, condition = true) => {
 };
 
 const updateCount = () => {
-  const count = document.querySelector("span.count");
-  count.textContent =
-    wallContainer.querySelectorAll("img:not(.hidden").length +
-    " / " +
-    wallContainer.querySelectorAll("img").length;
+  const countSpan = document.querySelector("div.count span");
+  const shownMemeCount =
+    wallContainer.querySelectorAll("img:not(.hidden)").length;
+  const totalMemeCount = wallContainer.querySelectorAll("img").length;
+  countSpan.textContent = shownMemeCount + " / " + totalMemeCount;
+  countSpan.parentElement.classList.toggle(
+    "show-reset",
+    shownMemeCount !== totalMemeCount,
+  );
 };
 
 const updateWall = () => {
   updateCount();
-  wallContainer.classList.add("loading");
+  overlayButtons.classList.remove("active");
   memewall.reset();
   if (wallContainer.querySelectorAll("img:not(.hidden)").length === 0) {
     wallContainer.classList.add("empty");
@@ -63,71 +53,95 @@ const updateWall = () => {
     });
     wallContainer.classList.add("single");
   }
-  wallContainer.classList.remove("loading");
+  if (!supportsCssHasSelector) {
+    setTimeout(() => {
+      document.querySelector(".loader").style.opacity =
+        +!!wallContainer.querySelectorAll("img:not(.hidden).offcanvas").length;
+    }, 0);
+  }
 };
 
-const resetUi = (except = []) => {
-  except = [].concat(except);
-
+const resetFilters = () => {
   wallContainer.classList.remove("empty");
   wallContainer.classList.remove("single");
+  history.replaceState("", document.title, window.location.pathname);
 
-  if (!except.includes("search")) {
-    document.querySelector("div.controls").classList.remove("searching");
-    searchInput.value = "";
-  }
-
-  Object.entries(filterSelects).forEach(([filter, filterSelect]) => {
-    if (!except.includes(filter)) filterSelect.value = "";
+  Object.values(filterSelects).forEach((filterSelect) => {
+    filterSelect.dispatchEvent(new Event("clear"));
   });
+  activeFilters = {};
+  filterMemes();
 };
 
-const shuffle = () => {
-  wallContainer.classList.add("loading");
+const resetSearch = (ui = true) => {
+  wallContainer.classList.remove("empty");
   wallContainer.classList.remove("single");
-  resetUi();
-  setTimeout(() => {
-    memewall.reset();
-    memewall.destroy();
-    wallContainer.querySelectorAll("img").forEach((img) => toggleItem(img));
-    updateCount();
-    // Modified Fisher–Yates shuffle
-    for (let i = wallContainer.children.length; i >= 0; i--) {
-      wallContainer.appendChild(
-        wallContainer.children[(Math.random() * i) | 0],
-      );
-    }
-    memewall = new MemeWall(wallContainer);
-    wallContainer.classList.remove("loading");
-  }, 200);
+  wallContainer.classList.remove("zoomed");
+  history.replaceState("", document.title, window.location.pathname);
+  document.querySelector("div.controls").classList.remove("searching");
+  searchInput.value = "";
+
+  if (ui) {
+    setTimeout(() => {
+      items.forEach((item) => {
+        toggleItem(item.querySelector("img"), true);
+      });
+      updateWall();
+    }, 200);
+  }
 };
 
-const filterMemes = (facet, value) => {
+const reset = () => {
+  wallContainer.classList.remove("empty");
+  wallContainer.classList.remove("single");
+  wallContainer.classList.remove("zoomed");
+  resetFilters();
+};
+
+const filterMemes = () => {
+  wallContainer.classList.remove("empty");
+  wallContainer.classList.remove("single");
+  wallContainer.classList.remove("zoomed");
+  resetSearch(false);
   const delay = searchInput.value ? 200 : 0;
-  resetUi(facet);
+
+  const showHide = (item) =>
+    Object.entries(activeFilters).some(([facet, values]) =>
+      values.some((value) => item.dataset[facet].split("|").includes(value)),
+    );
+
+  const activeFilterCount = Object.entries(activeFilters).reduce(
+    (acc, [key, values]) => (acc += key === "memeType" ? 0 : values.length),
+    0,
+  );
+  showFiltersButton.dataset.activeFilterCount = activeFilterCount;
+  showFiltersButton.classList.toggle("show-indicator", activeFilterCount > 0);
+
   setTimeout(() => {
-    items.forEach((item) => {
-      toggleItem(
-        item.querySelector("img"),
-        item.dataset[facet].split("|").includes(value),
-      );
-    });
+    Object.values(activeFilters).flat().length
+      ? items.forEach((item) => {
+          toggleItem(item.querySelector("img"), showHide(item));
+        })
+      : items.forEach((item) => {
+          toggleItem(item.querySelector("img"), true);
+        });
     updateWall();
   }, delay);
 };
 
 const searchMemes = (searchTerm) => {
-  resetUi("search");
-  items.forEach((item) =>
-    toggleItem(
-      item.querySelector("img"),
-      [...item.querySelectorAll("dd")].some((dd) =>
-        dd.textContent
-          .toLocaleLowerCase()
-          .includes(searchTerm.toLocaleLowerCase()),
+  [...items]
+    .filter((item) => !item.querySelector("img").classList.contains("hidden"))
+    .forEach((item) =>
+      toggleItem(
+        item.querySelector("img"),
+        [...item.querySelectorAll("dd")].some((dd) =>
+          dd.textContent
+            .toLocaleLowerCase()
+            .includes(searchTerm.toLocaleLowerCase()),
+        ),
       ),
-    ),
-  );
+    );
   updateWall();
 };
 
@@ -137,9 +151,8 @@ const showMoreListener = ({ currentTarget: target }) =>
 const wallItemToggleCb = (img) => {
   if (img.classList.contains("active")) {
     img.sizes = "100vw";
-    img.previousElementSibling.sizes = "100vw";
     img.nextElementSibling.addEventListener("click", showMoreListener);
-    shareButton.style.opacity = 1;
+    overlayButtons.classList.add("active");
     history.replaceState(
       "",
       document.title,
@@ -147,9 +160,8 @@ const wallItemToggleCb = (img) => {
     );
   } else {
     img.sizes = "15vmax";
-    img.previousElementSibling.sizes = "15vmax";
     img.nextElementSibling.removeEventListener("click", showMoreListener);
-    shareButton.style.opacity = 0;
+    overlayButtons.classList.remove("active");
     history.replaceState("", document.title, window.location.pathname);
   }
 };
@@ -157,8 +169,14 @@ const wallItemToggleCb = (img) => {
 const goToMeme = (memeId) => {
   const el = document.querySelector(`[data-id='${memeId}'] img`);
   if (!el) return false;
-  el.previousElementSibling.scrollIntoView();
-  memewall.activateItem(el);
+  const observer = new MutationObserver(() => {
+    if (!el.classList.contains("offcanvas")) {
+      observer.disconnect();
+      memewall.activateItem(el);
+    }
+  });
+  observer.observe(el, { attributes: true });
+  el.scrollIntoView({ behavior: "instant" });
 };
 
 // Hook up event listeners
@@ -172,13 +190,14 @@ window.addEventListener("hashchange", () => {
     goToMeme(memeId);
 });
 
-shuffleButton.addEventListener("click", shuffle);
+resetButton.addEventListener("click", reset);
 
-Object.entries(filterSelects).forEach(([filter, filterSelect]) =>
-  filterSelect.addEventListener("change", ({ target: { value } }) =>
-    filterMemes(filter, value),
-  ),
-);
+Object.entries(filterSelects).forEach(([filter, filterSelect]) => {
+  filterSelect.addEventListener("updated", ({ detail: selected }) => {
+    activeFilters[filter] = selected;
+    filterMemes(filter, selected);
+  });
+});
 
 showFiltersButton.addEventListener("click", () => {
   document.querySelector("div.more-filters").classList.toggle("show");
@@ -186,8 +205,17 @@ showFiltersButton.addEventListener("click", () => {
 });
 
 searchButton.addEventListener("click", () => {
-  document.querySelector("div.controls").classList.toggle("searching");
-  searchInput.focus();
+  const controls = document.querySelector("div.controls");
+  if (controls.classList.contains("searching")) {
+    if (searchInput.value == "") {
+      controls.classList.remove("searching");
+      return;
+    }
+    resetSearch();
+  } else {
+    controls.classList.add("searching");
+    searchInput.focus();
+  }
 });
 
 searchInput.addEventListener("change", ({ target: { value } }) =>
@@ -197,28 +225,61 @@ searchInput.addEventListener("change", ({ target: { value } }) =>
 wallContainer.addEventListener("click", ({ target }) => {
   if (target === wallContainer && target.classList.contains("empty")) {
     wallContainer.classList.remove("empty");
-    shuffle();
+    reset();
   }
 });
 
-if (navigator.share) {
-  shareButton.addEventListener("click", (event) => {
-    event.preventDefault();
-    navigator
-      .share({
-        title: "From the SUCHO Meme Wall",
-        url: window.location,
-      })
-      .catch((error) => {});
-  });
-} else {
-  shareButton.classList.add("disabled");
-}
+const flash = (el) => {
+  el.classList.add("flash");
+  const animation = el.getAnimations()[0];
+  if (animation !== undefined) {
+    animation.onfinish = () => el.classList.remove("flash");
+  } else {
+    el.classList.remove("flash");
+  }
+};
 
-// Hook up lazy loading
-enableLazyLoading(wallContainer.querySelectorAll("[data-src]"), wallContainer);
+window.addEventListener("keydown", (event) => {
+  if (wallContainer.classList.contains("zoomed")) {
+    switch (event.key) {
+      case "Escape": {
+        flash(document.querySelector('[aria-label="Close"]'));
+        memewall.toggleItem({
+          target: wallContainer.querySelector("img.active"),
+          stopPropagation: () => {},
+        });
+        break;
+      }
+
+      case "ArrowLeft":
+      case "ArrowUp":
+        flash(document.querySelector('[aria-label="Previous"]'));
+        memewall.previous();
+        break;
+
+      case "ArrowRight":
+      case "ArrowDown":
+        flash(document.querySelector('[aria-label="Next"]'));
+        memewall.next();
+        break;
+    }
+  }
+});
+
+// the `vh` unit is problematic on mobile; this workaround sets a CSS variable
+//  to 1% of `window.innerHeight` which can be used instead
+const setVh = () =>
+  document.documentElement.style.setProperty(
+    "--vh",
+    `${window.innerHeight * 0.01}px`,
+  );
+window.addEventListener("resize", setVh);
+setVh();
 
 // Initialize MemeWall
 memewall = new MemeWall(wallContainer, wallItemToggleCb);
 if (window.location.hash) goToMeme(window.location.hash.substring(1));
-wallContainer.classList.remove("loading");
+
+self.memewall = memewall;
+self.wallContainer = wallContainer;
+self.flash = flash;

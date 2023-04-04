@@ -1,6 +1,18 @@
 ---
 import { execSync } from "node:child_process";
-import openGraphImage from "../img/opengraph_image.1200x630.jpeg";
+
+let openGraphImage = "";
+try {
+  ({ default: openGraphImage } = await import(
+    "../../assets/open-graph.jpeg?url"
+  ));
+} catch (err) {
+  if (import.meta.env.PROD) {
+    // if the open-graph image is not available in PROD, throw an error
+    // (see integrations/memewall-og-image.ts)
+    throw err;
+  }
+}
 
 const commit = execSync("git rev-parse --short HEAD").toString().trim();
 const datetime = new Date().toISOString();

@@ -1,0 +1,42 @@
+---
+import Ident from "../components/Ident.astro";
+import ExtendedFilters from "../components/ExtendedFilters.astro";
+import MainControls from "../components/MainControls.astro";
+import OverlayButtons from "../components/OverlayButtons.astro";
+---
+
+<header>
+  <Ident />
+  <MainControls />
+  <ExtendedFilters />
+  <OverlayButtons />
+</header>
+
+<style>
+  header {
+    align-items: start;
+    border-bottom: 5px solid #777;
+    border-top: 5px solid #777;
+    display: grid;
+    gap: 0.5em 1em;
+    grid-template-areas: "title" "controls" "extended-filters";
+    justify-items: stretch;
+    padding: 0.5em calc(0.5em + ((100vw - min(800px, 100vw)) / 2)) 0;
+    position: relative;
+    width: 100vw;
+
+    :global(.filter) {
+      max-height: 39px;
+    }
+  }
+
+  @media (min-width: 1150px) {
+    header {
+      gap: 0.5em 1em;
+      grid-template-areas: "title controls" ". extended-filters";
+      grid-template-columns: 1fr minmax(800px, 40%);
+      padding: 0.5em 1em 0;
+      margin: 0;
+    }
+  }
+</style>

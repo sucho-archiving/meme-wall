@@ -1,0 +1,60 @@
+diff --git a/api/utils/getImage.js b/api/utils/getImage.js
+index 12bc1a8fe664f77614d46df0619724239c07af60..147d0d012c06ec976eb90aa81883dd272c309971 100644
+--- a/api/utils/getImage.js
++++ b/api/utils/getImage.js
+@@ -37,7 +37,9 @@ export default async function ({
+ 
+   rest.aspect = `${imageWidth / imageHeight}`;
+ 
+-  if (!fallbackFormat) {
++  if (fallbackFormat === false) {
++    fallbackFormat = format;
++  } else if (!fallbackFormat) {
+     fallbackFormat = imageFormat;
+   }
+ 
+diff --git a/api/utils/getBreakpoints.js b/api/utils/getBreakpoints.js
+index 02a098e5d0415ca896b225fe6b235364d08af8f5..e04c2aa4c89d11556b751f82f27f41be177718cb 100644
+--- a/api/utils/getBreakpoints.js
++++ b/api/utils/getBreakpoints.js
+@@ -1,5 +1,5 @@
+ // @ts-check
+-import printWarning from "../../utils/printWarning.js";
++import log from "loglevel";
+ 
+ export default function getBreakpoints(breakpoints, imageWidth) {
+   if (Array.isArray(breakpoints)) {
+@@ -12,10 +12,7 @@ export default function getBreakpoints(breakpoints, imageWidth) {
+     if (breakpoints?.maxWidth) return breakpoints.maxWidth;
+ 
+     if (imageWidth > 3840) {
+-      printWarning({
+-        message:
+-          "The width of the source image is greater than 3840px. The generated breakpoints will be capped at 3840px. If you need breakpoints larger than this, please pass the maxWidth option to the breakpoints property.",
+-      });
++      log.debug("The width of the source image is greater than 3840px. The generated breakpoints will be capped at 3840px. If you need breakpoints larger than this, please pass the maxWidth option to the breakpoints property.");
+ 
+       return 3840;
+     }
+diff --git a/api/utils/getImage.js b/api/utils/getImage.js
+index 12bc1a8fe664f77614d46df0619724239c07af60..10f404af7f1f2b3553c25f9dda39c1d5649f1a48 100644
+--- a/api/utils/getImage.js
++++ b/api/utils/getImage.js
+@@ -5,6 +5,8 @@ import getImageSources from "./getImageSources.js";
+ import getProcessedImage from "./getProcessedImage.js";
+ import getArtDirectedImages from "./getArtDirectedImages.js";
+ 
++import log from "loglevel";
++
+ const imagesData = new Map();
+ 
+ export default async function ({
+@@ -83,7 +85,7 @@ export default async function ({
+ 
+   const end = performance.now();
+ 
+-  console.log(
++  log.debug(
+     `Responsive Image sets generated for ${type} at ${args[0].src} in ${
+       end - start
+     }ms`

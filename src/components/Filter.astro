@@ -1,30 +1,46 @@
 ---
-import StyledSelect from "../components/StyledSelect.astro";
+import CheckboxMultiSelect from "../components/CheckboxMultiSelect.svelte";
+
 import * as datasetObj from "../dataset.mjs";
 
-const { title, selectClass, placeHolder, facet } = Astro.props;
-const { memes } = datasetObj;
+const { title, selectId, placeHolder, containerClass, facet } = Astro.props;
+const memes = datasetObj.memes;
+const groupOrders = datasetObj.groupOrders;
 const facetValues = datasetObj[facet];
+let options;
+
+const makeLabels = ({ value, count }) => ({
+  value,
+  label: `${value} [${count}]`,
+});
+
+if (facetValues[0].group) {
+  // group options and add counts
+  // nb. this is not an efficient way to do this, but it runs at build time
+  const groupsHash = groupOrders[facet].reduce(
+    (acc, group) => ({ ...acc, [group]: [] }),
+    {},
+  );
+  options = facetValues.reduce((hash, obj) => {
+    const options = (hash[obj.group]?.options || []).concat(makeLabels(obj));
+    const count = memes.filter((meme) =>
+      meme[facet].some((mt) => options.map((o) => o.value).includes(mt)),
+    ).length;
+    return {
+      ...hash,
+      [obj.group]: { options, count },
+    };
+  }, groupsHash);
+} else {
+  options = facetValues.map(makeLabels);
+}
 ---
 
-<StyledSelect {title} {selectClass}>
-  <option value="" disabled selected>{placeHolder}</option>
-  {
-    Array.from(facetValues)
-      .map((facetValue) => ({
-        value: facetValue,
-        count: memes.filter((meme) => meme[facet].includes(facetValue)).length,
-      }))
-      .sort((a, b) =>
-        a.value
-          .replace(/^["“'‘]+/, "")
-          .localeCompare(b.value.replace(/^["“'‘]+/, "")),
-      )
-      .map((option) => (
-        <option
-          value={option.value}
-          set:text={`${option.value} [${option.count}]`}
-        />
-      ))
-  }
-</StyledSelect>
+<CheckboxMultiSelect
+  {options}
+  {selectId}
+  {containerClass}
+  {title}
+  {placeHolder}
+  client:idle
+/>

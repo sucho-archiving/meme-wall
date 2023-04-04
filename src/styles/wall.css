@@ -1,15 +1,8 @@
 body {
   -webkit-tap-highlight-color: transparent;
-  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100); /* see script.js#setVh */
+  min-height: -webkit-fill-available;
   overflow: hidden;
-}
-
-body > header {
-  padding: 0.5em 0.5em 0;
-}
-
-header > h1 {
-  line-height: 39px;
 }
 
 button {
@@ -23,113 +16,10 @@ button {
   }
 }
 
-div.controls {
-  display: flex;
-  flex-grow: 1;
-  gap: 0.5em;
-  justify-content: center;
-  position: relative;
-
-  span.count {
-    background: #555;
-    border-radius: 4px;
-    display: grid;
-    min-width: calc(9ch + 10px);
-    padding: 7px 8px 5px;
-    place-content: center;
-    white-space: nowrap;
-  }
-
-  div.select {
-    flex-grow: 1;
-    flex-shrink: 1;
-    height: 39px;
-    max-width: 20em;
-  }
-
-  svg {
-    display: inline-block;
-    fill: transparent;
-    height: 1.5rem;
-    stroke: white;
-    vertical-align: middle;
-    width: 1.5rem;
-  }
-
-  div.search {
-    display: flex;
-    max-width: 20em;
-    transition: flex 200ms ease-in-out;
-
-    button {
-      height: 100%;
-    }
-
-    input {
-      appearance: none;
-      background-color: transparent;
-      border: none;
-      color: white;
-      flex: 1 1 auto;
-      font-family: inherit;
-      font-size: 1rem;
-      margin-bottom: -2px;
-      outline-offset: -1px;
-      outline: 1px solid #555;
-      padding: 0;
-      width: 0;
-    }
-  }
-}
-
-button.show-filters.on {
-  background-color: #555;
-}
-
-div.more-filters {
-  display: flex;
-  gap: 0.5em;
-  height: 0;
-  justify-content: center;
-  overflow: hidden;
-  transition: height 200ms ease, margin-bottom 100ms 100ms ease;
-  width: 100%;
-
-  &.show {
-    height: 39px;
-    margin-bottom: 0.5em;
-    transition: height 200ms ease, margin-bottom 200ms ease;
-  }
-
-  div {
-    max-width: calc(25% - 0.375em);
-  }
-}
-
-a.share {
-  background-color: #555;
-  opacity: 0;
-  position: absolute;
-  top: calc(100% + 0.5em);
-  transition: box-shadow 200ms ease, opacity 200ms ease;
-  right: 1em;
-  z-index: 9;
-
-  &.disabled {
-    display: none;
-    pointer-events: none;
-  }
-
-  svg {
-    height: 1em;
-    margin-left: -4px;
-  }
-}
-
 div.loader {
-  opacity: 0;
   pointer-events: none;
   transition: opacity 0.4s ease-in-out;
+  z-index: -1;
 }
 
 #meme-wall {
@@ -139,16 +29,12 @@ div.loader {
   overflow-y: scroll;
   transition: opacity 1s ease-in-out;
 
-  &.loading {
+  &.loading,
+  &.initializing {
     transition: none;
 
-    img {
-      opacity: 0;
-    }
-
-    & + div.loader {
-      opacity: 1;
-      transition: opacity 1s ease-in-out;
+    &:not(.initializing) img {
+      opacity: 0.2;
     }
   }
 
@@ -176,7 +62,7 @@ div.loader {
   }
 
   img {
-    background-size: cover;
+    box-shadow: inset 3px 3px 20px 1px rgb(255 255 255 / 40%);
     display: inline-block;
     height: 15vmax;
     opacity: 1;
@@ -189,6 +75,10 @@ div.loader {
 
     &.hidden {
       display: none;
+    }
+
+    &.offcanvas {
+      opacity: 0;
     }
   }
 
@@ -203,6 +93,7 @@ div.loader {
     grid-template-columns: 7em 1fr;
     margin: 0;
     position: absolute;
+    transition: opacity 200ms ease-in-out;
     width: 100%;
     z-index: 2;
 
@@ -262,19 +153,27 @@ div.loader {
   }
 
   &.zoomed {
+    overflow-y: hidden;
+
     img {
       opacity: 0.1;
       transition-timing-function: ease-in;
+      pointer-events: none;
 
       &.active {
-        opacity: 1;
         box-shadow: 0px 0px 8px 10px rgba(0, 0, 0, 0.8);
+        opacity: 1;
+        pointer-events: all;
 
         & + dl {
           display: grid;
         }
       }
     }
+  }
+
+  &::-webkit-scrollbar {
+    display: none;
   }
 }
 
@@ -288,80 +187,41 @@ div.loader {
   width: 1px;
 }
 
-@media (min-width: 1100px) {
-  body > header {
-    gap: 0.5em 1em;
-    justify-content: space-between;
-    padding: 0.5em 1em 0;
+[type="checkbox"] {
+  -webkit-appearance: none;
+  background: lightgrey;
+  background-repeat: no-repeat;
+  border-radius: 2px;
+  height: 1em;
+  transition: background-color 100ms, border-color 100ms;
+  vertical-align: sub;
+  width: 1em;
+
+  &:hover {
+    background: var(--primary-accent);
   }
 
-  div.controls {
-    justify-content: flex-end;
+  &:focus {
+    outline: 1px solid var(--primary-accent);
+    outline-offset: 2px;
   }
 
-  div.more-filters {
-    justify-content: flex-end;
+  &:checked {
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='white' stroke-width='2' viewBox='0 0 24 24'%3E%3Cpath d='M5 12l5 5l10 -10'/%3E%3C/svg%3E"),
+      var(--primary-accent);
   }
-}
 
-@media (max-width: 1149px) {
-  div.controls {
-    transition: padding-bottom 200ms ease;
-
-    &.searching {
-      padding-bottom: calc(40px + 0.5em);
-
-      div.search {
-        button {
-          background-color: #555;
-        }
-
-        input {
-          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' fill='transparent' stroke='%23555'%3E%3Ccircle cx='10' cy='10' r='7'%3E%3C/circle%3E%3Cline x1='21' y1='21' x2='15' y2='15'%3E%3C/line%3E%3C/svg%3E");
-          background-repeat: no-repeat;
-          background-size: 1.5rem;
-          background-position: 10px center;
-          border-radius: 4px;
-          padding: 10px 10px 10px 40px;
-          position: absolute;
-          width: 100%;
-          left: 0;
-          bottom: 2px;
-          height: 40px;
-          line-height: 1em;
-        }
-      }
-    }
+  &:indeterminate {
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='white' stroke-width='2' viewBox='0 0 24 24'%3E%3Cpath d='M5 12l14 0'/%3E%3C/svg%3E"),
+      var(--primary-accent);
   }
 }
 
-@media (min-width: 1150px) {
-  body > header {
-    align-items: center;
-  }
-
-  div.controls,
-  div.more-filters {
-    gap: 1em;
-  }
-
-  div.controls {
-    &.searching {
-      div.search {
-        flex-grow: 1;
-
-        button {
-          background-color: #555;
-          border-radius: 4px 0 0 4px;
-        }
-
-        input {
-          border-radius: 0 4px 4px 0;
-          display: inline;
-          margin-bottom: 0;
-          padding: 0 10px;
-        }
-      }
-    }
+@supports selector(:has(img)) {
+  body:not(:has(img:not(.hidden).offcanvas)) .loader {
+    /* hide the loader if there are no active memes that are off canvas --
+     i.e. if we have a screenful's or less, and the loader might be showing
+          through on uncovered parts of the wall. */
+    opacity: 0;
   }
 }
