@@ -4,7 +4,7 @@
 [![GitHub Pages Deployment Status](https://img.shields.io/github/deployments/sucho-archiving/meme-wall/github-pages?label=GitHub%20Pages)](https://github.com/sucho-archiving/meme-wall/actions/workflows/pages/pages-build-deployment) [![Update Media Workflow Status](https://img.shields.io/github/actions/workflow/status/sucho-archiving/meme-wall/update-media-and-deploy-site.yml?branch=main&label=Update%20Media)](https://github.com/sucho-archiving/meme-wall/actions/workflows/update-media-and-deploy-site.yml)
 
 
-[![Visit the Meme Wall](src/img/opengraph_image.1200x630.jpeg)](https://memes.sucho.org/)
+[![Visit the Meme Wall](https://raw.githubusercontent.com/sucho-archiving/meme-wall/gh-pages/open-graph.jpeg)](https://memes.sucho.org/)
 
 [![Submit a Meme](https://img.shields.io/badge/Submit%20a%20Meme-blue?style=for-the-badge)](https://docs.google.com/forms/d/e/1FAIpQLSdhi-nky_fICuBD-HKaGsQi_ezukKtU3oVeMulMg0Ra8TCnvw/viewform)
 
