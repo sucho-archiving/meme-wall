@@ -3,9 +3,7 @@ import { execSync } from "node:child_process";
 
 let openGraphImage = "";
 try {
-  ({ default: openGraphImage } = await import(
-    "../../assets/open-graph.jpeg?url"
-  ));
+  ({ default: openGraphImage } = await import("../../assets/open-graph.jpeg"));
 } catch (err) {
   if (import.meta.env.PROD) {
     // if the open-graph image is not available in PROD, throw an error
