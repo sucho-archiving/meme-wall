@@ -26,9 +26,15 @@ COMMIT_MESSAGE="Deploy from $(git log -n 1 --format="%h" HEAD) at $(date +"%Y-%m
 git fetch --force origin "$DEPLOY_BRANCH":"$DEPLOY_BRANCH";
 
 git symbolic-ref HEAD refs/heads/"$DEPLOY_BRANCH";
+
+# Disable Jekyll on the gh-pages branch
 touch "$BUILD_FOLDER/.nojekyll";
 
+# add CNAME
 [ -n "$CNAME" ] && echo "$CNAME" > "$BUILD_FOLDER/CNAME";
+
+# copy OpenGraph image to an unhashed filename
+cp $BUILD_FOLDER/_astro/open-graph*.jpeg "$BUILD_FOLDER/open-graph.jpeg"
 
 git --work-tree "$BUILD_FOLDER" reset --mixed --quiet;
 git --work-tree "$BUILD_FOLDER" add --all;
