@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro build",
+    "build": "rm -rf node_modules/.cache/astro-imagetools && astro build",
     "preview": "astro preview",
     "print-dataset": "node src/dataset.mjs",
     "update-media": "node src/fetch-data.mjs",
