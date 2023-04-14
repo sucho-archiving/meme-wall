@@ -58,3 +58,37 @@ index 12bc1a8fe664f77614d46df0619724239c07af60..10f404af7f1f2b3553c25f9dda39c1d5
      `Responsive Image sets generated for ${type} at ${args[0].src} in ${
        end - start
      }ms`
+diff --git a/plugin/hooks/load.js b/plugin/hooks/load.js
+index 4998301e03e00ee126e691a86ddc07e626cd8144..5da9b2d66672e8586da8f2296fcac12f5799b14f 100644
+--- a/plugin/hooks/load.js
++++ b/plugin/hooks/load.js
+@@ -47,6 +47,12 @@ export default async function load(id) {
+       { algorithm: "sha256" }
+     );
+ 
++  const getContentHash = async () => {
++    const buffer = await loadedImage.toBuffer();
++    const hash = objectHash(buffer, { algorithm: "sha256" });
++    return hash;
++  }
++
+   const base =
+     typeof arguments[1] === "string"
+       ? arguments[1]
+@@ -114,6 +120,7 @@ export default async function load(id) {
+       return `export default "${dataUri}"`;
+     }
+   } else {
++    const contentHash = await getContentHash();
+     const sources = await Promise.all(
+       widths.map(async (width) => {
+         const hash = getHash(width);
+@@ -123,7 +130,7 @@ export default async function load(id) {
+           assetFileNames,
+           extension,
+           width,
+-          hash
++          contentHash
+         );
+ 
+         if (!store.has(assetPath)) {
