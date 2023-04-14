@@ -44,6 +44,7 @@ const memewallOgImage = (): AstroIntegration => ({
       });
 
       const page = await browser.newPage();
+      page.setDefaultTimeout(0);
       await page.setViewportSize({ width: 1200, height: 630 });
       await page.goto(astroServerUrl, { waitUntil: "networkidle" });
 
