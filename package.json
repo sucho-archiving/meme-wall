@@ -5,10 +5,11 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "rm -rf node_modules/.cache/astro-imagetools && astro build",
+    "build": "pnpm create-og-image && astro build",
     "preview": "astro preview",
     "print-dataset": "node src/dataset.mjs",
     "update-media": "node src/fetch-data.mjs",
+    "create-og-image": "node bin/create-og-image.mjs",
     "gh-deploy": "CNAME=memes.sucho.org bin/astro-gh-deploy.sh"
   },
   "devDependencies": {
