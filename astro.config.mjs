@@ -7,6 +7,9 @@ export default defineConfig({
   site: "https://memes.sucho.org/",
   trailingSlash: "always",
   integrations: [astroImageTools, svelte()],
+  build: {
+    assets: "assets",
+  },
   vite: {
     ssr: { external: ["neat-csv"] },
     optimizeDeps: { exclude: ["neat-csv"] },

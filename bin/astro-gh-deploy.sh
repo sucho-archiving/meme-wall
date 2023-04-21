@@ -34,7 +34,7 @@ touch "$BUILD_FOLDER/.nojekyll";
 [ -n "$CNAME" ] && echo "$CNAME" > "$BUILD_FOLDER/CNAME";
 
 # copy OpenGraph image to an unhashed filename
-cp $BUILD_FOLDER/_astro/open-graph*.jpeg "$BUILD_FOLDER/open-graph.jpeg"
+cp $BUILD_FOLDER/assets/open-graph*.jpeg "$BUILD_FOLDER/open-graph.jpeg"
 
 git --work-tree "$BUILD_FOLDER" reset --mixed --quiet;
 git --work-tree "$BUILD_FOLDER" add --all;
