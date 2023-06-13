@@ -1,23 +1,10 @@
 ---
-import { renderPicture } from "astro-imagetools/api";
-
 import Head from "../components/Head.astro";
 import Header from "../components/Header.astro";
 import Loader from "../components/Loader.astro";
 import { memes } from "../dataset.mjs";
 
 import "@fontsource/jost/300.css";
-
-// Given a <picture/> element as an HTML string (as returned by renderPicture),
-// extract the srcset attribute values and return an object of the form
-// { <ext>: <srcset>, ... }
-const getSrcsetFromPicture = (picture) =>
-  Object.fromEntries(
-    [...picture.matchAll(/srcset="(?<s>[^"]*?)"/g)].map((s) => [
-      s[1].match(/(?<=\.)[^\s.]+(?=\s|$)/)[0],
-      s.groups.s,
-    ]),
-  );
 
 const title = "SUCHO Meme Wall";
 const description =
@@ -32,17 +19,6 @@ const description =
     <main id="meme-wall">
       {
         memes.map(async (meme, idx) => {
-          const { picture } = await renderPicture({
-            src: "/src/../meme_media/" + meme.filename,
-            format: "webp",
-            fallbackFormat: false,
-            includeSourceFormat: false,
-            alt: meme.title,
-            placeholder: "none",
-            includeSourceFormat: false,
-          });
-          const srcsets = getSrcsetFromPicture(picture);
-
           return (
             <picture
               data-id={meme.driveId}
@@ -53,7 +29,7 @@ const description =
               data-template-type={meme.templateTypes.join("|")}
             >
               <img
-                srcset={srcsets.webp}
+                srcset={meme.srcSets.webp}
                 style={`aspect-ratio:${meme.aspectRatio}`}
                 loading={idx > 20 ? "lazy" : "eager"}
                 decoding="async"

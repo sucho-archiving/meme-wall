@@ -12,6 +12,6 @@ export default defineConfig({
   },
   vite: {
     ssr: { external: ["neat-csv"] },
-    optimizeDeps: { exclude: ["neat-csv"] },
+    optimizeDeps: { exclude: ["neat-csv", "astro-imagetools"] },
   },
 });
