@@ -10,7 +10,13 @@ const logo64x64 = await getRefToOptimizedImage("/src/img/sucho-logo.64x64.png");
 ---
 
 <h1>
-  <img srcset={`${logo64x64} 2x`} src={logo32x32} alt="SUCHO" />
+  <img
+    srcset={`${logo64x64} 2x`}
+    src={logo32x32}
+    height="32"
+    width="32"
+    alt="SUCHO"
+  />
   <a href={Astro.site.pathname} title="SUCHO Meme Wall">SUCHO Meme Wall</a>
 </h1>
 
