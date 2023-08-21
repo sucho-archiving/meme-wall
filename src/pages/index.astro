@@ -1,8 +1,11 @@
 ---
 import Head from "../components/Head.astro";
 import Header from "../components/Header.astro";
+import Icon from "../components/Icon.astro";
 import Loader from "../components/Loader.astro";
 import { memes } from "../dataset.mjs";
+
+import { sluggify } from "../utils.js";
 
 import "@fontsource/jost/300.css";
 
@@ -43,7 +46,19 @@ const description =
                 <dt>Translation</dt>
                 <dd>{meme.textTranslatedIntoEnglish || "---"}</dd>
                 <dt>Content Type</dt>
-                <dd>{meme.memeContentType || "---"}</dd>
+                <dd>
+                  {meme.memeContentType
+                    ? meme.memeTypes.map((memeType) => (
+                        <a
+                          class="show-content-type"
+                          title="More Information"
+                          href={`/glossary/${sluggify(memeType)}/`}
+                        >
+                          {memeType} <Icon name="info-circle" />
+                        </a>
+                      ))
+                    : "---"}
+                </dd>
                 <dt>Country</dt>
                 <dd>{meme.country || "---"}</dd>
                 <dt>Language</dt>
@@ -58,6 +73,9 @@ const description =
         })
       }
     </main>
+    <div id="popup">
+      <iframe></iframe>
+    </div>
     <script type="module" hoist>
       import "../js/script.js";
     </script>

@@ -10,6 +10,7 @@ const showFiltersButton = document.querySelector("button.show-filters");
 const searchButton = document.querySelector("button.search");
 const searchInput = document.querySelector("div.search input");
 const overlayButtons = document.getElementById("overlay-buttons");
+const glossaryPopup = document.getElementById("popup");
 
 const filters = ["memeType", "person", "language", "country", "templateType"];
 const filterSelects = Object.fromEntries(
@@ -229,6 +230,33 @@ wallContainer.addEventListener("click", ({ target }) => {
   }
 });
 
+const iframe = glossaryPopup.querySelector("iframe");
+iframe.addEventListener("load", () => {
+  iframe.style.height =
+    iframe.contentDocument.querySelector("main").offsetHeight + 6 + "px";
+});
+
+document.querySelectorAll("a.show-content-type").forEach((link) => {
+  link.addEventListener("click", (evt) => {
+    evt.preventDefault();
+    evt.stopPropagation();
+    // iframe.src = link.href;
+    fetch(link)
+      .then((res) => res.text())
+      .then((html) => {
+        iframe.srcdoc = html;
+        glossaryPopup.classList.add("active");
+      });
+  });
+});
+
+glossaryPopup.addEventListener("click", (evt) => {
+  if (evt.target === glossaryPopup) {
+    glossaryPopup.classList.remove("active");
+    iframe.style.height = 0;
+  }
+});
+
 const flash = (el) => {
   el.classList.add("flash");
   const animation = el.getAnimations()[0];
@@ -240,6 +268,13 @@ const flash = (el) => {
 };
 
 window.addEventListener("keydown", (event) => {
+  if (glossaryPopup.classList.contains("active")) {
+    if (event.key == "Escape") {
+      glossaryPopup.classList.remove("active");
+    }
+    return;
+  }
+
   if (wallContainer.classList.contains("zoomed")) {
     switch (event.key) {
       case "Escape": {

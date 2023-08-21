@@ -1,5 +1,7 @@
 :root {
   --primary-accent: cadetblue;
+  --main-wrap: min(1000px, 80vw);
+  --main-gutter: calc((100vw - var(--main-wrap)) / 2);
 }
 
 * {
@@ -9,6 +11,11 @@
 ::selection {
   background: var(--primary-accent);
   color: white;
+}
+
+html,
+body {
+  height: 100%;
 }
 
 a {
@@ -69,6 +76,12 @@ body {
   margin: 0;
   padding: 0;
   position: relative;
+}
+
+body {
+  margin-left: calc(100vw - 100%);
+  margin-right: 0;
+  overflow-x: hidden;
 }
 
 @keyframes flash {

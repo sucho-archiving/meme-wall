@@ -1,0 +1,116 @@
+---
+import PageLayout from "../../components/PageLayout.astro";
+
+import { sluggify } from "../../utils.js";
+import { contentTypeGlossary } from "../../glossary.mjs";
+import { memes } from "../../dataset.mjs";
+
+export const getStaticPaths = () =>
+  contentTypeGlossary.map((c) => ({
+    params: { slug: sluggify(c.title) },
+  }));
+
+const _contentTypeGlossary = Object.fromEntries(
+  contentTypeGlossary.map((c) => [sluggify(c.title), c]),
+);
+
+const { slug } = Astro.params;
+
+const { title, content, urls, hashtags } = _contentTypeGlossary[slug];
+
+const directoryOrder = Object.keys(_contentTypeGlossary).sort((a, b) => {
+  return a.localeCompare(b);
+});
+
+const prev =
+  directoryOrder.indexOf(slug) > 0
+    ? directoryOrder[directoryOrder.indexOf(slug) - 1]
+    : null;
+const next =
+  directoryOrder.indexOf(slug) + 1 < directoryOrder.length
+    ? directoryOrder[directoryOrder.indexOf(slug) + 1]
+    : null;
+
+const description = `Meme Glossary: ${title}`;
+---
+
+<PageLayout {title} {description}>
+  <div class="nav">
+    {
+      prev ? (
+        <span
+          set:html={`<a href="/glossary/${sluggify(prev)}/"><< ${
+            _contentTypeGlossary[prev].title
+          }</a>`}
+        />
+      ) : null
+    }
+    {
+      next ? (
+        <span
+          set:html={`<a href="/glossary/${sluggify(next)}/">${
+            _contentTypeGlossary[next].title
+          } >></a>`}
+        />
+      ) : null
+    }
+  </div>
+
+  <h1>{title}</h1>
+
+  <p>{content}</p>
+
+  {
+    urls.length ? (
+      <ul class="links">
+        {urls.map((url) => (
+          <li>
+            <a href={url}>{url}</a>
+          </li>
+        ))}
+      </ul>
+    ) : null
+  }
+  {
+    hashtags.length ? (
+      <ul>
+        {hashtags.map((hashtag) => (
+          <li>{hashtag}</li>
+        ))}
+      </ul>
+    ) : null
+  }
+</PageLayout>
+
+<style>
+  li {
+    color: var(--primary-accent);
+    font-weight: bold;
+  }
+
+  .links li {
+    list-style-position: inside;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    text-wrap: nowrap;
+  }
+
+  div.nav {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+</style>
+
+<script>
+  if (window.self != window.top) {
+    document.querySelector("body > header").style.display = "none";
+    document.querySelector("body > footer").style.display = "none";
+    document.querySelector("div.nav").style.display = "none";
+    document.body.style.display = "grid";
+    document.body.style.placeContent = "center";
+    document.querySelector("main").style.padding = "2rem 0";
+  } else {
+    console.log("top");
+  }
+</script>
