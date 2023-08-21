@@ -15,8 +15,13 @@ export const driveApiKey = "AIzaSyAVsxisgH5DPgtN0jJF6Cf0Q9xbSSaBaZU";
 export const submissionFormUrl =
   "https://docs.google.com/forms/d/e/1FAIpQLSdhi-nky_fICuBD-HKaGsQi_ezukKtU3oVeMulMg0Ra8TCnvw/viewform";
 
+// Sheets containing the hierarchical arrangements for content and template types
 export const hierarchiesSheetId = formResponsesSheetId;
 export const hierarchiesTabIds = {
   memeTypes: "948017538",
   templateTypes: "1496259696",
 };
+
+// Documents for the glossary
+export const contentTypeGlossaryDocId =
+  "1hT404CLLJxIJqE6jo5OACCff_E4Mpwp7OCwTtUAIogs";
