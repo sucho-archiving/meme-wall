@@ -87,6 +87,12 @@ const fetchSheet = async (sheetId, tabId) => {
   });
 };
 
+const fetchDocument = async (docId) => {
+  const docUrl = `https://docs.google.com/document/export?format=html&id=${docId}`;
+  const response = await fetch(docUrl);
+  return await response.text();
+};
+
 const fetchMemes = async () => {
   const memes = await fetchSheet(formResponsesSheetId, readyTabId);
   return memes
@@ -144,7 +150,13 @@ const purgeFiles = (memes, memeMediaFolder) => {
   return purgedCount;
 };
 
-export { fetchMemes, fetchMetadataHierarchies, fetchFile, purgeFiles };
+export {
+  fetchMemes,
+  fetchMetadataHierarchies,
+  fetchFile,
+  purgeFiles,
+  fetchDocument,
+};
 
 // If called as a node script, fetch and parse the spreadsheet and ensure the
 //  media files cache is up to date.
