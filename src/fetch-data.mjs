@@ -131,14 +131,17 @@ const fetchFile = async (meme, memeMediaFolder, delay = 1000) => {
 };
 
 const purgeFiles = (memes, memeMediaFolder) => {
+  let purgedCount = 0;
   const files = fs.readdirSync(memeMediaFolder);
   const driveIds = memes.map((meme) => meme.driveId);
   for (let filename of files) {
     if (!driveIds.includes(path.parse(filename).name)) {
       log.info(`     purging ${filename}...`);
       fs.unlinkSync(path.join(memeMediaFolder, filename));
+      purgedCount++;
     }
   }
+  return purgedCount;
 };
 
 export { fetchMemes, fetchMetadataHierarchies, fetchFile, purgeFiles };

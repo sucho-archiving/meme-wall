@@ -78,13 +78,13 @@ for (const meme of memes) {
     skippedCount++;
   }
 }
+const purgedCount = purgeFiles(memes, memeMediaFolder);
 log.info(
-  `     ... completed in ${(performance.now() - start).toFixed(
-    0,
-  )}ms -- ${skippedCount} file(s) already available locally, ${downloadedCount} file(s) downloaded.`,
+  `     ... completed in ${(performance.now() - start).toFixed(0)}ms` +
+    ` -- ${skippedCount} file(s) already available locally, ` +
+    `${downloadedCount} file(s) downloaded,` +
+    ` ${purgedCount} file(s) purged.`,
 );
-
-purgeFiles(memes, memeMediaFolder);
 
 // filter out non-image files
 // note: may prove to be inadequate (if other image types are submitted)
@@ -95,13 +95,18 @@ memes = memes.filter((meme) =>
 );
 
 // parse the images and calculate aspect ratios
+start = performance.now();
+log.info(" --> Generating derivative images...");
 for (const meme of memes) {
   const filepath = path.join(memeMediaFolder, meme.filename);
   meme.aspectRatio = getAspectRatio(filepath);
   meme.srcSets = await generateImages(meme);
 }
+log.info(`     ... completed in ${(performance.now() - start).toFixed(0)}ms.`);
 
 // Prepare facets and facet counts
+start = performance.now();
+log.info(" --> Preparing facets and facet counts...");
 const memeTypes = [
   ...new Set(
     memes
@@ -191,6 +196,7 @@ const groupOrders = Object.fromEntries(
     Object.keys(value),
   ]),
 );
+log.info(`     ... completed in ${(performance.now() - start).toFixed(0)}ms.`);
 
 export {
   memes,
