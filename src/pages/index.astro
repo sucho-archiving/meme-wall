@@ -4,6 +4,7 @@ import Header from "../components/Header.astro";
 import Icon from "../components/Icon.astro";
 import Loader from "../components/Loader.astro";
 import { memes } from "../dataset.mjs";
+import { contentTypeGlossary } from "../glossary.mjs";
 
 import { sluggify } from "../utils.js";
 
@@ -48,15 +49,21 @@ const description =
                 <dt>Content Type</dt>
                 <dd>
                   {meme.memeContentType
-                    ? meme.memeTypes.map((memeType) => (
-                        <a
-                          class="show-content-type"
-                          title="More Information"
-                          href={`/glossary/${sluggify(memeType)}/`}
-                        >
-                          {memeType} <Icon name="info-circle" />
-                        </a>
-                      ))
+                    ? meme.memeTypes.map((memeType) => {
+                        if (contentTypeGlossary[sluggify(memeType)]) {
+                          return (
+                            <a
+                              class="show-content-type"
+                              title="More Information"
+                              href={`/glossary/${sluggify(memeType)}/`}
+                            >
+                              {memeType} <Icon name="info-circle" />
+                            </a>
+                          );
+                        } else {
+                          return memeType;
+                        }
+                      })
                     : "---"}
                 </dd>
                 <dt>Country</dt>
