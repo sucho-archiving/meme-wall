@@ -1,0 +1,24 @@
+---
+import { sluggify } from "../utils.js";
+import Icon from "./Icon.astro";
+
+const { terms, glossary, route } = Astro.props;
+---
+
+{
+  terms.map((term) => {
+    if (glossary[sluggify(term)]) {
+      return (
+        <a
+          class="show-content-type"
+          title="More Information"
+          href={`/${route}/${sluggify(term)}/`}
+        >
+          {term} <Icon name="info-circle" />
+        </a>
+      );
+    } else {
+      return term;
+    }
+  })
+}
