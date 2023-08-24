@@ -1,16 +1,16 @@
 ---
 import PageLayout from "../../components/PageLayout.astro";
 
-import { contentTypeGlossary } from "../../glossary.mjs";
+import { templateTypeGlossary } from "../../glossary.mjs";
 import { memes } from "../../dataset.mjs";
 import { sluggify } from "../../utils.js";
 
-const directoryOrder = Object.keys(contentTypeGlossary).sort((a, b) =>
+const directoryOrder = Object.keys(templateTypeGlossary).sort((a, b) =>
   a.localeCompare(b),
 );
 
-const title = `Content Types Glossary`;
-const description = `Content Types Glossary`;
+const title = `Template Types Glossary`;
+const description = `Template Types Glossary`;
 ---
 
 <PageLayout {title} {description}>
@@ -20,13 +20,13 @@ const description = `Content Types Glossary`;
     {
       directoryOrder.map((memeTypeSlug) => (
         <li>
-          <a href={`/glossary/${memeTypeSlug}/`}>
-            {contentTypeGlossary[memeTypeSlug].title}
+          <a href={`${memeTypeSlug}/`}>
+            {templateTypeGlossary[memeTypeSlug].title}
           </a>
           [
           {
             memes.filter((m) =>
-              m.memeTypes.map((t) => sluggify(t)).includes(memeTypeSlug),
+              m.templateTypes.map((t) => sluggify(t)).includes(memeTypeSlug),
             ).length
           }
           ]

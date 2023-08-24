@@ -25,3 +25,5 @@ export const hierarchiesTabIds = {
 // Documents for the glossary
 export const contentTypeGlossaryDocId =
   "1hT404CLLJxIJqE6jo5OACCff_E4Mpwp7OCwTtUAIogs";
+export const templateTypeGlossaryDocId =
+  "1BmRyd2O6TQAdctw1zk2MnQ6XROwr7xendsLg9gzfymc";

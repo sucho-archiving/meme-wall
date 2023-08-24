@@ -4,7 +4,7 @@ import Header from "../components/Header.astro";
 import GlossaryLinks from "../components/GlossaryLinks.astro";
 import Loader from "../components/Loader.astro";
 import { memes } from "../dataset.mjs";
-import { contentTypeGlossary } from "../glossary.mjs";
+import { contentTypeGlossary, templateTypeGlossary } from "../glossary.mjs";
 
 import "@fontsource/jost/300.css";
 
@@ -61,7 +61,17 @@ const description =
                 <dt>Language</dt>
                 <dd>{meme.language || "---"}</dd>
                 <dt>Template Type</dt>
-                <dd>{meme.memeTemplateType || "---"}</dd>
+                <dd>
+                  {meme.memeTemplateType ? (
+                    <GlossaryLinks
+                      terms={meme.templateTypes}
+                      glossary={templateTypeGlossary}
+                      route="template-types"
+                    />
+                  ) : (
+                    "---"
+                  )}
+                </dd>
                 <dt>People</dt>
                 <dd>{meme.peopleIndividuals || "---"}</dd>
               </dl>
