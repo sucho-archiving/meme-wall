@@ -1,6 +1,6 @@
 import { JSDOM } from "jsdom";
 
-import { normalizeText } from "./utils.js";
+import { normalizeText, sluggify } from "./utils.js";
 
 const parseSection = (titleEl) => {
   const title = titleEl.textContent.trim();
@@ -28,9 +28,12 @@ export const parseGlossaryDoc = (html) => {
   const dom = new JSDOM(html);
   const document = dom.window.document;
 
-  const directory = [...document.querySelectorAll("h2")]
-    .filter((titleEl) => titleEl.textContent.trim() !== "")
-    .map((titleEl) => parseSection(titleEl));
+  const contentTypeGlossary = Object.fromEntries(
+    [...document.querySelectorAll("h2")]
+      .filter((titleEl) => titleEl.textContent.trim() !== "")
+      .map((titleEl) => parseSection(titleEl))
+      .map((c) => [sluggify(c.title), c]),
+  );
 
-  return directory;
+  return contentTypeGlossary;
 };

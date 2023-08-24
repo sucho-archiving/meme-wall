@@ -5,11 +5,7 @@ import { contentTypeGlossary } from "../../glossary.mjs";
 import { memes } from "../../dataset.mjs";
 import { sluggify } from "../../utils.js";
 
-const _contentTypeGlossary = Object.fromEntries(
-  contentTypeGlossary.map((c) => [sluggify(c.title), c]),
-);
-
-const directoryOrder = Object.keys(_contentTypeGlossary).sort((a, b) =>
+const directoryOrder = Object.keys(contentTypeGlossary).sort((a, b) =>
   a.localeCompare(b),
 );
 
@@ -25,7 +21,7 @@ const description = `Meme Glossary`;
       directoryOrder.map((memeTypeSlug) => (
         <li>
           <a href={`/glossary/${memeTypeSlug}/`}>
-            {_contentTypeGlossary[memeTypeSlug].title}
+            {contentTypeGlossary[memeTypeSlug].title}
           </a>
           [
           {

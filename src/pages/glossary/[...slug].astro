@@ -5,19 +5,15 @@ import { sluggify } from "../../utils.js";
 import { contentTypeGlossary } from "../../glossary.mjs";
 
 export const getStaticPaths = () =>
-  contentTypeGlossary.map((c) => ({
-    params: { slug: sluggify(c.title) },
+  Object.keys(contentTypeGlossary).map((s) => ({
+    params: { slug: s },
   }));
-
-const _contentTypeGlossary = Object.fromEntries(
-  contentTypeGlossary.map((c) => [sluggify(c.title), c]),
-);
 
 const { slug } = Astro.params;
 
-const { title, content, urls, hashtags } = _contentTypeGlossary[slug];
+const { title, content, urls, hashtags } = contentTypeGlossary[slug];
 
-const directoryOrder = Object.keys(_contentTypeGlossary).sort((a, b) => {
+const directoryOrder = Object.keys(contentTypeGlossary).sort((a, b) => {
   return a.localeCompare(b);
 });
 
@@ -39,7 +35,7 @@ const description = `Meme Glossary: ${title}`;
       prev ? (
         <span
           set:html={`<a href="/glossary/${sluggify(prev)}/"><< ${
-            _contentTypeGlossary[prev].title
+            contentTypeGlossary[prev].title
           }</a>`}
         />
       ) : null
@@ -48,7 +44,7 @@ const description = `Meme Glossary: ${title}`;
       next ? (
         <span
           set:html={`<a href="/glossary/${sluggify(next)}/">${
-            _contentTypeGlossary[next].title
+            contentTypeGlossary[next].title
           } >></a>`}
         />
       ) : null
