@@ -2,20 +2,25 @@
 import PageLayout from "../../components/PageLayout.astro";
 
 import { sluggify } from "../../utils.js";
-import { contentTypeGlossary } from "../../glossary.mjs";
+import { glossaries } from "../../glossary.mjs";
 
-export const getStaticPaths = () =>
-  Object.keys(contentTypeGlossary).map((s) => ({
-    params: { slug: s },
-  }));
+export const getStaticPaths = () => {
+  return Object.entries(glossaries)
+    .map(([glossaryType, glossary]) =>
+      Object.keys(glossary.glossary).map((slug) => ({
+        params: { glossaryType, slug },
+        props: glossary,
+      })),
+    )
+    .flat();
+};
 
-const { slug } = Astro.params;
+const { glossaryType, slug } = Astro.params;
+const { glossary, title: typeTitle } = Astro.props;
 
-const { title, content, urls, hashtags } = contentTypeGlossary[slug];
+const { title, content, urls, hashtags } = glossary[slug];
 
-const directoryOrder = Object.keys(contentTypeGlossary).sort((a, b) => {
-  return a.localeCompare(b);
-});
+const directoryOrder = Object.keys(glossary).sort((a, b) => a.localeCompare(b));
 
 const prev =
   directoryOrder.indexOf(slug) > 0
@@ -26,7 +31,7 @@ const next =
     ? directoryOrder[directoryOrder.indexOf(slug) + 1]
     : null;
 
-const description = `Meme Glossary: ${title}`;
+const description = `${typeTitle}: ${title}`;
 ---
 
 <PageLayout {title} {description}>
@@ -34,8 +39,8 @@ const description = `Meme Glossary: ${title}`;
     {
       prev ? (
         <span
-          set:html={`<a href="/glossary/${sluggify(prev)}/"><< ${
-            contentTypeGlossary[prev].title
+          set:html={`<a href="/${glossaryType}/${sluggify(prev)}/"><< ${
+            glossary[prev].title
           }</a>`}
         />
       ) : null
@@ -43,8 +48,8 @@ const description = `Meme Glossary: ${title}`;
     {
       next ? (
         <span
-          set:html={`<a href="/glossary/${sluggify(next)}/">${
-            contentTypeGlossary[next].title
+          set:html={`<a href="/${glossaryType}/${sluggify(next)}/">${
+            glossary[next].title
           } >></a>`}
         />
       ) : null

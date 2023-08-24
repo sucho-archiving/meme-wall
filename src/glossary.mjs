@@ -17,3 +17,18 @@ const templateTypeHtml = await fetchDocument(templateTypeGlossaryDocId);
 export const templateTypeGlossary = parseGlossaryDoc(templateTypeHtml);
 
 log.info(`     ... completed in ${(performance.now() - start).toFixed(0)}ms.`);
+
+export const glossaries = {
+  "content-types": {
+    glossary: contentTypeGlossary,
+    termsKey: "memeTypes",
+    title: `Content Types Glossary`,
+    description: `Content Types Glossary`,
+  },
+  "template-types": {
+    glossary: templateTypeGlossary,
+    termsKey: "templateTypes",
+    title: `Template Types Glossary`,
+    description: `Template Types Glossary`,
+  },
+};

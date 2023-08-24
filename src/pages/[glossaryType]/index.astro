@@ -1,0 +1,37 @@
+---
+import PageLayout from "../../components/PageLayout.astro";
+
+import { glossaries } from "../../glossary.mjs";
+import { memes } from "../../dataset.mjs";
+import { sluggify } from "../../utils.js";
+
+export const getStaticPaths = () =>
+  Object.entries(glossaries).map(([glossaryType, glossary]) => ({
+    params: { glossaryType },
+    props: glossary,
+  }));
+
+const { glossary, termsKey, title, description } = Astro.props;
+
+const directoryOrder = Object.keys(glossary).sort((a, b) => a.localeCompare(b));
+---
+
+<PageLayout {title} {description}>
+  <h1>{title}</h1>
+
+  <ul>
+    {
+      directoryOrder.map((termSlug) => (
+        <li>
+          <a href={`${termSlug}/`}>{glossary[termSlug].title}</a> [
+          {
+            memes.filter((m) =>
+              m[termsKey].map((t) => sluggify(t)).includes(termSlug),
+            ).length
+          }
+          ]
+        </li>
+      ))
+    }
+  </ul>
+</PageLayout>
