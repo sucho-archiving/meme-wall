@@ -3,7 +3,6 @@ import PageLayout from "../../components/PageLayout.astro";
 
 import { sluggify } from "../../utils.js";
 import { contentTypeGlossary } from "../../glossary.mjs";
-import { memes } from "../../dataset.mjs";
 
 export const getStaticPaths = () =>
   contentTypeGlossary.map((c) => ({
