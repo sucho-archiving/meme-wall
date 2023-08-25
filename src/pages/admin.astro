@@ -1,0 +1,106 @@
+---
+import PageLayout from "../components/PageLayout.astro";
+
+import { glossaries } from "../glossary.mjs";
+import { memes } from "../dataset.mjs";
+import { sluggify } from "../utils.js";
+
+const title = "Admin :: SUCHO Meme Wall";
+const description = "Admin Page";
+
+const getUnusedGlossaryEntries = (glossary, termsKey) => {
+  const unusedEntries = Object.keys(glossary).filter(
+    (termSlug) =>
+      memes.filter((m) =>
+        m[termsKey].map((t) => sluggify(t)).includes(termSlug),
+      ).length === 0,
+  );
+  return unusedEntries.sort((a, b) => a.localeCompare(b));
+};
+
+const getMissingGlossaryEntries = (glossary, termsKey) => {
+  const missingEntries = new Set();
+  memes.forEach((m) => {
+    m[termsKey].forEach((t) => {
+      if (t && !glossary[sluggify(t)]) {
+        missingEntries.add(t);
+      }
+    });
+  });
+  return Array.from(missingEntries).sort((a, b) => a.localeCompare(b));
+};
+
+const sections = Object.values(glossaries)
+  .map(({ title, glossary, termsKey }) => {
+    const unused = getUnusedGlossaryEntries(glossary, termsKey);
+    const missing = getMissingGlossaryEntries(glossary, termsKey);
+    if (unused.length || missing.length) {
+      return { title, unused: unused.map((m) => glossary[m].title), missing };
+    }
+  })
+  .filter((x) => x);
+---
+
+<PageLayout {title} {description}>
+  <>
+    {
+      sections.map(({ title, unused, missing }) => (
+        <section>
+          <h2>{title}</h2>
+          {(unused.length) ? (
+            <p>
+              The following terms from the glossary are not represented in the
+              memes dataset:
+            </p>
+            <ul>
+              {unused.map((m) => (
+                <li>{m}</li>
+              ))}
+            </ul>) : ""
+          }
+          {(missing.length) ? (
+            <p>The following terms do not have glossary entries available:</p>
+            <ul>
+              {missing.map((m) => (
+                <li>{m}</li>
+              ))}
+            </ul>) : ""
+          }
+        </section>
+      ))
+    }
+    {
+      !sections.length && (
+        <p>
+          There are no terms in the glossary that are not represented in the
+          memes dataset!
+        </p>
+      )
+    }
+  </>
+</PageLayout>
+
+<style>
+  h2 {
+    letter-spacing: 0;
+  }
+
+  ul {
+    column-gap: 5rem;
+    columns: 3;
+  }
+
+  li {
+    break-inside: avoid;
+  }
+
+  li:hover {
+    border-radius: 0.5rem;
+    outline: 2px solid var(--primary-accent);
+    outline-offset: 6px;
+  }
+
+  li::marker {
+    color: var(--primary-accent);
+  }  
+</style>
