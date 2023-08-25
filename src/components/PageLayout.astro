@@ -11,11 +11,11 @@ import "@fontsource/jost/300.css";
 import "../styles/shared.css";
 import "../styles/about-page.css";
 
-const { title, description } = Astro.props;
+const { title, description, noIndex = false } = Astro.props;
 ---
 
 <html lang="en">
-  <Head {title} {description} />
+  <Head {title} {description} {noIndex} />
   <body>
     <header>
       <Ident />

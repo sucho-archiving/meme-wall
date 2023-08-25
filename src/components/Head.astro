@@ -15,7 +15,7 @@ try {
 const commit = execSync("git rev-parse --short HEAD").toString().trim();
 const datetime = new Date().toISOString();
 
-let { title, description } = Astro.props;
+let { title, description, noIndex = false } = Astro.props;
 ---
 
 <head prefix="dcterms: http://purl.org/dc/terms/#">
@@ -28,6 +28,8 @@ let { title, description } = Astro.props;
   <!-- HTML Meta Tags -->
   <title>{title}</title>
   <meta name="description" content={description} />
+
+  {noIndex && <meta name="robots" content="noindex,nofollow" />}
 
   <!-- Facebook Meta Tags -->
   <meta property="og:url" content={Astro.site} />

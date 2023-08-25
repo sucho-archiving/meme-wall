@@ -16,7 +16,7 @@ const { glossary, termsKey, title, description } = Astro.props;
 const directoryOrder = Object.keys(glossary).sort((a, b) => a.localeCompare(b));
 ---
 
-<PageLayout {title} {description}>
+<PageLayout {title} {description} noIndex={true}>
   <h1>{title}</h1>
 
   <ul>

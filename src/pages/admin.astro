@@ -41,7 +41,7 @@ const sections = Object.values(glossaries)
   .filter((x) => x);
 ---
 
-<PageLayout {title} {description}>
+<PageLayout {title} {description} noIndex={true}>
   <>
     {
       sections.map(({ title, unused, missing }) => (
