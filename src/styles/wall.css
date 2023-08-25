@@ -124,13 +124,21 @@ div.loader {
       transition: font-size 300ms 0ms ease-in, margin-top 300ms 0ms ease-in,
         opacity 300ms 300ms ease-in;
 
-      a {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        transition: height 300ms 0ms ease-in;
-        overflow: hidden;
+      a:not(:last-child),
+      span:not(:last-child) {
+        &::after {
+          display: inline-block;
+          content: " | ";
+          color: var(--primary-accent);
+          margin: 0 0.5rem;
+        }
+      }
 
+      a {
+        display: inline-flex;
+        align-items: center;
+        transition: height 300ms 0ms ease-in, opacity 300ms 300ms ease-in;
+        overflow: hidden;
         color: white;
         background: none;
         border: none;
@@ -138,10 +146,19 @@ div.loader {
         font-family: inherit;
         font-size: inherit;
         cursor: pointer;
+        height: 26px;
 
         &:hover {
           color: var(--primary-accent);
         }
+
+        svg {
+          margin-left: 0.5rem;
+        }
+      }
+
+      span {
+        display: inline-block;
       }
     }
 

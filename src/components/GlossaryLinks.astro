@@ -18,7 +18,7 @@ const { terms, glossary, route } = Astro.props;
         </a>
       );
     } else {
-      return term;
+      return <span>{term}</span>;
     }
   })
 }
