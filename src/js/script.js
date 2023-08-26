@@ -232,8 +232,7 @@ wallContainer.addEventListener("click", ({ target }) => {
 
 const iframe = glossaryPopup.querySelector("iframe");
 iframe.addEventListener("load", () => {
-  iframe.style.height =
-    iframe.contentDocument.querySelector("main").offsetHeight + 6 + "px";
+  iframe.style.height = iframe.contentDocument.body.offsetHeight + 40 + "px";
 });
 
 document.querySelectorAll("a.show-content-type").forEach((link) => {
