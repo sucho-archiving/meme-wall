@@ -3,6 +3,10 @@ import PageLayout from "../components/PageLayout.astro";
 
 import { submissionFormUrl } from "../config.mjs";
 
+import csv from "../img/csv.svg?raw";
+import mastodon from "../img/mastodon.svg?raw";
+import rss from "../img/rss.svg?raw";
+
 const title = "About :: SUCHO Meme Wall";
 const description =
   "Collected memes from the SUCHO project concerning the Russian invasion of Ukraine.";
@@ -38,6 +42,36 @@ const description =
   </section>
   <section>
     <header>
+      <h2>Additional Resources</h2>
+    </header>
+    <ul>
+      <li>
+        <Fragment set:html={csv} />
+        <span
+          >A <a href="/memes.csv">CSV file</a> comprising the entire published dataset
+          is available.</span
+        >
+      </li>
+      <li>
+        <Fragment set:html={rss} />
+        <span
+          >An <a href="/rss.xml">RSS feed</a> is available and is updated daily with
+          new memes.</span
+        >
+      </li>
+      <li>
+        <Fragment set:html={mastodon} />
+        <span
+          >An bot on the Fediverse posts a new random meme every two hours from
+          a Mastodon account <a href="https://mastodon.online/@sucho_memes"
+            >@sucho_memes@mastodon.online</a
+          >.</span
+        >
+      </li>
+    </ul>
+  </section>
+  <section>
+    <header>
       <h2>About the Site</h2>
     </header>
     <p>
@@ -62,3 +96,24 @@ const description =
     </p>
   </section>
 </PageLayout>
+
+<style>
+  ul {
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 2rem auto;
+    list-style: none;
+    margin: 1rem 0 1rem 0.5rem;
+
+    :global(svg) {
+      margin-top: 2px;
+      height: auto;
+      width: 100%;
+    }
+  }
+</style>
