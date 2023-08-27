@@ -65,4 +65,8 @@ footer {
   h2 {
     text-align: center;
   }
+
+  main p {
+    text-align: left;
+  }
 }
