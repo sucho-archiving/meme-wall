@@ -11,7 +11,7 @@ import "@fontsource/jost/300.css";
 import "../styles/shared.css";
 import "../styles/about-page.css";
 
-const { title, description, noIndex = false } = Astro.props;
+const { title, description, noIndex = false, backToTop = true } = Astro.props;
 ---
 
 <html lang="en">
@@ -33,7 +33,7 @@ const { title, description, noIndex = false } = Astro.props;
         title={`Release v${version} on GitHub`}>v{version}</a
       >
     </footer>
-    <BackToTop />
+    {backToTop && <BackToTop />}
 
     <style>
       body > header {
