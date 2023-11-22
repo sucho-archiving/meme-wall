@@ -29,7 +29,9 @@ const csvStringifier = createObjectCsvStringifier({
 });
 
 const csv =
-  csvStringifier.getHeaderString() + csvStringifier.stringifyRecords(memesRows);
+  "\ufeff" + // Write a BOM at the start of the output to force Windows systems to recognize the file as UTF-8
+  csvStringifier.getHeaderString() +
+  csvStringifier.stringifyRecords(memesRows);
 
 export async function get() {
   return {
