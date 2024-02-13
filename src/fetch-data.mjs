@@ -16,6 +16,8 @@ import {
   hierarchiesTabIds,
 } from "./config.mjs";
 
+log.setLevel(log.levels[process.env.LOG_LEVEL || "INFO"]);
+
 const toCamelCase = (str) =>
   str
     .toLowerCase()
@@ -80,6 +82,7 @@ const memeExists = (fileStem, memeMediaFolder) => {
 
 const fetchSheet = async (sheetId, tabId) => {
   const sheetUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&gid=${tabId}`;
+  log.info(`Fetching ${sheetUrl}...`);
   const response = await fetch(sheetUrl);
   return await neatCsv(await response.text(), {
     mapHeaders: ({ header, index }) => toCamelCase(header.trim()),
@@ -166,6 +169,7 @@ const nodePath = path.resolve(process.argv[1]);
 const modulePath = path.resolve(fileURLToPath(import.meta.url));
 if (nodePath === modulePath) {
   const memes = await fetchMemes();
+  log.info(`Found ${memes.length} memes...`);
   for (const meme of memes) {
     meme.filename = await fetchFile(meme, memeMediaFolder);
   }
