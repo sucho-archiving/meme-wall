@@ -1,7 +1,6 @@
 import path from "path";
 
 import log from "loglevel";
-import { renderPicture } from "astro-imagetools/api";
 import sizeOf from "image-size";
 
 import { memeMediaFolder } from "./config.mjs";
@@ -17,31 +16,6 @@ log.setLevel(log.levels[process.env.LOG_LEVEL || "INFO"]);
 const getAspectRatio = (imgPath) => {
   const dimensions = sizeOf(imgPath);
   return dimensions.width / dimensions.height;
-};
-
-// Given a <picture/> element as an HTML string (as returned by renderPicture),
-// extract the srcset attribute values and return an object of the form
-// { <ext>: <srcset>, ... }
-const getSrcsetFromPicture = (picture) =>
-  Object.fromEntries(
-    [...picture.matchAll(/srcset="(?<s>[^"]*?)"/g)].map((s) => [
-      s[1].match(/(?<=\.)[^\s.]+(?=\s|$)/)[0],
-      s.groups.s,
-    ]),
-  );
-
-const generateImages = async (meme) => {
-  const { picture } = await renderPicture({
-    src: "/src/../meme_media/" + meme.filename,
-    format: "webp",
-    fallbackFormat: false,
-    includeSourceFormat: false,
-    alt: meme.title,
-    placeholder: "none",
-    includeSourceFormat: false,
-  });
-  const srcsets = getSrcsetFromPicture(picture);
-  return srcsets;
 };
 
 // fetch minimally-parsed data from the spreadsheet(s)
@@ -100,7 +74,6 @@ log.info(" --> Generating derivative images...");
 for (const meme of memes) {
   const filepath = path.join(memeMediaFolder, meme.filename);
   meme.aspectRatio = getAspectRatio(filepath);
-  meme.srcSets = await generateImages(meme);
 }
 log.info(`     ... completed in ${(performance.now() - start).toFixed(0)}ms.`);
 
