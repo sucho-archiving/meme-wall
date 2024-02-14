@@ -1,0 +1,100 @@
+---
+import { getImage } from "astro:assets";
+
+import GlossaryLinks from "../components/GlossaryLinks.astro";
+import {
+  contentTypeGlossary,
+  peopleGlossary,
+  templateTypeGlossary,
+} from "../glossary.mjs";
+
+const images = import.meta.glob(
+  "/src/../meme_media/*.{jpeg,jpg,png,webp,avif}",
+);
+
+const { meme, idx } = Astro.props;
+
+const rawImg = images[`/meme_media/${meme.filename}`]();
+
+const width = (await rawImg).default.width;
+
+// TODO: use a better algorithm to determine widths
+const img = await getImage({
+  src: rawImg,
+  format: "webp",
+  widths: [240, 540, 720, width],
+  sizes: `(max-width: 360px) 240px, (max-width: 720px) 540px, (max-width: 1600px) 720px, ${width}px`,
+});
+---
+
+<picture
+  data-id={meme.driveId}
+  data-meme-type={meme.memeTypes.join("|")}
+  data-person={meme.people.join("|")}
+  data-language={meme.languages.join("|")}
+  data-country={meme.countries.join("|")}
+  data-template-type={meme.templateTypes.join("|")}
+>
+  <img
+    srcset={img.srcSet.attribute}
+    alt={meme.title}
+    sizes="15vmax"
+    style={`aspect-ratio:${meme.aspectRatio}`}
+    class="offcanvas"
+    loading={idx > 20 ? "lazy" : "eager"}
+    decoding="async"
+  />
+
+  <dl>
+    <dt>Title</dt>
+    <dd>{meme.title || "---"}</dd>
+    <dt>Translation</dt>
+    <dd>{meme.textTranslatedIntoEnglish || "---"}</dd>
+    <dt>Content Type</dt>
+    <dd>
+      {
+        meme.memeContentType ? (
+          <GlossaryLinks
+            terms={meme.memeTypes}
+            glossary={contentTypeGlossary}
+            route="content-types"
+          />
+        ) : (
+          "---"
+        )
+      }
+    </dd>
+    <dt>Country</dt>
+    <dd>{meme.country || "---"}</dd>
+    <dt>Language</dt>
+    <dd>{meme.language || "---"}</dd>
+    <dt>Template Type</dt>
+    <dd>
+      {
+        meme.memeTemplateType ? (
+          <GlossaryLinks
+            terms={meme.templateTypes}
+            glossary={templateTypeGlossary}
+            route="template-types"
+          />
+        ) : (
+          "---"
+        )
+      }
+    </dd>
+    <dt>People</dt>
+    <dd>
+      {
+        meme.peopleIndividuals ? (
+          <GlossaryLinks
+            terms={meme.people}
+            glossary={peopleGlossary}
+            route="people"
+          />
+        ) : (
+          "---"
+        )
+      }
+    </dd>
+  </dl>
+</picture>

@@ -1,14 +1,10 @@
 ---
 import Head from "../components/Head.astro";
 import Header from "../components/Header.astro";
-import GlossaryLinks from "../components/GlossaryLinks.astro";
 import Loader from "../components/Loader.astro";
+import Meme from "../components/Meme.astro";
+
 import { memes } from "../dataset.mjs";
-import {
-  contentTypeGlossary,
-  peopleGlossary,
-  templateTypeGlossary,
-} from "../glossary.mjs";
 
 import "@fontsource/jost/300.css";
 
@@ -23,76 +19,7 @@ const description =
     <Header />
     <Loader />
     <main id="meme-wall">
-      {
-        memes.map(async (meme, idx) => {
-          return (
-            <picture
-              data-id={meme.driveId}
-              data-meme-type={meme.memeTypes.join("|")}
-              data-person={meme.people.join("|")}
-              data-language={meme.languages.join("|")}
-              data-country={meme.countries.join("|")}
-              data-template-type={meme.templateTypes.join("|")}
-            >
-              <img
-                srcset={meme.srcSets.webp}
-                style={`aspect-ratio:${meme.aspectRatio}`}
-                loading={idx > 20 ? "lazy" : "eager"}
-                decoding="async"
-                alt={meme.title}
-                sizes="15vmax"
-                class="offcanvas"
-              />
-              <dl>
-                <dt>Title</dt>
-                <dd>{meme.title || "---"}</dd>
-                <dt>Translation</dt>
-                <dd>{meme.textTranslatedIntoEnglish || "---"}</dd>
-                <dt>Content Type</dt>
-                <dd>
-                  {meme.memeContentType ? (
-                    <GlossaryLinks
-                      terms={meme.memeTypes}
-                      glossary={contentTypeGlossary}
-                      route="content-types"
-                    />
-                  ) : (
-                    "---"
-                  )}
-                </dd>
-                <dt>Country</dt>
-                <dd>{meme.country || "---"}</dd>
-                <dt>Language</dt>
-                <dd>{meme.language || "---"}</dd>
-                <dt>Template Type</dt>
-                <dd>
-                  {meme.memeTemplateType ? (
-                    <GlossaryLinks
-                      terms={meme.templateTypes}
-                      glossary={templateTypeGlossary}
-                      route="template-types"
-                    />
-                  ) : (
-                    "---"
-                  )}
-                </dd>
-                <dt>People</dt>
-                <dd>
-                  {meme.peopleIndividuals ? (
-                    <GlossaryLinks
-                      terms={meme.people}
-                      glossary={peopleGlossary}
-                      route="people"
-                    />
-                  ) : (
-                    "---"
-                  )}
-                </dd>
-              </dl>
-            </picture>
-          );
-        })
-      }
+      {memes.map(async (meme, idx) => <Meme meme={meme} idx={idx} />)}
     </main>
     <div id="popup">
       <iframe></iframe>
