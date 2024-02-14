@@ -124,7 +124,7 @@
 
   <div class="dropdown" class:open bind:this={dropdown}>
     {#if hasGroups}
-      {#each Object.keys(options) as group}
+      {#each Object.keys(options).filter((group) => options[group].options) as group}
         {@const subOptions = options[group].options}
         {@const optionValues = subOptions.map((o) => o.value)}
         <label class="group">
