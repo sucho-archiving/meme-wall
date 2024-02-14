@@ -1,22 +1,10 @@
 ---
-import { renderImg } from "astro-imagetools/api";
-const getRefToOptimizedImage = async (src) => {
-  const { img } = await renderImg({ src, alt: "" });
-  return img.match(/srcset="([^"]*?)"/)[1];
-};
-
-const logo32x32 = await getRefToOptimizedImage("/src/img/sucho-logo.32x32.png");
-const logo64x64 = await getRefToOptimizedImage("/src/img/sucho-logo.64x64.png");
+import { Image } from "astro:assets";
+import suchoLogo from "../img/sucho-logo.32x32.png";
 ---
 
 <h1>
-  <img
-    srcset={`${logo64x64} 2x`}
-    src={logo32x32}
-    height="32"
-    width="32"
-    alt="SUCHO"
-  />
+  <Image src={suchoLogo} width={32} densities={[2]} alt="SUCHO" />
   <a href={Astro.site.pathname} title="SUCHO Meme Wall">SUCHO Meme Wall</a>
 </h1>
 
