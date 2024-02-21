@@ -15,15 +15,16 @@ const images = import.meta.glob(
 const { meme, idx } = Astro.props;
 
 const rawImg = images[`/meme_media/${meme.filename}`]();
+const imgWidth = Math.min((await rawImg).default.width, 3840);
+const widths = [120, 240, 360, 640, 800, 1024, 1280, 1440, 1920, 2560, 3840]
+  .map((w) => (w < imgWidth ? w : null))
+  .filter(Boolean)
+  .concat([imgWidth]);
 
-const width = (await rawImg).default.width;
-
-// TODO: use a better algorithm to determine widths
 const img = await getImage({
   src: rawImg,
   format: "webp",
-  widths: [240, 540, 720, width],
-  sizes: `(max-width: 360px) 240px, (max-width: 720px) 540px, (max-width: 1600px) 720px, ${width}px`,
+  widths: widths,
 });
 ---
 

@@ -151,7 +151,6 @@ const showMoreListener = ({ currentTarget: target }) =>
 
 const wallItemToggleCb = (img) => {
   if (img.classList.contains("active")) {
-    img.sizes = "100vw";
     img.nextElementSibling.addEventListener("click", showMoreListener);
     overlayButtons.classList.add("active");
     history.replaceState(
@@ -160,7 +159,6 @@ const wallItemToggleCb = (img) => {
       window.location.pathname + "#" + img.parentElement.dataset.id,
     );
   } else {
-    img.sizes = "15vmax";
     img.nextElementSibling.removeEventListener("click", showMoreListener);
     overlayButtons.classList.remove("active");
     history.replaceState("", document.title, window.location.pathname);

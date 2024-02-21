@@ -175,6 +175,8 @@ export default class MemeWall {
       scale = parentWidth / blockWidth;
     }
 
+    block.sizes = `${blockWidth * scale}px`;
+
     // determine offset
     let offsetY =
       parentTop -
