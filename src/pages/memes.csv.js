@@ -33,8 +33,6 @@ const csv =
   csvStringifier.getHeaderString() +
   csvStringifier.stringifyRecords(memesRows);
 
-export async function get() {
-  return {
-    body: csv,
-  };
+export async function GET() {
+  return new Response(csv);
 }
