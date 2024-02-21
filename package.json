@@ -1,6 +1,6 @@
 {
   "name": "@sucho/meme-wall",
-  "version": "4",
+  "version": "5",
   "private": true,
   "scripts": {
     "dev": "astro dev",
