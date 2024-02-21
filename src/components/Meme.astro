@@ -26,6 +26,10 @@ const img = await getImage({
   format: "webp",
   widths: widths,
 });
+
+// Record the absolute URL for the largest generated image
+//  (for use when generating the RSS feed)
+meme.imgUrl = img.srcSet.values.at(-1).url;
 ---
 
 <picture

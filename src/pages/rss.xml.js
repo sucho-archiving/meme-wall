@@ -1,3 +1,4 @@
+import fs from "fs";
 import log from "loglevel";
 import rss from "@astrojs/rss";
 import { memes } from "../dataset.mjs";
@@ -11,20 +12,20 @@ const generateDescription = (meme) => {
 };
 
 const generateEnclosure = async (meme) => {
-  // The URL of the largest generated image
-  //  (submitted source size and resolution, with the intrinsic size indicator removed)
-  const image = meme.srcSets.webp.split(", ").at(-1).split(" ")[0];
-
-  // Hack using the astro-imagetools internals to get the generated image
-  //  as a buffer so we can get the size in bytes
-  // (This is slow -- not sure if there's a better way)
-  const store = globalThis.astroImageToolsStore;
-  const imageObject = store.get(image);
-  const buffer = await imageObject.image.clone().toBuffer();
+  // `meme.imgUrl` is the absolute URL for the largest generated image
+  const imageFn = meme.imgUrl.split("/").at(-1);
+  let length = 0;
+  try {
+    // Read the image from the Astro assets cache, and get the filesize
+    let imgInfo = fs.statSync(`node_modules/.astro/assets/${imageFn}`);
+    length = imgInfo.size;
+  } catch (e) {
+    console.error(`Failed to get image info for RSS enclosure: ${imageFn}`);
+  }
 
   return {
-    url: image.split(" ")[0],
-    length: buffer.length,
+    url: meme.imgUrl,
+    length: length,
     type: "image/webp",
   };
 };
@@ -46,7 +47,7 @@ const getItems = async (memes) => {
   return items;
 };
 
-export async function get(context) {
+export async function GET(context) {
   const start = performance.now();
   log.info(
     " --> Generating items for RSS feed (this may take a while -- use LOG_LEVEL=DEBUG to follow progress)...",
@@ -55,6 +56,7 @@ export async function get(context) {
   log.info(
     `     ... completed in ${(performance.now() - start).toFixed(0)}ms.`,
   );
+
   return rss({
     title: "SUCHO Meme Wall",
     description:
