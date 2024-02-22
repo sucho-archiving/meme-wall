@@ -38,6 +38,11 @@ memes = memes
   }))
   .sort((a, b) => b.timestamp - a.timestamp);
 
+if (process.env.MEME_LIMIT) {
+  log.info(` --> Limiting to most-recent ${process.env.MEME_LIMIT} memes...`);
+  memes = memes.slice(0, parseInt(process.env.MEME_LIMIT));
+}
+
 // ensure all media files are available locally
 start = performance.now();
 let downloadedCount = 0;
@@ -52,7 +57,14 @@ for (const meme of memes) {
     skippedCount++;
   }
 }
-const purgedCount = purgeFiles(memes, memeMediaFolder);
+
+let purgedCount = 0;
+if (process.env.MEME_LIMIT) {
+  log.info(` --> MEME_LIMIT is set -- skipping purge...`);
+} else {
+  purgedCount = purgeFiles(memes, memeMediaFolder);
+}
+
 log.info(
   `     ... completed in ${(performance.now() - start).toFixed(0)}ms` +
     ` -- ${skippedCount} file(s) already available locally, ` +
