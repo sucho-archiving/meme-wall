@@ -17,7 +17,7 @@ current_branch=$(git rev-parse --abbrev-ref HEAD);
 
 unclean=$(git status --porcelain) && [ -n "$unclean" ] && abort "Working directory is not clean -- aborting!";
 
-pnpm build;
+pnpm astro build && pnpm build;
 [ ! -d "$BUILD_FOLDER" ] && abort "'$BUILD_FOLDER' does not exist -- aborting!";
 
 COMMIT_MESSAGE="Deploy from $(git log -n 1 --format="%h" HEAD) at $(date +"%Y-%m-%d %H:%M:%S %Z")";

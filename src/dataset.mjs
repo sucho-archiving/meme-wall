@@ -3,6 +3,8 @@ import path from "path";
 import log from "loglevel";
 import sizeOf from "image-size";
 
+import { getImage } from "astro:assets";
+
 import { memeMediaFolder } from "./config.mjs";
 import {
   fetchMemes,
@@ -12,6 +14,25 @@ import {
 } from "./fetch-data.mjs";
 
 log.setLevel(log.levels[process.env.LOG_LEVEL || "INFO"]);
+
+const generateImages = async (meme) => {
+  const rawImg = images[`/meme_media/${meme.filename}`]();
+  const imgWidth = Math.min((await rawImg).default.width, 3840);
+  const widths = [120, 240, 360, 640, 800, 1024, 1280, 1440, 1920, 2560, 3840]
+    .map((w) => (w < imgWidth ? w : null))
+    .filter(Boolean)
+    .concat([imgWidth]);
+
+  const img = await getImage({
+    src: rawImg,
+    format: "webp",
+    widths: widths,
+  });
+
+  // Return `srcset` attribute string and the absolute URL for the
+  //  largest generated image (for use when generating the RSS feed)
+  return [img.srcSet.attribute, img.srcSet.values.at(-1).url];
+};
 
 const getAspectRatio = (imgPath) => {
   const dimensions = sizeOf(imgPath);
@@ -83,8 +104,14 @@ memes = memes.filter((meme) =>
 // parse the images and calculate aspect ratios
 start = performance.now();
 log.info(" --> Generating derivative images...");
+
+const images = import.meta.glob(
+  "/src/../meme_media/*.{jpeg,jpg,png,webp,avif}",
+);
+
 for (const meme of memes) {
   const filepath = path.join(memeMediaFolder, meme.filename);
+  [meme.srcSet, meme.imgUrl] = await generateImages(meme);
   meme.aspectRatio = getAspectRatio(filepath);
 }
 log.info(`     ... completed in ${(performance.now() - start).toFixed(0)}ms.`);
@@ -192,35 +219,3 @@ export {
   templateTypes,
   groupOrders,
 };
-
-// If called as a node script, print memes to stdout.
-// See `yarn print-dataset`  (requires node >= v17.5.0)
-import { fileURLToPath } from "url";
-const nodePath = path.resolve(process.argv[1]);
-const modulePath = path.resolve(fileURLToPath(import.meta.url));
-if (nodePath === modulePath) {
-  switch (process.argv[2]) {
-    case "memeTypes":
-      log.info(memeTypes);
-      break;
-
-    case "people":
-      log.info(people);
-      break;
-
-    case "countries":
-      log.info(countries);
-      break;
-
-    case "templateTypes":
-      log.info(templateTypes);
-      break;
-
-    case "languages":
-      log.info(languages);
-      break;
-
-    default:
-      log.info(JSON.stringify(memes, null, 2));
-  }
-}

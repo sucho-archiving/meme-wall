@@ -1,6 +1,4 @@
 ---
-import { getImage } from "astro:assets";
-
 import GlossaryLinks from "../components/GlossaryLinks.astro";
 import {
   contentTypeGlossary,
@@ -8,28 +6,7 @@ import {
   templateTypeGlossary,
 } from "../glossary.mjs";
 
-const images = import.meta.glob(
-  "/src/../meme_media/*.{jpeg,jpg,png,webp,avif}",
-);
-
 const { meme, idx } = Astro.props;
-
-const rawImg = images[`/meme_media/${meme.filename}`]();
-const imgWidth = Math.min((await rawImg).default.width, 3840);
-const widths = [120, 240, 360, 640, 800, 1024, 1280, 1440, 1920, 2560, 3840]
-  .map((w) => (w < imgWidth ? w : null))
-  .filter(Boolean)
-  .concat([imgWidth]);
-
-const img = await getImage({
-  src: rawImg,
-  format: "webp",
-  widths: widths,
-});
-
-// Record the absolute URL for the largest generated image
-//  (for use when generating the RSS feed)
-meme.imgUrl = img.srcSet.values.at(-1).url;
 ---
 
 <picture
@@ -41,7 +18,7 @@ meme.imgUrl = img.srcSet.values.at(-1).url;
   data-template-type={meme.templateTypes.join("|")}
 >
   <img
-    srcset={img.srcSet.attribute}
+    srcset={meme.srcSet}
     alt={meme.title}
     sizes="15vmax"
     style={`aspect-ratio:${meme.aspectRatio}`}

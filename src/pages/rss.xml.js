@@ -15,13 +15,10 @@ const generateEnclosure = async (meme) => {
   // `meme.imgUrl` is the absolute URL for the largest generated image
   const imageFn = meme.imgUrl.split("/").at(-1);
   let length = 0;
-  try {
-    // Read the image from the Astro assets cache, and get the filesize
-    let imgInfo = fs.statSync(`node_modules/.astro/assets/${imageFn}`);
-    length = imgInfo.size;
-  } catch (e) {
-    console.error(`Failed to get image info for RSS enclosure: ${imageFn}`);
-  }
+
+  // Read the image from the Astro assets cache, and get the filesize
+  let imgInfo = fs.statSync(`node_modules/.astro/assets/${imageFn}`);
+  length = imgInfo.size;
 
   return {
     url: meme.imgUrl,
@@ -49,10 +46,14 @@ const getItems = async (memes) => {
 
 export async function GET(context) {
   const start = performance.now();
-  log.info(
-    " --> Generating items for RSS feed (this may take a while -- use LOG_LEVEL=DEBUG to follow progress)...",
-  );
+  log.info(" --> Generating items for RSS feed...");
+
+  if (!fs.existsSync("node_modules/.astro")) {
+    log.warn("     ... image assets not available -- aborting!");
+    return new Response("Not found", { status: 404 });
+  }
   const items = await getItems(memes);
+
   log.info(
     `     ... completed in ${(performance.now() - start).toFixed(0)}ms.`,
   );
