@@ -48,11 +48,16 @@ export async function GET(context) {
   const start = performance.now();
   log.info(" --> Generating items for RSS feed...");
 
-  if (!fs.existsSync("node_modules/.astro")) {
-    log.warn("     ... image assets not available -- aborting!");
-    return new Response("Not found", { status: 404 });
+  let items;
+  try {
+    items = await getItems(memes);
+  } catch (error) {
+    if (error.code == "ENOENT") {
+      log.warn("     ... image assets not available -- aborting!");
+      return new Response("Not found", { status: 404 });
+    }
+    log.error(error);
   }
-  const items = await getItems(memes);
 
   log.info(
     `     ... completed in ${(performance.now() - start).toFixed(0)}ms.`,
