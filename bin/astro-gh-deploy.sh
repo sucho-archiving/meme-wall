@@ -21,8 +21,8 @@ pnpm astro build && pnpm build;
 [ ! -d "$BUILD_FOLDER" ] && abort "'$BUILD_FOLDER' does not exist -- aborting!";
 
 # Purge generated JPEGs from the build folder
-find "$BUILD_FOLDER"/assets/ -type f -iname '*.jpeg' \
-  | grep -P '^[a-zA-Z0-9_-]{33}\.[a-zA-Z0-9_-]{8}.*\.jpeg$' \
+find "$BUILD_FOLDER/assets/" -type f -iname '*.jpeg' \
+  | grep -P '[a-zA-Z0-9_-]{33}\.[a-zA-Z0-9_-]{8}.*\.jpeg$' \
   | while read -r file; do rm "$file"; done;
 
 COMMIT_MESSAGE="Deploy from $(git log -n 1 --format="%h" HEAD) at $(date +"%Y-%m-%d %H:%M:%S %Z")";
