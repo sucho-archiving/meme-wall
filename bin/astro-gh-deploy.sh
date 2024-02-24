@@ -17,7 +17,7 @@ current_branch=$(git rev-parse --abbrev-ref HEAD);
 
 unclean=$(git status --porcelain) && [ -n "$unclean" ] && abort "Working directory is not clean -- aborting!";
 
-pnpm astro build && pnpm build;
+pnpm build && pnpm build;
 [ ! -d "$BUILD_FOLDER" ] && abort "'$BUILD_FOLDER' does not exist -- aborting!";
 
 # Purge generated JPEGs from the build folder
