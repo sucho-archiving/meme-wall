@@ -49,6 +49,10 @@ jobs:
             echo "has_new_media=true" >> $GITHUB_OUTPUT
           fi
 
+      - name: Playwright -- install browsers
+        if: steps.check.outputs.has_new_media == 'true'
+        run: pnpm exec playwright install
+
       - name: Configure git
         if: steps.check.outputs.has_new_media == 'true'
         run: |
