@@ -100,6 +100,7 @@ const fetchMemes = async () => {
   const memes = await fetchSheet(formResponsesSheetId, readyTabId);
   return memes
     .filter((meme) => meme.timestamp) // filter out empty rows
+    .filter((meme) => !isNaN(new Date(meme.timestamp))) // filter out rows where the date doesn't parse
     .map((meme) => ({
       ...meme,
       driveId: parseDriveId(meme.uploadFile),
