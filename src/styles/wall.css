@@ -61,6 +61,14 @@ div.loader {
     }
   }
 
+  picture {
+    contain-intrinsic-size: auto 15vmax;
+  }
+
+  picture.cv-enabled {
+    content-visibility: auto;
+  }
+
   img {
     box-shadow: inset 3px 3px 20px 1px rgb(255 255 255 / 40%);
     display: inline-block;
