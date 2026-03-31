@@ -18,6 +18,16 @@ const filterSelects = Object.fromEntries(
 );
 let activeFilters = {};
 
+let filterTimeout = null;
+let searchTimeout = null;
+
+const debounce = (fn, delay) => {
+  return (...args) => {
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => fn(...args), delay);
+  };
+};
+
 const toggleItem = (img, condition = true) => {
   if (condition) {
     img.style.removeProperty("width");
@@ -83,12 +93,12 @@ const resetSearch = (ui = true) => {
   searchInput.value = "";
 
   if (ui) {
-    setTimeout(() => {
-      items.forEach((item) => {
-        toggleItem(item.querySelector("img"), true);
-      });
-      updateWall();
-    }, 200);
+    clearTimeout(filterTimeout);
+    clearTimeout(searchTimeout);
+    items.forEach((item) => {
+      toggleItem(item.querySelector("img"), true);
+    });
+    updateWall();
   }
 };
 
@@ -100,6 +110,7 @@ const reset = () => {
 };
 
 const filterMemes = () => {
+  clearTimeout(filterTimeout);
   wallContainer.classList.remove("empty");
   wallContainer.classList.remove("single");
   wallContainer.classList.remove("zoomed");
@@ -118,7 +129,7 @@ const filterMemes = () => {
   showFiltersButton.dataset.activeFilterCount = activeFilterCount;
   showFiltersButton.classList.toggle("show-indicator", activeFilterCount > 0);
 
-  setTimeout(() => {
+  filterTimeout = setTimeout(() => {
     Object.values(activeFilters).flat().length
       ? items.forEach((item) => {
           toggleItem(item.querySelector("img"), showHide(item));
@@ -131,27 +142,23 @@ const filterMemes = () => {
 };
 
 const searchMemes = (searchTerm) => {
-  [...items]
-    .filter((item) => !item.querySelector("img").classList.contains("hidden"))
-    .forEach((item) =>
-      toggleItem(
-        item.querySelector("img"),
-        [...item.querySelectorAll("dd")].some((dd) =>
-          dd.textContent
-            .toLocaleLowerCase()
-            .includes(searchTerm.toLocaleLowerCase()),
+  clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(() => {
+    const term = searchTerm.toLocaleLowerCase();
+    [...items]
+      .filter((item) => !item.querySelector("img").classList.contains("hidden"))
+      .forEach((item) =>
+        toggleItem(
+          item.querySelector("img"),
+          item.dataset.metadata?.toLocaleLowerCase().includes(term),
         ),
-      ),
-    );
-  updateWall();
+      );
+    updateWall();
+  }, 200);
 };
-
-const showMoreListener = ({ currentTarget: target }) =>
-  target.classList.toggle("show-more");
 
 const wallItemToggleCb = (img) => {
   if (img.classList.contains("active")) {
-    img.nextElementSibling.addEventListener("click", showMoreListener);
     overlayButtons.classList.add("active");
     history.replaceState(
       "",
@@ -159,7 +166,6 @@ const wallItemToggleCb = (img) => {
       window.location.pathname + "#" + img.parentElement.dataset.id,
     );
   } else {
-    img.nextElementSibling.removeEventListener("click", showMoreListener);
     overlayButtons.classList.remove("active");
     history.replaceState("", document.title, window.location.pathname);
   }
