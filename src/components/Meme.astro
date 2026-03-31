@@ -5,8 +5,53 @@ import {
   peopleGlossary,
   templateTypeGlossary,
 } from "../glossary.mjs";
+import { sluggify } from "../utils.js";
 
 const { meme, idx } = Astro.props;
+
+const renderGlossaryLinks = (terms, glossary, route) =>
+  terms
+    .map((term) => {
+      if (glossary[sluggify(term)]) {
+        return `<a class="show-content-type" title="More Information" href="/${route}/${sluggify(term)}/">${term} <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg></a>`;
+      } else {
+        return `<span>${term}</span>`;
+      }
+    })
+    .join("");
+
+const renderDl = () => {
+  const renderField = (label, content) =>
+    `<dt>${label}</dt><dd>${content}</dd>`;
+
+  const renderTerms = (terms, glossary, route) =>
+    terms ? renderGlossaryLinks(terms, glossary, route) : "---";
+
+  return [
+    renderField("Title", meme.title || "---"),
+    renderField("Translation", meme.textTranslatedIntoEnglish || "---"),
+    renderField(
+      "Content Type",
+      meme.memeContentType
+        ? renderTerms(meme.memeTypes, contentTypeGlossary, "content-types")
+        : "---",
+    ),
+    renderField("Country", meme.country || "---"),
+    renderField("Language", meme.language || "---"),
+    renderField(
+      "Template Type",
+      meme.memeTemplateType
+        ? renderTerms(meme.templateTypes, templateTypeGlossary, "template-types")
+        : "---",
+    ),
+    renderField(
+      "People",
+      meme.peopleIndividuals
+        ? renderTerms(meme.people, peopleGlossary, "people")
+        : "---",
+    ),
+  ].join("");
+};
 ---
 
 <picture
@@ -16,6 +61,7 @@ const { meme, idx } = Astro.props;
   data-language={meme.languages.join("|")}
   data-country={meme.countries.join("|")}
   data-template-type={meme.templateTypes.join("|")}
+  data-metadata={renderDl()}
 >
   <img
     srcset={meme.srcSet}
@@ -26,57 +72,4 @@ const { meme, idx } = Astro.props;
     loading={idx > 20 ? "lazy" : "eager"}
     decoding="async"
   />
-
-  <dl>
-    <dt>Title</dt>
-    <dd>{meme.title || "---"}</dd>
-    <dt>Translation</dt>
-    <dd>{meme.textTranslatedIntoEnglish || "---"}</dd>
-    <dt>Content Type</dt>
-    <dd>
-      {
-        meme.memeContentType ? (
-          <GlossaryLinks
-            terms={meme.memeTypes}
-            glossary={contentTypeGlossary}
-            route="content-types"
-          />
-        ) : (
-          "---"
-        )
-      }
-    </dd>
-    <dt>Country</dt>
-    <dd>{meme.country || "---"}</dd>
-    <dt>Language</dt>
-    <dd>{meme.language || "---"}</dd>
-    <dt>Template Type</dt>
-    <dd>
-      {
-        meme.memeTemplateType ? (
-          <GlossaryLinks
-            terms={meme.templateTypes}
-            glossary={templateTypeGlossary}
-            route="template-types"
-          />
-        ) : (
-          "---"
-        )
-      }
-    </dd>
-    <dt>People</dt>
-    <dd>
-      {
-        meme.peopleIndividuals ? (
-          <GlossaryLinks
-            terms={meme.people}
-            glossary={peopleGlossary}
-            route="people"
-          />
-        ) : (
-          "---"
-        )
-      }
-    </dd>
-  </dl>
 </picture>
