@@ -27,8 +27,13 @@ export default class MemeWall {
     this.initializeRows();
     this.container.classList.remove("loading");
 
+    this.items.forEach((item) =>
+      item.parentElement.classList.add("cv-enabled"),
+    );
+
     this.shrink = this.shrink.bind(this);
     this.toggleItem = this.toggleItem.bind(this);
+    this.resetItem = this.resetItem.bind(this);
 
     // shrink blocks if an empty space is clicked
     this.container.addEventListener("click", this.shrink);
@@ -56,6 +61,11 @@ export default class MemeWall {
   }
 
   initializeRows() {
+    const pictures = this.container.querySelectorAll("picture");
+    pictures.forEach((p) => p.classList.remove("cv-enabled"));
+
+    void this.container.offsetHeight;
+
     this.rows = this.items.reduce((rows, block) => {
       block.classList.add("offcanvas");
       const offsetTop = block.offsetTop;
@@ -67,6 +77,8 @@ export default class MemeWall {
     }, new Map());
 
     this.rows = [...this.rows.values()];
+
+    if (this.layoutObserver) this.layoutObserver.disconnect();
 
     this.layoutObserver = new IntersectionObserver(
       (entries) => {
@@ -108,6 +120,9 @@ export default class MemeWall {
       row.forEach((block) => (block.rowIndex = idx));
       this.layoutObserver.observe(row[0]);
     });
+
+    void this.container.offsetHeight;
+    pictures.forEach((p) => p.classList.add("cv-enabled"));
   }
 
   shrink(event) {
@@ -118,9 +133,42 @@ export default class MemeWall {
     }
   }
 
+  createMetadata(block) {
+    if (block.nextElementSibling?.tagName === "DL") return;
+    const picture = block.parentElement;
+    const metadata = picture.dataset.metadata;
+    if (!metadata) return;
+    const dl = document.createElement("dl");
+    dl.innerHTML = metadata;
+    dl.addEventListener("click", (e) => {
+      if (e.target.closest("a.show-content-type")) {
+        e.preventDefault();
+        e.stopPropagation();
+        const link = e.target.closest("a.show-content-type");
+        const popup = document.getElementById("popup");
+        const iframe = popup.querySelector("iframe");
+        fetch(link)
+          .then((res) => res.text())
+          .then((html) => {
+            iframe.srcdoc = html;
+            popup.classList.add("active");
+          });
+        return;
+      }
+      dl.classList.toggle("show-more");
+    });
+    picture.appendChild(dl);
+  }
+
+  removeMetadata(block) {
+    const dl = block.nextElementSibling;
+    if (dl?.tagName === "DL") dl.remove();
+  }
+
   resetItem(block) {
     block.style.transform = "translate(0, 0) scale(1)";
     block.classList.remove("active");
+    this.removeMetadata(block);
   }
 
   activateItem(block) {
@@ -146,6 +194,8 @@ export default class MemeWall {
     block.classList.add("active");
     block.classList.remove("offcanvas");
     this.container.classList.add("zoomed");
+
+    this.createMetadata(block);
 
     // parent dimensions
     const parentStyle = window.getComputedStyle(this.container);
@@ -198,19 +248,30 @@ export default class MemeWall {
       }
     }
 
-    const leftWidth = selectedRow
-      .slice(0, selectedRow.indexOf(block))
-      .reduce(
-        (offset, item) =>
-          offset + parseInt(window.getComputedStyle(item).width, 10) * scale,
-        0,
-      );
-    const leftOffsetX = parentWidth / 2 - (blockWidth * scale) / 2 - leftWidth;
-
     const selectedIndex = block.rowIndex;
+
     const rowHeights = this.rows.map((r) =>
       parseInt(window.getComputedStyle(r[0]).height, 10),
     );
+
+    const itemDimensions = new Map();
+    this.rows.forEach((row) => {
+      row.forEach((item) => {
+        const style = window.getComputedStyle(item);
+        itemDimensions.set(item, {
+          width: parseInt(style.width, 10),
+          height: parseInt(style.height, 10),
+        });
+      });
+    });
+
+    const leftWidth = selectedRow
+      .slice(0, selectedRow.indexOf(block))
+      .reduce(
+        (offset, item) => offset + itemDimensions.get(item).width * scale,
+        0,
+      );
+    const leftOffsetX = parentWidth / 2 - (blockWidth * scale) / 2 - leftWidth;
 
     this.rows.forEach((row, rowIndex) => {
       // compute the y offset based on the distance from this row to the selected row
@@ -230,9 +291,7 @@ export default class MemeWall {
 
       let offsetX = 0;
       row.forEach((item) => {
-        let { width, height } = window.getComputedStyle(item);
-        width = parseInt(width, 10);
-        height = parseInt(height, 10);
+        const { width, height } = itemDimensions.get(item);
 
         const percentageOffsetX =
           ((offsetX * (scale - 1) + leftOffsetX) / width) * 100;
