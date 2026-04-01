@@ -8,6 +8,9 @@ export const readyTabId = "965014117";
 // location of the local folder for copies of the uploaded media
 export const memeMediaFolder = "meme_media";
 
+// location of the cache directory for fetched data
+export const cacheDir = "cache";
+
 // Google Drive API key (read-only, can access publicly-accessible files only)
 export const driveApiKey = "AIzaSyAVsxisgH5DPgtN0jJF6Cf0Q9xbSSaBaZU";
 

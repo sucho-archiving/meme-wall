@@ -15,3 +15,6 @@ pnpm-debug.log*
 
 # assets generated at build-time
 assets/
+
+# cached data (generated on first run without SKIP_FETCH)
+cache/
