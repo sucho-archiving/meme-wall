@@ -489,8 +489,11 @@ export default class MemeWall {
       templateType: "templateTypes",
     };
 
-    const hasFilters =
-      Object.values(this._activeFilters || {}).flat().length > 0;
+    const activeFacets = Object.entries(this._activeFilters || {}).filter(
+      ([, values]) => values && values.length > 0,
+    );
+
+    const hasFilters = activeFacets.length > 0;
     const hasSearch = !!this.activeSearchTerm;
     const searchLower = hasSearch
       ? this.activeSearchTerm.toLocaleLowerCase()
@@ -500,14 +503,11 @@ export default class MemeWall {
       let hidden = false;
 
       if (hasFilters) {
-        const matches = Object.entries(this._activeFilters).some(
-          ([facet, values]) => {
-            if (!values || values.length === 0) return false;
-            const dataKey = facetMap[facet] || facet;
-            const memeValues = meme[dataKey] || [];
-            return values.some((v) => memeValues.includes(v));
-          },
-        );
+        const matches = activeFacets.every(([facet, values]) => {
+          const dataKey = facetMap[facet] || facet;
+          const memeValues = meme[dataKey] || [];
+          return values.some((v) => memeValues.includes(v));
+        });
         if (!matches) hidden = true;
       }
 
