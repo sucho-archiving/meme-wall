@@ -19,6 +19,8 @@ log.setLevel(log.levels[process.env.LOG_LEVEL || "INFO"]);
 const SKIP_FETCH = process.env.SKIP_FETCH;
 const cachePath = path.join(cacheDir, "dataset.json");
 
+let images;
+
 const generateImages = async (meme) => {
   const rawImg = images[`/meme_media/${meme.filename}`]();
   const imgWidth = Math.min((await rawImg).default.width, 3840);
@@ -145,6 +147,23 @@ if (SKIP_FETCH) {
     meme.filename.match(/\.jpg|\.jpeg|\.png|\.webp$/i),
   );
 
+  // parse the images and calculate aspect ratios
+  start = performance.now();
+  log.info(" --> Generating derivative images...");
+
+  images = import.meta.glob(
+    "/src/../meme_media/*.{jpeg,jpg,png,webp,avif}",
+  );
+
+  for (const meme of memes) {
+    const filepath = path.join(memeMediaFolder, meme.filename);
+    [meme.srcSet, meme.imgUrl] = await generateImages(meme);
+    meme.aspectRatio = getAspectRatio(filepath);
+  }
+  log.info(
+    `     ... completed in ${(performance.now() - start).toFixed(0)}ms.`,
+  );
+
   // Prepare facets and facet counts
   start = performance.now();
   log.info(" --> Preparing facets and facet counts...");
@@ -241,7 +260,7 @@ if (SKIP_FETCH) {
     `     ... completed in ${(performance.now() - start).toFixed(0)}ms.`,
   );
 
-  // Save cache (exclude srcSet/imgUrl/aspectRatio — those are regenerated below)
+  // Save cache (including srcSet/imgUrl/aspectRatio — no need to regenerate)
   saveCache({
     memes,
     metadataHierarchies,
@@ -253,21 +272,6 @@ if (SKIP_FETCH) {
     groupOrders,
   });
 }
-
-// parse the images and calculate aspect ratios (always runs — needs Astro Vite context)
-let start = performance.now();
-log.info(" --> Generating derivative images...");
-
-const images = import.meta.glob(
-  "/src/../meme_media/*.{jpeg,jpg,png,webp,avif}",
-);
-
-for (const meme of memes) {
-  const filepath = path.join(memeMediaFolder, meme.filename);
-  [meme.srcSet, meme.imgUrl] = await generateImages(meme);
-  meme.aspectRatio = getAspectRatio(filepath);
-}
-log.info(`     ... completed in ${(performance.now() - start).toFixed(0)}ms.`);
 
 export {
   memes,
