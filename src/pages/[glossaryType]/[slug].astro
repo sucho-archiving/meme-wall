@@ -39,7 +39,7 @@ const description = `${typeTitle}: ${title}`;
     {
       prev ? (
         <span
-          set:html={`<a href="/${glossaryType}/${sluggify(prev)}/"><< ${
+          set:html={`<a href="${import.meta.env.BASE_URL}${glossaryType}/${sluggify(prev)}/"><< ${
             glossary[prev].title
           }</a>`}
         />
@@ -48,7 +48,7 @@ const description = `${typeTitle}: ${title}`;
     {
       next ? (
         <span
-          set:html={`<a href="/${glossaryType}/${sluggify(next)}/">${
+          set:html={`<a href="${import.meta.env.BASE_URL}${glossaryType}/${sluggify(next)}/">${
             glossary[next].title
           } >></a>`}
         />

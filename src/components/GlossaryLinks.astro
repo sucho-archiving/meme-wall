@@ -12,7 +12,7 @@ const { terms, glossary, route } = Astro.props;
         <a
           class="show-content-type"
           title="More Information"
-          href={`/${route}/${sluggify(term)}/`}
+          href={`${import.meta.env.BASE_URL}${route}/${sluggify(term)}/`}
         >
           {term} <Icon name="info-circle" />
         </a>

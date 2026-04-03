@@ -48,14 +48,14 @@ const description =
       <li>
         <Fragment set:html={csv} />
         <span
-          >A <a href="/memes.csv">CSV file</a> comprising the entire published dataset
+          >A <a href={import.meta.env.BASE_URL + "memes.csv"}>CSV file</a> comprising the entire published dataset
           is available.</span
         >
       </li>
       <li>
         <Fragment set:html={rss} />
         <span
-          >An <a href="/rss.xml">RSS feed</a> is available and is updated daily with
+          >An <a href={import.meta.env.BASE_URL + "rss.xml"}>RSS feed</a> is available and is updated daily with
           new memes.</span
         >
       </li>

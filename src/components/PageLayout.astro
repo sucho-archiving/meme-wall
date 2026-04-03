@@ -19,7 +19,7 @@ const { title, description, noIndex = false, backToTop = true } = Astro.props;
   <body>
     <header>
       <Ident />
-      <a class="button" title="Return to the Meme Wall" href="/">
+      <a class="button" title="Return to the Meme Wall" href={import.meta.env.BASE_URL}>
         <Icon name="arrow-narrow-left" /> Return to the Meme Wall
       </a>
     </header>
