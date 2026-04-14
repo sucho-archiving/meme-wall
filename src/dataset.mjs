@@ -24,7 +24,7 @@ let images;
 const generateImages = async (meme) => {
   const rawImg = images[`/meme_media/${meme.filename}`]();
   const imgWidth = Math.min((await rawImg).default.width, 3840);
-  const widths = [120, 240, 360, 640, 800, 1024, 1280, 1440, 1920, 2560, 3840]
+  const widths = [320, 640, 1024, 1600, 2560, 3840]
     .map((w) => (w < imgWidth ? w : null))
     .filter(Boolean)
     .concat([imgWidth]);

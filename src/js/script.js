@@ -4,7 +4,6 @@ const supportsCssHasSelector = CSS.supports("selector(:has(img))");
 
 let memewall;
 const wallContainer = document.getElementById("meme-wall");
-const items = wallContainer.querySelectorAll("picture");
 const resetButton = document.querySelector("button.reset-wall");
 const showFiltersButton = document.querySelector("button.show-filters");
 const searchButton = document.querySelector("button.search");
@@ -18,21 +17,13 @@ const filterSelects = Object.fromEntries(
 );
 let activeFilters = {};
 
-const toggleItem = (img, condition = true) => {
-  if (condition) {
-    img.style.removeProperty("width");
-    img.style.removeProperty("height");
-    img.classList.remove("hidden");
-  } else {
-    img.classList.add("hidden");
-  }
-};
+let filterTimeout = null;
+let searchTimeout = null;
 
 const updateCount = () => {
   const countSpan = document.querySelector("div.count span");
-  const shownMemeCount =
-    wallContainer.querySelectorAll("img:not(.hidden)").length;
-  const totalMemeCount = wallContainer.querySelectorAll("img").length;
+  const shownMemeCount = memewall.getShownCount();
+  const totalMemeCount = memewall.getTotalCount();
   countSpan.textContent = shownMemeCount + " / " + totalMemeCount;
   countSpan.parentElement.classList.toggle(
     "show-reset",
@@ -44,15 +35,15 @@ const updateWall = () => {
   updateCount();
   overlayButtons.classList.remove("active");
   memewall.reset();
-  if (wallContainer.querySelectorAll("img:not(.hidden)").length === 0) {
+  if (memewall.getShownCount() === 0) {
     wallContainer.classList.add("empty");
   }
-  if (wallContainer.querySelectorAll("img:not(.hidden)").length === 1) {
-    memewall.toggleItem({
-      target: wallContainer.querySelector("img:not(.hidden)"),
-      stopPropagation: () => {},
-    });
+  if (memewall.getShownCount() === 1) {
     wallContainer.classList.add("single");
+    const img = memewall.getActiveItem();
+    if (img) {
+      memewall.activateItem(img);
+    }
   }
   if (!supportsCssHasSelector) {
     setTimeout(() => {
@@ -83,12 +74,10 @@ const resetSearch = (ui = true) => {
   searchInput.value = "";
 
   if (ui) {
-    setTimeout(() => {
-      items.forEach((item) => {
-        toggleItem(item.querySelector("img"), true);
-      });
-      updateWall();
-    }, 200);
+    clearTimeout(filterTimeout);
+    clearTimeout(searchTimeout);
+    memewall.applySearch("");
+    updateWall();
   }
 };
 
@@ -100,16 +89,10 @@ const reset = () => {
 };
 
 const filterMemes = () => {
+  clearTimeout(filterTimeout);
   wallContainer.classList.remove("empty");
   wallContainer.classList.remove("single");
   wallContainer.classList.remove("zoomed");
-  resetSearch(false);
-  const delay = searchInput.value ? 200 : 0;
-
-  const showHide = (item) =>
-    Object.entries(activeFilters).some(([facet, values]) =>
-      values.some((value) => item.dataset[facet].split("|").includes(value)),
-    );
 
   const activeFilterCount = Object.entries(activeFilters).reduce(
     (acc, [key, values]) => (acc += key === "memeType" ? 0 : values.length),
@@ -118,64 +101,37 @@ const filterMemes = () => {
   showFiltersButton.dataset.activeFilterCount = activeFilterCount;
   showFiltersButton.classList.toggle("show-indicator", activeFilterCount > 0);
 
-  setTimeout(() => {
-    Object.values(activeFilters).flat().length
-      ? items.forEach((item) => {
-          toggleItem(item.querySelector("img"), showHide(item));
-        })
-      : items.forEach((item) => {
-          toggleItem(item.querySelector("img"), true);
-        });
+  filterTimeout = setTimeout(() => {
+    memewall.applyFilters(activeFilters);
     updateWall();
-  }, delay);
+  }, 0);
 };
 
 const searchMemes = (searchTerm) => {
-  [...items]
-    .filter((item) => !item.querySelector("img").classList.contains("hidden"))
-    .forEach((item) =>
-      toggleItem(
-        item.querySelector("img"),
-        [...item.querySelectorAll("dd")].some((dd) =>
-          dd.textContent
-            .toLocaleLowerCase()
-            .includes(searchTerm.toLocaleLowerCase()),
-        ),
-      ),
-    );
-  updateWall();
+  clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(() => {
+    memewall.applySearch(searchTerm);
+    updateWall();
+  }, 200);
 };
-
-const showMoreListener = ({ currentTarget: target }) =>
-  target.classList.toggle("show-more");
 
 const wallItemToggleCb = (img) => {
   if (img.classList.contains("active")) {
-    img.nextElementSibling.addEventListener("click", showMoreListener);
     overlayButtons.classList.add("active");
+    const picture = img.parentElement;
     history.replaceState(
       "",
       document.title,
-      window.location.pathname + "#" + img.parentElement.dataset.id,
+      window.location.pathname + "#" + picture.dataset.id,
     );
   } else {
-    img.nextElementSibling.removeEventListener("click", showMoreListener);
     overlayButtons.classList.remove("active");
     history.replaceState("", document.title, window.location.pathname);
   }
 };
 
 const goToMeme = (memeId) => {
-  const el = document.querySelector(`[data-id='${memeId}'] img`);
-  if (!el) return false;
-  const observer = new MutationObserver(() => {
-    if (!el.classList.contains("offcanvas")) {
-      observer.disconnect();
-      memewall.activateItem(el);
-    }
-  });
-  observer.observe(el, { attributes: true });
-  el.scrollIntoView({ behavior: "instant" });
+  memewall.goToMeme(memeId);
 };
 
 // Hook up event listeners
@@ -237,7 +193,6 @@ document.querySelectorAll("a.show-content-type").forEach((link) => {
   link.addEventListener("click", (evt) => {
     evt.preventDefault();
     evt.stopPropagation();
-    // iframe.src = link.href;
     fetch(link)
       .then((res) => res.text())
       .then((html) => {
@@ -308,8 +263,11 @@ const setVh = () =>
 window.addEventListener("resize", setVh);
 setVh();
 
+const dataEl = document.getElementById("meme-data");
+const { memes, glossaries } = JSON.parse(dataEl.textContent);
+
 // Initialize MemeWall
-memewall = new MemeWall(wallContainer, wallItemToggleCb);
+memewall = new MemeWall(wallContainer, memes, glossaries, wallItemToggleCb);
 if (window.location.hash) goToMeme(window.location.hash.substring(1));
 
 self.memewall = memewall;

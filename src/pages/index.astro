@@ -2,15 +2,27 @@
 import Head from "../components/Head.astro";
 import Header from "../components/Header.astro";
 import Loader from "../components/Loader.astro";
-import Meme from "../components/Meme.astro";
 
-import { memes } from "../dataset.mjs";
+import {
+  memes,
+} from "../dataset.mjs";
+import {
+  contentTypeGlossary,
+  peopleGlossary,
+  templateTypeGlossary,
+} from "../glossary.mjs";
 
 import "@fontsource/jost/300.css";
 
 const title = "SUCHO Meme Wall";
 const description =
   "Collected memes from the SUCHO project concerning the Russian invasion of Ukraine.";
+
+const glossaries = {
+  contentType: contentTypeGlossary,
+  people: peopleGlossary,
+  templateType: templateTypeGlossary,
+};
 ---
 
 <html lang="en">
@@ -19,11 +31,12 @@ const description =
     <Header />
     <Loader />
     <main id="meme-wall">
-      {memes.map(async (meme, idx) => <Meme meme={meme} idx={idx} />)}
+      <div class="wall-spacer"></div>
     </main>
     <div id="popup">
       <iframe></iframe>
     </div>
+    <script is:inline type="application/json" id="meme-data" set:html={JSON.stringify({ memes, glossaries })}></script>
     <script type="module" hoist>
       import "../js/script.js";
     </script>

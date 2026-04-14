@@ -61,17 +61,30 @@ div.loader {
     }
   }
 
+  .wall-spacer {
+    position: relative;
+    width: 100%;
+  }
+
+  .meme-row {
+    display: flex;
+  }
+
+  picture {
+    display: block;
+    height: 100%;
+    position: relative;
+  }
+
   img {
     box-shadow: inset 3px 3px 20px 1px rgb(255 255 255 / 40%);
-    display: inline-block;
-    height: 15vmax;
-    opacity: 1;
+    display: block;
+    height: 100%;
     transform-origin: 0% 0%;
     transition-duration: 0.3s;
     transition-property: transform, opacity, box-shadow;
     transition-timing-function: ease-out;
-    vertical-align: top;
-    width: auto;
+    width: 100%;
 
     &.hidden {
       display: none;
@@ -82,7 +95,8 @@ div.loader {
     }
   }
 
-  dl {
+  dl,
+  .meme-metadata {
     background: rgba(0, 0, 0, 0.8);
     border: 1em solid transparent;
     bottom: 0;
@@ -203,11 +217,11 @@ div.loader {
         box-shadow: 0px 0px 8px 10px rgba(0, 0, 0, 0.8);
         opacity: 1;
         pointer-events: all;
-
-        & + dl {
-          display: grid;
-        }
       }
+    }
+
+    .meme-metadata {
+      display: grid;
     }
   }
 

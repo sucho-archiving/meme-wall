@@ -29,7 +29,7 @@ import Filter from "../components/Filter.astro";
   <a class="button" title="Submit a Meme" href={submissionFormUrl}>
     <Icon name="upload" />
   </a>
-  <a class="button" title="About" href="/about/">
+  <a class="button" title="About" href={import.meta.env.BASE_URL + "about/"}>
     <Icon name="info-circle" />
   </a>
 </div>
