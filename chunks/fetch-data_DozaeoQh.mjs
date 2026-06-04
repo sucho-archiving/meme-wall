@@ -1,0 +1,158 @@
+import fs, { writeFile } from 'fs';
+import path from 'path';
+import { promisify } from 'util';
+import log from 'loglevel';
+import neatCsv from 'neat-csv';
+import sharp from 'sharp';
+import { m as memeMediaFolder, r as readyTabId, f as formResponsesSheetId, h as hierarchiesTabIds, b as hierarchiesSheetId, d as driveApiKey } from './config_Bj2EZlPB.mjs';
+import { fileURLToPath } from 'url';
+
+log.setLevel(log.levels[process.env.LOG_LEVEL || "INFO"]);
+
+const toCamelCase = (str) =>
+  str
+    .toLowerCase()
+    .replace(/[^a-zA-Z0-9]+(.|$)/g, (m, chr) => chr.toUpperCase());
+
+const writeFilePromise = promisify(writeFile);
+
+const getDriveApiUrl = (id) =>
+  `https://www.googleapis.com/drive/v3/files/${id}?key=${driveApiKey}&alt=media`;
+
+const timer = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const parseDriveId = (url) => {
+  // Files submitted via the Google Form get a URL of the form
+  //  https://drive.google.com/open?id=<driveId>
+  let driveId = url.match(/id=([^&]+)/)?.[1];
+
+  // Those manually added to the spreadsheet get a URL of the form
+  //  https://drive.google.com/file/d/<driveId>/view?usp=sharing
+  if (!driveId) driveId = url.match(/file\/d\/([^&\/]+)/)?.[1];
+  if (!driveId) log.warn("Unable to parse a driveId from", url);
+  return driveId;
+};
+
+const downloadFile = async (url, outputPath, fileStem) =>
+  await fetch(url)
+    .then((response) => {
+      if (response.ok) return response;
+      console.dir(response);
+      process.exit(1);
+    })
+    .then(async (response) => {
+      const buffer = await response.arrayBuffer();
+
+      const mimeType = response.headers.get("content-type");
+      const extension = mimeType.split("/")[1];
+      const filename = `${fileStem}.${extension}`;
+      const destination = path.join(outputPath, filename);
+
+      if (extension === "jpeg") {
+        // calling sharp.rotate with no arguments will rotate the image according
+        //  to the jpeg EXIF `Orientation` tag (if it exists), and then remove the
+        //  tag.  Should be a noop otherwise.
+        const rotatedBuffer = await sharp(Buffer.from(buffer))
+          .rotate()
+          .toBuffer();
+        writeFilePromise(destination, rotatedBuffer);
+      } else {
+        writeFilePromise(destination, Buffer.from(buffer));
+      }
+
+      return filename;
+    });
+
+const memeExists = (fileStem, existingStems) => {
+  return existingStems.get(fileStem) || false;
+};
+
+const fetchSheet = async (sheetId, tabId) => {
+  const sheetUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&gid=${tabId}`;
+  log.info(`Fetching ${sheetUrl}...`);
+  const response = await fetch(sheetUrl);
+  return await neatCsv(await response.text(), {
+    mapHeaders: ({ header, index }) => toCamelCase(header.trim()),
+    mapValues: ({ header, index, value }) => value.trim(),
+  });
+};
+
+const fetchDocument = async (docId) => {
+  const docUrl = `https://docs.google.com/document/export?format=html&id=${docId}`;
+  const response = await fetch(docUrl);
+  return await response.text();
+};
+
+const fetchMemes = async () => {
+  const memes = await fetchSheet(formResponsesSheetId, readyTabId);
+  return memes
+    .filter((meme) => meme.timestamp) // filter out empty rows
+    .filter((meme) => !isNaN(new Date(meme.timestamp))) // filter out rows where the date doesn't parse
+    .map((meme) => ({
+      ...meme,
+      driveId: parseDriveId(meme.uploadFile),
+    }))
+    .filter((meme) => meme.driveId); // filter out rows where we can't derive a driveId
+};
+
+const fetchMetadataHierarchies = async () => {
+  const hierarchies = {};
+  for (const [metadataType, tabId] of Object.entries(hierarchiesTabIds)) {
+    const data = await fetchSheet(hierarchiesSheetId, tabId);
+    hierarchies[metadataType] = data.reduce(
+      (acc, row) => ({
+        ...acc,
+        [row.category]: [...(acc[row.category] || []), row.value],
+      }),
+      {},
+    );
+  }
+  return hierarchies;
+};
+
+const fetchFile = async (meme, existingStems, delay = 1000) => {
+  const { driveId } = meme;
+  let filename;
+
+  if (typeof (filename = memeExists(driveId, existingStems)) === "string") {
+    log.debug(`     ${driveId}: exists (skipping)`);
+    return [filename, false];
+  }
+
+  log.info(`     ${driveId}: downloading...`);
+
+  const url = getDriveApiUrl(driveId);
+  filename = await downloadFile(url, memeMediaFolder, driveId);
+  existingStems.set(driveId, filename);
+  await timer(delay);
+  return [filename, true];
+};
+
+const purgeFiles = (memes, memeMediaFolder) => {
+  let purgedCount = 0;
+  const files = fs.readdirSync(memeMediaFolder);
+  const driveIds = memes.map((meme) => meme.driveId);
+  for (let filename of files) {
+    if (!driveIds.includes(path.parse(filename).name)) {
+      log.info(`     purging ${filename}...`);
+      fs.unlinkSync(path.join(memeMediaFolder, filename));
+      purgedCount++;
+    }
+  }
+  return purgedCount;
+};
+const nodePath = path.resolve(process.argv[1]);
+const modulePath = path.resolve(fileURLToPath(import.meta.url));
+if (nodePath === modulePath) {
+  const memes = await fetchMemes();
+  log.info(`Found ${memes.length} memes...`);
+  const existingStems = new Map(
+    fs.readdirSync(memeMediaFolder).map(f => [path.parse(f).name, f]),
+  );
+  for (const meme of memes) {
+    meme.filename = await fetchFile(meme, existingStems);
+  }
+  purgeFiles(memes, memeMediaFolder);
+}
+
+export { fetchMemes as a, fetchMetadataHierarchies as b, fetchFile as c, fetchDocument as f, purgeFiles as p };

@@ -1,0 +1,14 @@
+const _1UOqsvSg7Kpk8poOjTEFEQvILZYmu797O = new Proxy({"src":"/assets/1UOqsvSg7Kpk8poOjTEFEQvILZYmu797O.CDHQW4M-.jpeg","width":1200,"height":1278,"format":"jpg"}, {
+						get(target, name, receiver) {
+							if (name === 'clone') {
+								return structuredClone(target);
+							}
+							if (name === 'fsPath') {
+								return "/home/runner/work/meme-wall/meme-wall/meme_media/1UOqsvSg7Kpk8poOjTEFEQvILZYmu797O.jpeg";
+							}
+							if (target[name] !== undefined && globalThis.astroAsset) globalThis.astroAsset?.referencedImages.add("/home/runner/work/meme-wall/meme-wall/meme_media/1UOqsvSg7Kpk8poOjTEFEQvILZYmu797O.jpeg");
+							return target[name];
+						}
+					});
+
+export { _1UOqsvSg7Kpk8poOjTEFEQvILZYmu797O as default };
